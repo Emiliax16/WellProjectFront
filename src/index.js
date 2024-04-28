@@ -29,7 +29,6 @@ root.render(
               <Admin />
             </PrivateRoute>
           } />
-          <Route path="/admin" element={<Admin />} />
           <Route path="/view" element={<View />} />
 
           {/* Clientes */}
