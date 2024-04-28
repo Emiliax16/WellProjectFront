@@ -1,7 +1,8 @@
 
-import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import { createContext, useContext, useState, useEffect } from 'react';
+import {getClientDetails} from '../services/clientServices';
 
 const AuthContext = createContext(null);
 
@@ -9,6 +10,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     // eslint-disable-next-line no-unused-vars
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
     const baseURL = `${process.env.REACT_APP_API_PROTOCOL}://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}/`;
@@ -17,13 +19,14 @@ export const AuthProvider = ({ children }) => {
         const fetchUserDetails = async () => {
             if (cookies.token) {
                 try {
-                    console.log(`${baseURL}${process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO}`);
-                    const response = await axios.get(`${baseURL}${process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO}`, {
-                        headers: { Authorization: `Bearer ${cookies.token}` }
-                    });
-                    setUser(response.data);
+                    setLoading(true);
+                    const response = await getClientDetails(cookies.token);
+                    setUser(response);
                 } catch (error) {
                     console.error('Failed to fetch user details:', error);
+                }
+                finally {
+                    setLoading(false);
                 }
             }
         };
@@ -33,6 +36,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
+            setLoading(true);
             const response = await axios.post(`${baseURL}${process.env.REACT_APP_API_ENDPOINT_AUTH_LOGIN}`, {
                 email,
                 password
@@ -52,6 +56,8 @@ export const AuthProvider = ({ children }) => {
             console.log(user)
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -60,7 +66,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
-    const value = { user, login, logout };
+    const value = { user, login, logout, loading };
 
     return (
         <AuthContext.Provider value={value}>
