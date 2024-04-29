@@ -52,9 +52,44 @@ const getClientWells = async (token, userId) => {
   }
 }
 
+const postNewClient = async (token, data) => {
+  try {
+    const response = await apiClient.post(`${process.env.REACT_APP_API_ENDPOINT_POST_USER}` , {
+      ...data,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return response.data;
+  }
+  catch (error) {
+    console.error('User Creation Error:', error.response ? error.response.data : error);
+  }
+}
+
+const postNewWell = async (token, data, userId) => {
+  try {
+    const url = `${process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX}/${userId}/${process.env.REACT_APP_API_ENDPOINT_POST_WELL}`
+    console.log("el token es: ", token)
+    const response = await apiClient.post(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return response.data;
+  }
+  catch (error) {
+    console.error('Well Creation Error:', error.response ? error.response.data : error);
+  }
+}
+
 export { 
   getAllClients, 
   getClientDetails, 
   getClientDetailsById,
-  getClientWells, 
+  getClientWells,
+  postNewClient,
+  postNewWell
 }

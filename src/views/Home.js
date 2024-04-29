@@ -6,7 +6,7 @@ function Home() {
   const navigate = useNavigate()
 
   const handleLogin = async () => {
-    await login('jpoezi@gmail.com', 'micontraentextoplano')
+    await login('easy@gmail.com', 'hola')
     // await login('jpoezi2@gmail.com', 'micontraentextoplano')
     navigate('/admin')
   }
