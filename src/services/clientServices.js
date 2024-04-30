@@ -1,8 +1,14 @@
 import apiClient  from './index';
+import { clientBack, clientFront, wellBack, userBack } from '../utils/routes.utils';
+
+const { getClients, getDetails } = clientBack;
+const { urlClients } = clientFront;
+const { getWells, postWell } = wellBack;
+const { postUser } = userBack;
 
 const getAllClients = async () => {
   try {
-    const response = await apiClient.get(`${process.env.REACT_APP_API_ENDPOINT_GET_ALL_CLIENTS}`)
+    const response = await apiClient.get(`${getClients}`)
     return response.data
   } catch (error) {
     console.error('Error fetching clients', error)
@@ -11,7 +17,7 @@ const getAllClients = async () => {
 
 const getClientDetails = async (token) => {
   try {
-    const response = await apiClient.get(`${process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO}`,
+    const response = await apiClient.get(`${getDetails}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -25,7 +31,7 @@ const getClientDetails = async (token) => {
 
 const getClientDetailsById = async (token, userId) => {
   try {
-    const response = await apiClient.get(`${process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO}/${userId}`,
+    const response = await apiClient.get(`${getDetails}/${userId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -39,7 +45,7 @@ const getClientDetailsById = async (token, userId) => {
 
 const getClientWells = async (token, userId) => {
   try {
-    const url = `${process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX}/${userId}/${process.env.REACT_APP_API_ENDPOINT_GET_ALL_WELLS}`
+    const url = `${urlClients}/${userId}/${getWells}`
     const response = await apiClient.get(url,
       {
         headers: {
@@ -54,7 +60,7 @@ const getClientWells = async (token, userId) => {
 
 const postNewClient = async (token, data) => {
   try {
-    const response = await apiClient.post(`${process.env.REACT_APP_API_ENDPOINT_POST_USER}` , {
+    const response = await apiClient.post(`${postUser}` , {
       ...data,
       headers: {
         Authorization: `Bearer ${token}`
@@ -70,7 +76,7 @@ const postNewClient = async (token, data) => {
 
 const postNewWell = async (token, data, userId) => {
   try {
-    const url = `${process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX}/${userId}/${process.env.REACT_APP_API_ENDPOINT_POST_WELL}`
+    const url = `${urlClients}/${userId}/${postWell}`
     console.log("el token es: ", token)
     const response = await apiClient.post(url, data, {
       headers: {

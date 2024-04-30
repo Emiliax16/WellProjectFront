@@ -5,6 +5,7 @@ import Input from '../../../components/input';
 import Select from '../../../components/select';
 import { postNewClient } from '../../../services/clientServices';
 import { useNavigate } from 'react-router-dom';
+import { clientFront } from  '../../../utils/routes.utils';
 
 function NewClient() {
   const { 
@@ -21,7 +22,7 @@ function NewClient() {
 
     if (cookies.token) {
       await postNewClient(cookies.token, data);
-      navigate(`/${process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX}`);
+      navigate(`/${clientFront.urlClients}`);
     }
   };
 
