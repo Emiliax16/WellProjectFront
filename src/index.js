@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Test from './Test';
-import Home from './views/Home';
+import LandingPage from './views/LandingPage';
 import Admin from './views/Admin/Admin';
+import Login from './views/Login';
 import NewClient from './views/Clients/oneClient/NewClient';
 import ClientList from './views/Clients/allClients/ClientList';
 import ClientDetails from './views/Clients/oneClient/ClientDetails';
@@ -22,7 +23,8 @@ root.render(
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/test" element={<Test />} />
           <Route path="/admin" element={
             <PrivateRoute roles={['admin']}>

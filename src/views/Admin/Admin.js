@@ -4,7 +4,7 @@ import { FaCat } from "react-icons/fa";
 
 function Admin() {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
 
   return (
@@ -25,6 +25,10 @@ function Admin() {
         <button className='p-2 bg-cyan-400 text-white' onClick={()=>{navigate('/clients')}}>
           Ver clientes
         </button>
+      </div>
+
+      <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+        <button type="button" onClick={logout} class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Logout</button>
       </div>
 
     </div>
