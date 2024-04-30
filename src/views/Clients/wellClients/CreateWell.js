@@ -4,6 +4,10 @@ import { useCookies } from 'react-cookie';
 import Input from '../../../components/input';
 import { useParams, useNavigate } from 'react-router-dom';
 import { postNewWell } from '../../../services/clientServices';
+import { clientFront, wellBack } from '../../../utils/routes.utils';
+
+const { urlClients } = clientFront;
+const { getWells } = wellBack;
 
 function CreateWell() {
   const { 
@@ -22,7 +26,7 @@ function CreateWell() {
     if (cookies.token) {
       try {
         await postNewWell(cookies.token, data, userId);
-        const url = `/${process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX}/${userId}/${process.env.REACT_APP_API_ENDPOINT_GET_ALL_WELLS}`;
+        const url = `/${urlClients}/${userId}/${getWells}`;
         navigate(url);
       } catch (error) {
         console.error('Error creating well:', error);

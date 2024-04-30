@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { createContext, useContext, useState, useEffect } from 'react';
 import {getClientDetails} from '../services/clientServices';
+import { baseUrl, auth } from '../utils/routes.utils';
 
 const AuthContext = createContext(null);
 
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     // eslint-disable-next-line no-unused-vars
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
-    const baseURL = `${process.env.REACT_APP_API_PROTOCOL}://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}/`;
+    const baseURL = baseUrl;
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             setLoading(true);
-            const response = await axios.post(`${baseURL}${process.env.REACT_APP_API_ENDPOINT_AUTH_LOGIN}`, {
+            const response = await axios.post(`${baseURL}${auth.login}`, {
                 email,
                 password
             });
