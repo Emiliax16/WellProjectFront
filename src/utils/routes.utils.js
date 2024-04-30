@@ -1,7 +1,6 @@
 // Base url
-const IP = '3.137.51.212'
 const urlTypes = {
-    productionUrl: `${process.env.REACT_APP_API_PROTOCOL}://${IP}/`,
+    productionUrl: `https://jpoezi.me/`,
     developmentUrl: `${process.env.REACT_APP_API_PROTOCOL}://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}/`,
 }
 
