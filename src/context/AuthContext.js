@@ -52,9 +52,7 @@ export const AuthProvider = ({ children }) => {
                     sameSite: 'Strict'
                   });
                 setUser(user);
-                console.log(user)
             }
-            console.log(user)
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error);
         } finally {

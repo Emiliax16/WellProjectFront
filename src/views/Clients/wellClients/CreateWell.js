@@ -21,8 +21,6 @@ function CreateWell() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log('Well Form Data:', data);
-
     if (cookies.token) {
       try {
         await postNewWell(cookies.token, data, userId);

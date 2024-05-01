@@ -18,7 +18,7 @@ const userBack = {
 
 // Client Request
 const clientBack = {
-    getClients: process.env.REACT_APP_API_ENDPOINT_GET_ALL_CLIENTS, //TODO: esto trae user
+    getClients: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX, 
     getDetails: process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO, // TODO: nombre de user
 }
 

@@ -2,13 +2,14 @@ import { useNavigate } from 'react-router-dom';
 
 function ClientRow({ client }) {
   const navigate = useNavigate();
+  const { user } = client;
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm" onClick={() => navigate(`/user/${client.id}`)}>
-        {client.name}
+        {user.name}
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        {client.isActived ? 'Active' : 'Inactive'}
+        {user.isActived ? 'Active' : 'Inactive'}
       </td>
 
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">

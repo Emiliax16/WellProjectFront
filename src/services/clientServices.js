@@ -6,9 +6,14 @@ const { urlClients } = clientFront;
 const { getWells, postWell } = wellBack;
 const { postUser } = userBack;
 
-const getAllClients = async () => {
+const getAllClients = async (token) => {
   try {
-    const response = await apiClient.get(`${getClients}`)
+    const response = await apiClient.get(`${getClients}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
     return response.data
   } catch (error) {
     console.error('Error fetching clients', error)
@@ -43,9 +48,10 @@ const getClientDetailsById = async (token, userId) => {
   }
 }
 
-const getClientWells = async (token, userId) => {
+//                GET CLIENT WELLS
+const getClientWells = async (token, userId, page, size) => {
   try {
-    const url = `${urlClients}/${userId}/${getWells}`
+    const url = `${urlClients}/${userId}/${getWells}?page=${page}&size=${size}`
     const response = await apiClient.get(url,
       {
         headers: {
@@ -55,6 +61,23 @@ const getClientWells = async (token, userId) => {
     return response.data
   } catch (error) {
     console.error('Error fetching client wells', error)
+  }
+}
+
+//                GET WELL REPORTS
+const getWellReports = async (token, userId, wellCode, page, size) => {
+  try {
+    const url = `${urlClients}/${userId}/${getWells}/${wellCode}/data?page=${page}&size=${size}`
+    const response = await apiClient.get(url,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+    return response.data
+  }
+  catch (error) {
+    console.error('Error fetching well reports', error)
   }
 }
 
@@ -96,6 +119,7 @@ export {
   getClientDetails, 
   getClientDetailsById,
   getClientWells,
+  getWellReports,
   postNewClient,
   postNewWell
 }
