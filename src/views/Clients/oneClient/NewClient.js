@@ -18,8 +18,6 @@ function NewClient() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log('User Form Data:', data);
-
     if (cookies.token) {
       await postNewClient(cookies.token, data);
       navigate(`/${clientFront.urlClients}`);

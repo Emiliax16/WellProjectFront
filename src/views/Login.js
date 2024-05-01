@@ -16,8 +16,6 @@ function Login() {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log('User Login', data);
-
     const email = data.email;
     const password = data.password;
     try {

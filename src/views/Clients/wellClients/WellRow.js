@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom"
 
 function WellRow({ well }) {
   const navigate = useNavigate();
-
   const handleSeeReportsNavigation = () => {
     navigate(`/clients/${well.clientId}/wells/${well.code}`, { state: { well } });
   }
