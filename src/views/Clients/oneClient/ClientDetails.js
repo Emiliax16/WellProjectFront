@@ -51,7 +51,6 @@ function ClientDetails() {
               <div className='text-lg font-semibold'>Client Email: {client.email}</div>
               <div className='text-lg font-semibold'>Client Created: {client.createdAt}</div>
               <button onClick={() => navigate(`/clients/${client.id}/wells`)} className="p-2 bg-pink-500 text-white rounded-md">Wells</button>
-              {/* TODO */}
               <button onClick={handleCreateWell} className="p-2 ml-2 bg-pink-500 text-white rounded-md"> Create Well </button>
             </>
           ) : (
