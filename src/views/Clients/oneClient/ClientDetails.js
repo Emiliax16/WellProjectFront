@@ -2,13 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getClientDetailsById } from '../../../services/clientServices';
+import useLoading from '../../../hooks/useLoading';
 
 function ClientDetails() {
   const { id: userId } = useParams();
   const [client, setClient] = useState({});
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, loadingIcon, setLoading] = useLoading();
   const [error, setError] = useState(null);
   
   const handleCreateWell = () => {
@@ -26,7 +27,7 @@ function ClientDetails() {
     } finally {
       setLoading(false);
     }
-  }, [cookies.token, userId]);
+  }, [cookies.token, userId, setLoading]);
   
 
   useEffect(() => {
@@ -41,7 +42,7 @@ function ClientDetails() {
       <div className='bg-green-500 text-white p-2'>Client Details</div>
       <div className='flex justify-center items-center'>
         { loading ? (
-          <div>Loading...</div>
+          <div>{loadingIcon}</div>
         ) : 
         <div className='bg-white p-2 m-2'>
           {client ? (

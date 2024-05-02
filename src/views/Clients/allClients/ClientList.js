@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback} from 'react';
 import { getAllClients } from '../../../services/clientServices';
 import { useCookies } from 'react-cookie';
+import useLoading from '../../../hooks/useLoading';
 import ClientRow from './ClientRow';
 
 function ClientList() {
   const [clients, setClients] = useState([])
-  const [loading, setLoading] = useState(false);
+  const [loading, loadingIcon, setLoading] = useLoading();
   const [cookies] = useCookies(['token']);
 
   const getClients = useCallback(async () => {
@@ -14,7 +15,7 @@ function ClientList() {
       setClients(clients);
       setLoading(false);
     }
-  , [cookies.token]);
+  , [cookies.token, setLoading]);
   
   const thStyle = 'px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider';
 
@@ -28,7 +29,7 @@ function ClientList() {
       <div className='flex justify-center items-center'>
         { 
           loading ? (
-            <div>Loading... </div>
+            <div>{loadingIcon}</div>
           ) : (
             <div className='bg-white p-2 m-2 min-w-full'>
               <table className='min-w-full'>

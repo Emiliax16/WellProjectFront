@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { getClientWells } from '../../../services/clientServices';
 import usePagination from '../../../hooks/usePagination';
+import useLoading from '../../../hooks/useLoading';
 import WellRow from './WellRow';
 
 function ClientWells() {
@@ -10,7 +11,7 @@ function ClientWells() {
   const { page, size, setPage } = usePagination();
   const [cookies] = useCookies(['token']);
   const [wells, setWells] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, loadingIcon, setLoading] = useLoading();
   const [error, setError] = useState(null);
 
   const fetchClientWells = useCallback(async () => {
@@ -24,7 +25,7 @@ function ClientWells() {
     } finally {
       setLoading(false);
     }
-  }, [cookies.token, userId, page, size]);
+  }, [cookies.token, userId, page, size, setLoading]);
 
   useEffect(() => {
     fetchClientWells();
@@ -35,7 +36,7 @@ function ClientWells() {
       <div className='bg-green-500 text-white p-2'>Client Wells</div>
       <div className='flex justify-center items-center'>
         {loading ? (
-          <div>Loading...</div>
+          <div>{loadingIcon}</div>
         ) : error ? (
           <p>Error: {error}</p>
         ) : (

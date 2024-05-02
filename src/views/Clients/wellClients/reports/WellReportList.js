@@ -3,12 +3,13 @@ import { useParams } from "react-router-dom"
 import { getWellReports } from "../../../../services/clientServices";
 import { useCookies } from 'react-cookie';
 import usePagination from '../../../../hooks/usePagination';
+import useLoading from '../../../../hooks/useLoading';
 
 function WellReportList() {
   const { clientId, code } = useParams();
   const [cookies] = useCookies(['token']);
   const [wellReports, setWellReports] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, loadingIcon, setLoading] = useLoading();
   const { page, size, setPage } = usePagination();
 
   const fetchWellReports = useCallback(async () => {
@@ -21,7 +22,7 @@ function WellReportList() {
       console.error('Error fetching well reports', error);
     }
   }
-  , [cookies.token, clientId, code, page, size]);
+  , [cookies.token, clientId, code, page, size, setLoading]);
 
   useEffect(() => {
     fetchWellReports();
@@ -32,7 +33,7 @@ function WellReportList() {
     <div>
       { 
         loading ? (
-          <div>Loading...</div>
+          <div>{loadingIcon}</div>
         ) : (
           <div>
             <h1 className="text-center">Well Reports</h1>
