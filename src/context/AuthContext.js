@@ -4,6 +4,7 @@ import { useCookies } from 'react-cookie';
 import { createContext, useContext, useState, useEffect } from 'react';
 import {getClientDetails} from '../services/clientServices';
 import { baseUrl, auth } from '../utils/routes.utils';
+import useLoading from '../hooks/useLoading';
 
 const AuthContext = createContext(null);
 
@@ -11,7 +12,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, loadingIcon, setLoading] = useLoading();
     // eslint-disable-next-line no-unused-vars
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
     const baseURL = baseUrl;
@@ -32,7 +33,7 @@ export const AuthProvider = ({ children }) => {
             }
         };
         fetchUserDetails();
-    }, [baseURL, cookies.token]);
+    }, [baseURL, cookies.token, setLoading]);
 
 
     const login = async (email, password) => {
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
-    const value = { user, login, logout, loading };
+    const value = { user, login, logout, loading, loadingIcon };
 
     return (
         <AuthContext.Provider value={value}>

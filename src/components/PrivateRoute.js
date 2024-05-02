@@ -2,10 +2,10 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function PrivateRoute({ children, roles }) {
-  const { user, loading } = useAuth();
+  const { user, loading, loadingIcon } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{loadingIcon}</div>;
   }
 
 
