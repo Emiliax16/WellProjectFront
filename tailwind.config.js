@@ -9,8 +9,10 @@ module.exports = {
         'bounce-slow': 'bounce 3s linear infinite',
       }
     },
-    
   },
   plugins: [],
+  corePlugins: {
+    preflight: true,
+  },
 }
 
