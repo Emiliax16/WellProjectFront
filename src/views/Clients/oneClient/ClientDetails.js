@@ -5,7 +5,7 @@ import { getClientDetailsById } from '../../../services/clientServices';
 import useLoading from '../../../hooks/useLoading';
 
 function ClientDetails() {
-  const { id: userId } = useParams();
+  const { id: clientId } = useParams();
   const [client, setClient] = useState({});
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
@@ -13,13 +13,13 @@ function ClientDetails() {
   const [error, setError] = useState(null);
   
   const handleCreateWell = () => {
-    navigate(`/clients/${userId}/wells/new`);
+    navigate(`/clients/${clientId}/wells/new`);
   }
   
   const fetchClientDetails = useCallback(async () => {
     try {
       setLoading(true);
-      const clientDetails = await getClientDetailsById(cookies.token, userId);
+      const clientDetails = await getClientDetailsById(cookies.token, clientId);
       setClient(clientDetails);
     } catch (err) {
       setError('Failed to fetch details');
@@ -27,7 +27,7 @@ function ClientDetails() {
     } finally {
       setLoading(false);
     }
-  }, [cookies.token, userId, setLoading]);
+  }, [cookies.token, clientId, setLoading]);
   
 
   useEffect(() => {
