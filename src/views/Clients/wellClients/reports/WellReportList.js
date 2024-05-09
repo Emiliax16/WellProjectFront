@@ -4,22 +4,28 @@ import { getWellReports } from "../../../../services/clientServices";
 import { useCookies } from 'react-cookie';
 import usePagination from '../../../../hooks/usePagination';
 import useLoading from '../../../../hooks/useLoading';
+import useError from '../../../../hooks/useError';
+import Alerts from '../../../../components/Alerts';
 
 function WellReportList() {
   const { clientId, code } = useParams();
   const [cookies] = useCookies(['token']);
   const [wellReports, setWellReports] = useState([]);
   const [loading, loadingIcon, setLoading] = useLoading();
+  const { error, setError } = useError();
   const { page, size, setPage } = usePagination();
 
   const fetchWellReports = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
       const reports = await getWellReports(cookies.token, clientId, code, page, size);
       setWellReports(reports.rows);
-      setLoading(false);
     } catch (error) {
-      console.error('Error fetching well reports', error);
+      console.log('Error fetching well reports', error);
+      setError('Error cargando los reportes del pozo.');
+    } finally {
+      setLoading(false);
     }
   }
   , [cookies.token, clientId, code, page, size, setLoading]);
@@ -34,6 +40,8 @@ function WellReportList() {
       { 
         loading ? (
           <div>{loadingIcon}</div>
+        ) : error ? (
+          <Alerts type='error' message={error} />
         ) : (
           <div>
             <h1 className="text-center">Well Reports</h1>
@@ -57,7 +65,7 @@ function WellReportList() {
               </div>
               </>
             ) : (
-              <p>No reports available.</p>
+              <p>No hay reportes disponibles.</p>
             )}
           </div>
         )

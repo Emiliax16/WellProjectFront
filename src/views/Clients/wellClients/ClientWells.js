@@ -4,28 +4,31 @@ import { useCookies } from 'react-cookie';
 import { getClientWells } from '../../../services/clientServices';
 import usePagination from '../../../hooks/usePagination';
 import useLoading from '../../../hooks/useLoading';
+import useError from '../../../hooks/useError';
+import Alerts from '../../../components/Alerts';
 import WellRow from './WellRow';
 
 function ClientWells() {
-  const { id: userId } = useParams();
+  const { id: clientId } = useParams();
   const { page, size, setPage } = usePagination();
   const [cookies] = useCookies(['token']);
   const [wells, setWells] = useState([]);
   const [loading, loadingIcon, setLoading] = useLoading();
-  const [error, setError] = useState(null);
+  const { error, setError } = useError();
 
   const fetchClientWells = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      const wells = await getClientWells(cookies.token, userId, page, size);
+      const wells = await getClientWells(cookies.token, clientId, page, size);
       setWells(wells.rows);
     } catch (err) {
-      setError('Failed to fetch wells');
-      console.error(err);
+      console.log('Error fetching wells', err);
+      setError('Error cargando los pozos del cliente.');
     } finally {
       setLoading(false);
     }
-  }, [cookies.token, userId, page, size, setLoading]);
+  }, [cookies.token, clientId, page, size, setLoading, setError]);
 
   useEffect(() => {
     fetchClientWells();
@@ -38,7 +41,7 @@ function ClientWells() {
         {loading ? (
           <div>{loadingIcon}</div>
         ) : error ? (
-          <p>Error: {error}</p>
+          <Alerts type='error' message={error} />
         ) : (
           <div className='bg-white p-2 m-2'>
             {wells.length > 0 ? (
@@ -52,7 +55,7 @@ function ClientWells() {
                 </div>
               </>
             ) : (
-              <p>No wells available.</p>
+              <p>Cliente no tiene pozos creados.</p>
             )}
           </div>
         )}

@@ -5,6 +5,8 @@ import Input from '../../../components/input';
 import { useParams, useNavigate } from 'react-router-dom';
 import { postNewWell } from '../../../services/clientServices';
 import { clientFront, wellBack } from '../../../utils/routes.utils';
+import useError from '../../../hooks/useError';
+import Alerts from '../../../components/Alerts';
 
 const { urlClients } = clientFront;
 const { getWells } = wellBack;
@@ -16,24 +18,35 @@ function CreateWell() {
     formState: { errors }
   } = useForm();
 
-  const { id: userId } = useParams();
+  const { id: clientId } = useParams();
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
+  const { error, setError } = useError();
 
   const onSubmit = async (data) => {
+    setError(null);
     if (cookies.token) {
       try {
-        await postNewWell(cookies.token, data, userId);
-        const url = `/${urlClients}/${userId}/${getWells}`;
+        await postNewWell(cookies.token, data, clientId);
+        const url = `/${urlClients}/${clientId}/${getWells}`;
         navigate(url);
       } catch (error) {
-        console.error('Error creating well:', error);
+        const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message;
+        console.log('Error creating well', message)
+        setError('Error al crear el pozo: ' + message);
       }
     }
   };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      {
+        error ?
+          <div className='my-3'>
+            <Alerts type="error" message={error} /> 
+          </div>
+        : null
+      }
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-12">
@@ -86,7 +99,11 @@ function CreateWell() {
                 }}
                 errors={errors} 
               />
-              <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
+              <button 
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              >
                 Registrar Pozo
               </button>
             </div>
