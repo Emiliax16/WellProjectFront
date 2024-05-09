@@ -6,26 +6,44 @@ import Select from '../../../components/select';
 import { postNewClient } from '../../../services/clientServices';
 import { useNavigate } from 'react-router-dom';
 import { clientFront } from  '../../../utils/routes.utils';
+import Alerts from '../../../components/Alerts';
+import useError from '../../../hooks/useError';
 
 function NewClient() {
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors } 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
   } = useForm();
 
   const [cookies] = useCookies(['token']);
+  const { error, setError } = useError();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     if (cookies.token) {
-      await postNewClient(cookies.token, data);
-      navigate(`/${clientFront.urlClients}`);
+      try {
+        await postNewClient(cookies.token, data);
+        navigate(`/${clientFront.urlClients}`);
+      } catch (error) {
+        console.log(error)
+        const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message;
+        setError(message);
+      }
+    } else {
+      setError('Token expirado, por favor inicie sesión nuevamente.');
     }
   };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      {
+        error ?
+          <div className='my-3'>
+            <Alerts type="error" message={error} /> 
+          </div>
+        : null
+      }
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-12">
@@ -155,7 +173,11 @@ function NewClient() {
                 }}
                 errors={errors}
               />
-              <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
+              <button 
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                >
                 Registrar Usuario
               </button>
             </div>
