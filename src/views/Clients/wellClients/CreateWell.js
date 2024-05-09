@@ -16,15 +16,15 @@ function CreateWell() {
     formState: { errors }
   } = useForm();
 
-  const { id: userId } = useParams();
+  const { id: clientId } = useParams();
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     if (cookies.token) {
       try {
-        await postNewWell(cookies.token, data, userId);
-        const url = `/${urlClients}/${userId}/${getWells}`;
+        await postNewWell(cookies.token, data, clientId);
+        const url = `/${urlClients}/${clientId}/${getWells}`;
         navigate(url);
       } catch (error) {
         console.error('Error creating well:', error);
