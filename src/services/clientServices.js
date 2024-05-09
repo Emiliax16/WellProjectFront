@@ -16,7 +16,7 @@ const getAllClients = async (token) => {
       })
     return response.data
   } catch (error) {
-    console.error('Error fetching clients', error)
+    throw error;
   }
 }
 
@@ -34,9 +34,9 @@ const getClientDetails = async (token) => {
   }
 }
 
-const getClientDetailsById = async (token, userId) => {
+const getClientDetailsById = async (token, clientId) => {
   try {
-    const response = await apiClient.get(`${getDetails}/${userId}`,
+    const response = await apiClient.get(`${getDetails}/${clientId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -49,9 +49,9 @@ const getClientDetailsById = async (token, userId) => {
 }
 
 //                GET CLIENT WELLS
-const getClientWells = async (token, userId, page, size) => {
+const getClientWells = async (token, clientId, page, size) => {
   try {
-    const url = `${urlClients}/${userId}/${getWells}?page=${page}&size=${size}`
+    const url = `${urlClients}/${clientId}/${getWells}?page=${page}&size=${size}`
     const response = await apiClient.get(url,
       {
         headers: {
@@ -65,9 +65,9 @@ const getClientWells = async (token, userId, page, size) => {
 }
 
 //                GET WELL REPORTS
-const getWellReports = async (token, userId, wellCode, page, size) => {
+const getWellReports = async (token, clientId, wellCode, page, size) => {
   try {
-    const url = `${urlClients}/${userId}/${getWells}/${wellCode}/data?page=${page}&size=${size}`
+    const url = `${urlClients}/${clientId}/${getWells}/${wellCode}/data?page=${page}&size=${size}`
     const response = await apiClient.get(url,
       {
         headers: {
@@ -77,7 +77,7 @@ const getWellReports = async (token, userId, wellCode, page, size) => {
     return response.data
   }
   catch (error) {
-    console.error('Error fetching well reports', error)
+    throw error;
   }
 }
 
@@ -93,14 +93,13 @@ const postNewClient = async (token, data) => {
     return response.data;
   }
   catch (error) {
-    console.error('User Creation Error:', error.response ? error.response.data : error);
+    throw error;
   }
 }
 
-const postNewWell = async (token, data, userId) => {
+const postNewWell = async (token, data, clientId) => {
   try {
-    const url = `${urlClients}/${userId}/${postWell}`
-    console.log("el token es: ", token)
+    const url = `${urlClients}/${clientId}/${postWell}`
     const response = await apiClient.post(url, data, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -110,7 +109,7 @@ const postNewWell = async (token, data, userId) => {
     return response.data;
   }
   catch (error) {
-    console.error('Well Creation Error:', error.response ? error.response.data : error);
+    throw error;
   }
 }
 
