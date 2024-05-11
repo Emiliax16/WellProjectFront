@@ -1,7 +1,7 @@
 import apiClient  from './index';
 import { clientBack, clientFront, wellBack, userBack } from '../utils/routes.utils';
 
-const { getClients, getDetails, putClient } = clientBack;
+const { getClients, getDetails, putClient, deleteClient } = clientBack;
 const { urlClients } = clientFront;
 const { getWells, postWell } = wellBack;
 const { postUser } = userBack;
@@ -125,6 +125,21 @@ const postNewWell = async (token, data, clientId) => {
   }
 }
 
+const deleteClientById = async (token, clientId) => {
+  try {
+    const url = `${deleteClient}/${clientId}/delete`
+    const response = await apiClient.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export { 
   getAllClients, 
   getClientDetails, 
@@ -132,5 +147,6 @@ export {
   getClientWells,
   getWellReports,
   postNewClient,
-  postNewWell
+  postNewWell,
+  deleteClientById
 }

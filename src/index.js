@@ -9,6 +9,7 @@ import NewClient from './views/Clients/oneClient/NewClient';
 import ClientList from './views/Clients/allClients/ClientList';
 import ClientDetails from './views/Clients/oneClient/ClientDetails';
 import EditClient from './views/Clients/oneClient/EditClient';
+import DeleteClient from './views/Clients/oneClient/DeleteClient';
 import CreateWell from './views/Clients/wellClients/CreateWell';
 import ClientWells from './views/Clients/wellClients/ClientWells';
 import WellReportList from './views/Clients/wellClients/reports/WellReportList';
@@ -47,6 +48,8 @@ root.render(
             <Route path="/clients/:id/wells/new" element={<CreateWell />} />
             {/* Editar un cliente */}
             <Route path="/clients/:id/edit" element={<EditClient />} />
+            {/* Eliminar un cliente */}
+            <Route path="/clients/:id/delete" element={<DeleteClient />} />
             {/* Ver pozos */}
             <Route path="/clients/:id/wells" element={<ClientWells />} />
             {/* Ver reportes de un pozo */}

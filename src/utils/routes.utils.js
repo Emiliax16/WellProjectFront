@@ -19,8 +19,9 @@ const userBack = {
 // Client Request
 const clientBack = {
     getClients: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX, 
-    getDetails: process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO, // TODO: nombre de user
-    putClient: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX, // TODO: nombre de user
+    getDetails: process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO,
+    putClient: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX,
+    deleteClient: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX,
 }
 
 const clientFront = {
