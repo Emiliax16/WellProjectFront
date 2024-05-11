@@ -1,7 +1,7 @@
 import apiClient  from './index';
 import { clientBack, clientFront, wellBack, userBack } from '../utils/routes.utils';
 
-const { getClients, getDetails } = clientBack;
+const { getClients, getDetails, putClient } = clientBack;
 const { urlClients } = clientFront;
 const { getWells, postWell } = wellBack;
 const { postUser } = userBack;
@@ -81,14 +81,26 @@ const getWellReports = async (token, clientId, wellCode, page, size) => {
   }
 }
 
-const postNewClient = async (token, data) => {
+const postNewClient = async (token, data, clientId) => {
   try {
-    const response = await apiClient.post(`${postUser}` , {
-      ...data,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    let response = null;
+    if (clientId === '') {
+      response = await apiClient.post(`${postUser}` , {
+        ...data,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    } 
+    else {
+      const url = `${putClient}/${clientId}/edit`
+      response = await apiClient.put(url , {
+        ...data,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
 
     return response.data;
   }

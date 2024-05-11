@@ -1,0 +1,11 @@
+{
+    "titles": {
+        "principalTitle": "Registro de usuarios"
+    },
+    "descriptions": {
+        "principalDescription": "Creación de usuarios con diferentes funcionalidades dependiendo del rol asignado."
+    },
+    "buttons": {
+      "submitButton": "Registrar Usuario"
+    }
+  }

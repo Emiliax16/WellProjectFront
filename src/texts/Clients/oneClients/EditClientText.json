@@ -1,0 +1,11 @@
+{
+    "titles": {
+        "principalTitle": "Edición de usuarios"
+    },
+    "descriptions": {
+        "principalDescription": "En esta sección podrás editar los datos de los usuarios de la plataforma."
+    },
+    "buttons": {
+      "submitButton": "Editar usuario"
+    }
+  }
