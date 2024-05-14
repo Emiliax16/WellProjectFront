@@ -6,6 +6,8 @@ import usePagination from '../../../../hooks/usePagination';
 import useLoading from '../../../../hooks/useLoading';
 import useError from '../../../../hooks/useError';
 import Alerts from '../../../../components/Alerts';
+import EnhancedTable from './ReportsTable'
+import { headCells } from '../../../../utils/wellReport.utils'
 
 function WellReportList() {
   const { clientId, code } = useParams();
@@ -20,6 +22,7 @@ function WellReportList() {
     setError(null);
     try {
       const reports = await getWellReports(cookies.token, clientId, code, page, size);
+      console.log(reports.rows)
       setWellReports(reports.rows);
     } catch (error) {
       console.log('Error fetching well reports', error);
@@ -44,26 +47,8 @@ function WellReportList() {
           <Alerts type='error' message={error} />
         ) : (
           <div>
-            <h1 className="text-center">Well Reports</h1>
             { wellReports.length > 0 ? (
-            <> 
-              <ul>
-                { wellReports.map((report) => (
-                  <li key={report.id} className="shadow-xl rounded-md p-10 font-medium">
-                    <p>ID: {report.id}</p>
-                    <p>DATE: {report.date}</p>
-                    <p>CODE: {report.code}</p>
-                    <p>HOUR: {report.hour}</p>
-                    <p>NIVEL FREATICO: {report.nivel_freatico}</p>
-                    <p>TOTALIZADOR: {report.totalizador}</p>
-                  </li>
-                ))}
-              </ul>
-              <div className='flex justify-around'>
-                <button onClick={() => setPage(page - 1)} className='p-2 bg-blue-500 text-white rounded-md'>Previous Page</button>
-                <button onClick={() => setPage(page + 1)} className='p-2 bg-blue-500 text-white rounded-md'>Next Page</button>
-              </div>
-              </>
+            <EnhancedTable rows={wellReports} columns={headCells} wellCode={code}/>
             ) : (
               <p>No hay reportes disponibles.</p>
             )}
