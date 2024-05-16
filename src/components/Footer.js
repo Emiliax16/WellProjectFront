@@ -1,35 +1,37 @@
 import PropTypes from "prop-types";
 import Typography from '@mui/material/Typography';
 import Icon from "./Icon";
+import instagramQR from '../assets/img/instagramQR.webp';
+import Logo from '../assets/img/img5.webp';
 
 const year = new Date().getFullYear();
 
-export function Footer({ title, description, socials, menus, copyright }) {
+export function Footer({ title, description, socials, menus, copyright, qrCode, logo }) {
   return (
     <footer className="relative px-4 pt-8 pb-6">
       <div className="container mx-auto">
         <div className="flex flex-wrap pt-6 text-center lg:text-left">
-          <div className="w-full px-4 lg:w-6/12">
+          <div className="w-full px-4 lg:w-4/12">
             <Typography variant="h4" className="mb-4" color="blue-gray">
               {title}
             </Typography>
-            <Typography className="font-normal text-blue-gray-500 lg:w-2/5">
+            <Typography className="font-normal text-blue-gray-500 lg:w-full">
               {description}
             </Typography>
-            <div className="mx-auto mt-6 mb-8 flex justify-center gap-2 md:mb-0 lg:justify-start">
-              {socials.map(({ color, name, path }) => (
-                <a
-                  key={name}
-                  href={path}
-                  rel="noopener noreferrer"
-                >
-                  <Icon icon={name} classNameIcon={color} classNameDiv="flex flex-row items-center justify-center my-2" />
-                </a>
+            <div className="mx-auto mt-6 mb-8 flex flex-col md:mb-0 lg:justify-start">
+              <div className="mb-4">
+                  <img src={qrCode} alt="Instagram QR Code" style={{ width: 150, height: 150 }} />
+              </div>
+              {socials.filter(social => social.name === 'Instagram').map(({ color, name, path }) => (
+                  <a key={name} href={path} rel="noopener noreferrer" className="flex mt-2 ml-3">
+                      <Icon icon={name} classNameIcon={color} classNameDiv="flex flex-row items-center justify-center" />
+                  </a>
               ))}
             </div>
+
           </div>
-          <div className="mx-auto mt-12 w-max lg:mt-0">
-            {menus.map(({ name, items }) => (
+          <div className="w-full lg:w-4/12 mx-auto mt-12 lg:mt-0">
+            {menus.map(({ name, items, logo }) => (
               <div key={name}>
                 <Typography
                   variant="small"
@@ -49,13 +51,16 @@ export function Footer({ title, description, socials, menus, copyright }) {
                         variant="small"
                         className="mb-2 block font-normal text-blue-gray-500 hover:text-blue-gray-700"
                       >
-                        {item.name + " - " + item.position}
+                        {item.name}
                       </Typography>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
+            <div className="mb-4">
+              <img src={logo} alt="Logo" style={{ width: 150, height: 150 }} />
+            </div>
           </div>
         </div>
         <hr className="my-6 border-gray-300" />
@@ -77,45 +82,32 @@ export function Footer({ title, description, socials, menus, copyright }) {
 Footer.defaultProps = {
   title: "Promedición Chile",
   description:
-    "Algún slongan o frase llamativa que describa la empresa o el sitio web.",
+    "Monitoreo y precisión en telemetría del agua a la vanguardia tecnológica.",
   socials: [
     {
       color: "text-gray-800",
       name: "Instagram",
-      path: "https://www.instagram.com/",
+      path: "https://www.instagram.com/promedicion/",
     },
-    {
-      color: "text-gray-800",
-      name: "X",
-      path: "https://www.twitter.com/",
-    },
-    {
-      color: "text-gray-800",
-      name: "Facebook",
-      path: "https://www.facebook.com",
-    },  
   ],
   menus: [
     {
-      name: "Autores",
+      name: "Fundadores",
       items: [
         {
-          name: "Alejandro X",
-          position: "posicionX",
-          path: "https://github.com/creativetimofficial/material-tailwind/blob/main/LICENSE.md?ref=mtk",
+          name: "Alejandro Contreras",
         },
         {
-          name: "Aike Y",
-          position: "posicionY",
-          path: "https://github.com/creativetimofficial/material-tailwind/blob/main/CONTRIBUTING.md?ref=mtk",
+          name: "Aike Parvex",
         },
       ],
     },
   ],
+  qrCode: instagramQR,
+  logo: Logo,
   copyright: (
     <>
-      Copyright © {year} Algún Copyright{" "}
-      .
+      Copyright © {year} Todos los derechos reservados.
     </>
   ),
 };
@@ -125,8 +117,9 @@ Footer.propTypes = {
   description: PropTypes.string,
   socials: PropTypes.arrayOf(PropTypes.object),
   menus: PropTypes.arrayOf(PropTypes.object),
+  qrCode: PropTypes.string,
+  logo: PropTypes.string,
   copyright: PropTypes.node,
 };
-
 
 export default Footer;

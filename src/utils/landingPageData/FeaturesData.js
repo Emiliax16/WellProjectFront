@@ -2,24 +2,24 @@
 export const FeaturesData = [
   {
     color: "text-gray-800",
-    title: "Característica 1",
+    title: "Equipos de Alta Precisión",
     icon: "Construction",
     description:
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.",
+      "Utilizamos equipos y sistemas de alta tecnología especializados, adaptándonos a las exigencias del mercado y cumpliendo rigurosamente con las regulaciones vigentes. Nuestros sensores especializados y sondas de nivel ofrecen mediciones exactas para operaciones confiables y seguras.",
   },
   {
     color: "text-gray-800",
-    title: "Característica 2",
+    title: "DataLogger y Cloud Avanzado",
     icon: "ContentPasteSearch",
     description:
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.",
+    " Nuestros sistemas propios de DataLogger y Servidor Cloud recopilan y procesan datos en tiempo real, facilitando el envío automático de información crucial a la Dirección General de Aguas de Chile (DGA), garantizando así el cumplimiento normativo.",
   },
   {
     color: "text-gray-800",
-    title: "Característica 3",
+    title: "Soluciones Personalizadas",
     icon: "Chat",
     description:
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.",
+    "Gracias a nuestro desarrollo interno de tecnologías, podemos adaptarnos rápidamente a nuevas condiciones y exigencias del mercado. Nuestra plataforma es capaz de ajustarse de manera flexible a las necesidades de regulación y operación de nuestros clientes.",
   },
 ];
 
