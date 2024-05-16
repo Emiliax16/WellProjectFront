@@ -15,7 +15,7 @@ function WellReportList() {
   const [wellReports, setWellReports] = useState([]);
   const [loading, loadingIcon, setLoading] = useLoading();
   const { error, setError } = useError();
-  const { page, size, setPage } = usePagination();
+  const { page, size } = usePagination();
 
   const fetchWellReports = useCallback(async () => {
     setLoading(true);
@@ -31,7 +31,7 @@ function WellReportList() {
       setLoading(false);
     }
   }
-  , [cookies.token, clientId, code, page, size, setLoading]);
+  , [cookies.token, clientId, code, page, size, setLoading, setError]);
 
   useEffect(() => {
     fetchWellReports();
