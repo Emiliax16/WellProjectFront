@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import ActionAreaCard from "../components/cards/ActionAreaCard";
 import IconCard from "../components/cards/IconCard";
 import Footer from "../components/Footer";
+import Logo from "../assets/img/img5.webp";
 
 export function LandingPage() {
   const { 
@@ -35,7 +36,7 @@ export function LandingPage() {
         <nav class="container mx-auto px-6 py-3">
           <div class="flex items-center justify-between">
             <div class="text-white font-bold text-xl">
-              {landingPageText.titles.brand}
+              <img src={Logo} alt="Logo" className="h-10 w-10" />
             </div>
             <div class="md:block">
               <ul class="flex items-center space-x-8">
@@ -50,13 +51,13 @@ export function LandingPage() {
           <div className="flex flex-wrap items-center">
             <div className="ml-auto mr-auto w-full px-4 text-center lg:w-8/12">
               <Typography
-                variant="h1"
+                variant="h2"
                 color="white"
-                className="mb-6 font-black text-white text-4xl"
+                className="mb-6 font-black text-white"
               >
                 {landingPageText.titles.welcome}
               </Typography>
-              <Typography variant="lead" color="white" className="opacity-90">
+              <Typography variant="h6"  style={{ fontWeight: '700', color: 'white'}} className="opacity-90">
                 {landingPageText.descriptions.attentionGrabber}
               </Typography>
             </div>
@@ -89,15 +90,13 @@ export function LandingPage() {
               <Typography variant="h9" className="mb-8 font-normal text-blue-gray-500">
                 {landingPageText.descriptions.presentation}
                 <br />
-                <br />
-                {landingPageText.descriptions.presentation}
               </Typography>
             </div>
             <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
               <ActionAreaCard
                 title={landingPageText.titles.aboutUs}
                 description={landingPageText.descriptions.aboutUs}
-                path="teamwork.png"
+                path="img8.webp"
               />
             </div>
           </div>
@@ -125,7 +124,7 @@ export function LandingPage() {
           <PageTitle section={landingPageText.titles.ourBenefits} heading={landingPageText.titles.benefitsList}>
             {landingPageText.descriptions.ourBenefits}
           </PageTitle>
-          <div className="mx-auto mt-20 mb-24 grid max-w-5xl grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3 justify-items-center">
+          <div className="mx-auto mt-20 mb-24 flex flex-wrap justify-center gap-16">
             {MoreInformation.map(({ title, icon, description }) => (
               <IconCard 
                 title={title}

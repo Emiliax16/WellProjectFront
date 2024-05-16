@@ -1,27 +1,27 @@
 {
   "titles": {
-    "welcome": "Título llamativo Promedición!",
-    "presentation": "Slongan de la empresa",
-    "aboutUs": "Acerca de nosotros",
-    "ourTechnologies": "Nuestras tecnologías",
-    "usedResources": "Recursos utilizados",
-    "ourBenefits": "Nuestros beneficios",
-    "benefitsList": "Lista de beneficios al contratar nuestros servicios",
+    "welcome": "Promedición",
+    "presentation": "Quiénes somos",
+    "aboutUs": "Instalación",
+    "ourTechnologies": "¿Sabías que podrías enfrentar multas desde 51 UTM por no monitorear tu pozo?",
+    "usedResources": "Resolución 1238: Monitoreo de Extracciones Efectivas",
+    "ourBenefits": "Monitorea con precisión, cumple con certeza",
+    "benefitsList": "Monitoreo Avanzado de Recursos Hídricos",
     "contactUs": "Contáctenos",
     "wantOurServices": "¿Desea nuestros servicios?",
     "brand": "Logo"
   },
   "descriptions": {
     "attentionGrabber": 
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries",
+        "Descubre el poder de la telemetría con nuestra solución integral: seguimiento preciso y análisis en tiempo real, accesibles desde cualquier lugar.",
     "presentation": 
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+        "Somos una empresa experta en Telemetría, que contamos con una solución robusta, completa e integral para nuestros clientes, preocupándonos de cumplir las normativas y exigencias vigentes. A través de nuestro sistema de monitoreo avanzado, nuestros clientes pueden llevar un registro completo con analítica e información en tiempo real, lo que permite tener un control claro de todas las mediciones requeridas. Nuestra App y plataforma web, permite hacer el seguimiento y revisión en tiempo real de todas las mediciones, independiente de dónde se encuentre el cliente.",
     "aboutUs": 
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+        "Gracias a nuestro desarrollo interno de tecnologías, podemos adaptarnos rápidamente a nuevas condiciones y exigencias del mercado. Nuestra plataforma es capaz de ajustarse de manera flexible a las necesidades de regulación y operación de nuestros clientes.",
     "ourTechnologies":
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+        "La Resolución 1238 de la Dirección General de Aguas (2019) exige a los propietarios de pozos reportar de manera transparente y responsable el volumen de agua extraída y el nivel freático. Esta normativa es esencial para asegurar que las extracciones se alineen con los derechos otorgados y contribuir a la protección de nuestros acuíferos.",
     "ourBenefits":
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
+        "Nuestro sistema de monitoreo utiliza dos sensores clave para garantizar un seguimiento exhaustivo y fiable del agua. Uno en el pozo para el nivel freático y otro en la cañería para el caudal extraído, ambos conectados a un DataLogger que envía los datos directamente a la Dirección General de Aguas, asegurando cumplimiento normativo eficiente y automatizado.",
     "contactUs":
       "Completa el siguiente formulario"
   },

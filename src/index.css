@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .bg-custom {
-  background-image: url('./assets/img/background.jpg');
+  background-image: url('./assets/img/img2.webp');
   background-position: center;
   background-size: cover;
 }
