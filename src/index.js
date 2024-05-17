@@ -13,7 +13,7 @@ import DeleteClient from './views/Clients/oneClient/DeleteClient';
 import CreateWell from './views/Clients/wellClients/CreateWell';
 import ClientWells from './views/Clients/wellClients/ClientWells';
 import EditWell from './views/Clients/wellClients/EditWell';
-//import DeleteWell from './views/Clients/wellClients/DeleteWell';
+import DeleteWell from './views/Clients/wellClients/DeleteWell';
 import WellReportList from './views/Clients/wellClients/reports/WellReportList';
 import View from './views/View';
 import { StyledEngineProvider } from '@mui/material/styles';
@@ -59,7 +59,7 @@ root.render(
             {/* Editar un pozo */}
             <Route path="/clients/:id/wells/:code/edit" element={<EditWell />} />
             {/* Eliminar un pozo */}
-            {/*<Route path="/clients/:id/wells/:code/delete" element={<DeleteWell />} />*/}
+            <Route path="/clients/:id/wells/:code/delete" element={<DeleteWell />} />
             
 
             <Route path="/*" element="404 Not Found" />
