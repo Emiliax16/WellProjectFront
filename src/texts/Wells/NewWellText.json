@@ -1,0 +1,11 @@
+{
+    "titles": {
+        "principalTitle": "Registro de pozos"
+    },
+    "descriptions": {
+        "principalDescription": "Creación de pozos, por defecto vendrá inactivo hasta que comience a recibir reportes."
+    },
+    "buttons": {
+      "submitButton": "Registrar Pozo"
+    }
+  }
