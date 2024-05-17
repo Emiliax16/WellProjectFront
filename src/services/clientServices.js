@@ -3,7 +3,7 @@ import { clientBack, clientFront, wellBack, userBack } from '../utils/routes.uti
 
 const { getClients, getDetails, putClient, deleteClient } = clientBack;
 const { urlClients } = clientFront;
-const { getWells, postWell, putWell } = wellBack;
+const { getWells, postWell, putWell, deleteWell } = wellBack;
 const { postUser } = userBack;
 
 const getAllClients = async (token) => {
@@ -137,6 +137,21 @@ const postNewWell = async (token, data, clientId, wellCode) => {
   }
 }
 
+const deleteWellByCode = async (token, clientId, wellCode) => {
+  try {
+    const url = `${urlClients}/${clientId}/${deleteWell}/${wellCode}/delete`
+    const response = await apiClient.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 const deleteClientById = async (token, clientId) => {
   try {
     const url = `${deleteClient}/${clientId}/delete`
@@ -160,5 +175,6 @@ export {
   getWellReports,
   postNewClient,
   postNewWell,
-  deleteClientById
+  deleteClientById,
+  deleteWellByCode
 }
