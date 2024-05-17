@@ -31,6 +31,7 @@ const clientFront = {
 // Wells request
 const wellBack = {
     getWells: process.env.REACT_APP_API_ENDPOINT_GET_ALL_WELLS,
+    putWell: process.env.REACT_APP_API_ENDPOINT_PUT_WELL,
     postWell: process.env.REACT_APP_API_ENDPOINT_POST_WELL,
 
 }

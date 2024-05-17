@@ -3,7 +3,7 @@ import { clientBack, clientFront, wellBack, userBack } from '../utils/routes.uti
 
 const { getClients, getDetails, putClient, deleteClient } = clientBack;
 const { urlClients } = clientFront;
-const { getWells, postWell } = wellBack;
+const { getWells, postWell, putWell } = wellBack;
 const { postUser } = userBack;
 
 const getAllClients = async (token) => {
@@ -109,14 +109,26 @@ const postNewClient = async (token, data, clientId) => {
   }
 }
 
-const postNewWell = async (token, data, clientId) => {
+const postNewWell = async (token, data, clientId, wellCode) => {
   try {
-    const url = `${urlClients}/${clientId}/${postWell}`
-    const response = await apiClient.post(url, data, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    let response = null;
+    if (!wellCode) {
+      // Create new well
+      const url = `${urlClients}/${clientId}/${postWell}`
+      response = await apiClient.post(url, data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    } else {
+      // Update existing well
+      const url = `${urlClients}/${clientId}/${putWell}/${wellCode}/edit`
+      response = await apiClient.put(url, data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
 
     return response.data;
   }
