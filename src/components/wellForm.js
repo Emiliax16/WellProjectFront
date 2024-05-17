@@ -8,11 +8,12 @@ import { clientFront, wellBack } from '../utils/routes.utils';
 import useError from '../hooks/useError';
 import Alerts from './Alerts';
 import NewWellText from '../texts/Wells/NewWellText.json'
+import EditWellText from '../texts/Wells/EditWellText.json'
 
 const { urlClients } = clientFront;
 const { getWells } = wellBack;
 
-function WellForm() {
+function WellForm( { well } ) {
   const { 
     register, 
     handleSubmit, 
@@ -24,19 +25,20 @@ function WellForm() {
   const navigate = useNavigate();
   const { error, setError } = useError();
 
-  const text = NewWellText;
+  const text = well ? EditWellText : NewWellText;
+  const errorText = well ? 'Error al editar el pozo: ' : 'Error al crear el pozo: ';
 
   const onSubmit = async (data) => {
     setError(null);
     if (cookies.token) {
       try {
-        await postNewWell(cookies.token, data, clientId);
+        const code = well ? well.code : null;
+        await postNewWell(cookies.token, data, clientId, code);
         const url = `/${urlClients}/${clientId}/${getWells}`;
         navigate(url);
       } catch (error) {
         const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message;
-        console.log('Error creating well', message)
-        setError('Error al crear el pozo: ' + message);
+        setError(errorText + message);
       }
     }
   };
@@ -63,7 +65,8 @@ function WellForm() {
               <Input
                 name="Nombre (Palabra que identifique al pozo con facilidad)" 
                 label="name" 
-                placeholder="" 
+                placeholder="Pozo 1"
+                defaultValue={well ? well.name : ''} 
                 register={register}
                 validation={{ 
                   required: {
@@ -79,6 +82,7 @@ function WellForm() {
                 label="location"
                 placeholder="Santiago, Arturo Prat 4715"
                 register={register}
+                defaultValue={well ? well.location : ''}
                 validation={{ 
                   required: {
                     value: true, 
@@ -92,6 +96,7 @@ function WellForm() {
                 name="Código de obra"
                 label="code"
                 placeholder="ABC1638234"
+                defaultValue={well ? well.code : ''}
                 register={register}
                 validation={{ 
                   required: {

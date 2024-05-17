@@ -1,0 +1,11 @@
+{
+    "titles": {
+        "principalTitle": "Editar pozos"
+    },
+    "descriptions": {
+        "principalDescription": "Edición de pozos, no se puede editar el código si existen reportes asociados al pozo."
+    },
+    "buttons": {
+      "submitButton": "Editar pozo"
+    }
+  }
