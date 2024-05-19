@@ -2,6 +2,7 @@ import React from "react";
 
 import PageTitle from "../components/PageTitle";
 import { FeaturesData, TechData, MoreInformation } from "../utils/landingPageData";
+import WhatsAppFab from "../utils/landingPageData/WhatsAppFab";
 import Icon from "../components/Icon";
 import { useForm } from 'react-hook-form';
 import landingPageText from "../texts/landingPageText.json";
@@ -192,6 +193,7 @@ export function LandingPage() {
       <div className="bg-white">
         <Footer />
       </div>
+      <WhatsAppFab />
     </div>
   );
 }
