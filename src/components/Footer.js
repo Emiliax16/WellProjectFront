@@ -95,7 +95,7 @@ Footer.defaultProps = {
       name: "Fundadores",
       items: [
         {
-          name: "Alejandro Contreras",
+          name: "Alejandro Gómez",
         },
         {
           name: "Aike Parvex",
