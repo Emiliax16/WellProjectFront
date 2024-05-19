@@ -11,6 +11,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
@@ -19,6 +20,8 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import DownloadIcon from '@mui/icons-material/GetApp';
+import { exportToExcel, exportMultipleToExcel } from '../../../../utils/export.utils';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -111,52 +114,82 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
+function filterExportData(row) {
+  const { id, createdAt, updatedAt, ...filteredData } = row;
+  return filteredData;
+}
+
 function EnhancedTableToolbar(props) {
-  const { numSelected, wellCode } = props;
+  const { numSelected, wellCode, selectedRows } = props;
+
+  const handleDownload = () => {
+    if (numSelected === 1) {
+      const filteredRow = filterExportData(selectedRows[0]);
+      exportToExcel([filteredRow], `Report-${filteredRow.code}`);
+    } else {
+      const filteredRows = selectedRows.map(filterExportData);
+      exportMultipleToExcel(filteredRows, `Reports-${wellCode}`);
+    }
+  };
+  
 
   return (
     <Toolbar
       sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
+        flexDirection: { xs: 'column', sm: 'row' },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Pozo: {wellCode}
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
+      <Typography
+        sx={{ flex: '1 1 100%', mb: { xs: 1, sm: 0 } }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Pozo: {wellCode}
+      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Tooltip title="Filtrar lista">
           <IconButton>
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+        <Tooltip title="Descargar">
+          <Button
+            variant="contained"
+            startIcon={<DownloadIcon />}
+            disabled={numSelected === 0}
+            onClick={handleDownload}
+            color="primary"
+            sx={{ ml: 2 }}
+          >
+            Descargar Reportes
+          </Button>
+        </Tooltip>
+      </Box>
+      {numSelected > 0 && (
+         <Box sx={{ display: 'flex', alignItems: 'center', mt: { xs: 1, sm: 0 }, ml: { xs: 2 }, flexDirection: 'row', gap: 2 }}>
+          <Typography
+            sx={{ flex: '1 1 100%', mb: { xs: 1, sm: 0 } }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+          >
+            {numSelected} seleccionado(s)
+          </Typography>
+          <Tooltip title="Eliminar">
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       )}
     </Toolbar>
   );
@@ -169,7 +202,7 @@ EnhancedTableToolbar.propTypes = {
 export default function EnhancedTable({ rows, columns, wellCode }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
+  const [selectedRows, setSelectedRows] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -182,30 +215,31 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
-      setSelected(newSelected);
+      setSelectedRows(visibleRows);
       return;
     }
-    setSelected([]);
+    setSelectedRows([]);
   };
+  
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+  const handleClick = (event, row) => {
+    const id = row.id;
+    const selectedIndex = selectedRows.map(row => row.id).indexOf(id);
+    let newSelectedRows = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
+      newSelectedRows = newSelectedRows.concat(selectedRows, row);
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelectedRows = newSelectedRows.concat(selectedRows.slice(1));
+    } else if (selectedIndex === selectedRows.length - 1) {
+      newSelectedRows = newSelectedRows.concat(selectedRows.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+      newSelectedRows = newSelectedRows.concat(
+        selectedRows.slice(0, selectedIndex),
+        selectedRows.slice(selectedIndex + 1),
       );
     }
-    setSelected(newSelected);
+    setSelectedRows(newSelectedRows);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -222,7 +256,7 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
     setDense(event.target.checked);
   }; */
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (id) => selectedRows.some(row => row.id === id);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -240,7 +274,7 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} wellCode={wellCode}/>
+        <EnhancedTableToolbar numSelected={selectedRows.length} wellCode={wellCode} selectedRows={selectedRows}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -248,7 +282,7 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
             size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
-              numSelected={selected.length}
+              numSelected={selectedRows.length}
               order={order}
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
@@ -264,7 +298,7 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    onClick={(event) => handleClick(event, row)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
