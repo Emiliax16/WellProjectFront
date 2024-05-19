@@ -100,6 +100,9 @@ Footer.defaultProps = {
         {
           name: "Aike Parvex",
         },
+        {
+          name: "Sebastián Torres",
+        },
       ],
     },
   ],
