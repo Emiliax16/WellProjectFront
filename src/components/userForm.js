@@ -25,6 +25,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
   const onSubmit = async (data) => {
     if (cookies.token) {
       try {
+        if (!data.encrypted_password) delete data.encrypted_password;
         await postNewClient(cookies.token, data, userInfo.id);
         navigate(`/${clientFront.urlClients}`);
       } catch (error) {
@@ -168,26 +169,29 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
                 }}
                 errors={errors}
               />
-              {
-                userInfo.name === '' ?
-                  <Input 
-                    name="Contraseña"
-                    label="encrypted_password"
-                    register={register}
-                    validation={{ 
-                      required: {
-                        value: true, 
-                        message: 'Este campo es obligatorio'
-                      }, 
-                      minLength: {
-                        value: 8, 
-                        message: 'La contraseña debe tener al menos 8 caracteres'
-                      }
-                    }}
-                    errors={errors}
-                  />
-                : null
-              }
+              <Input
+                name="Contraseña"
+                label="encrypted_password"
+                placeholder={userInfo.name ? texts.placeholders.password : ''}
+                register={register}
+                type="password"
+                validation={userInfo.name ? {
+                  minLength: {
+                    value: 8,
+                    message: 'La contraseña debe tener al menos 8 caracteres',
+                  }
+                } : {
+                  required: {
+                    value: true,
+                    message: 'Este campo es obligatorio',
+                  },
+                  minLength: {
+                    value: 8,
+                    message: 'La contraseña debe tener al menos 8 caracteres',
+                  }
+                }}
+                errors={errors}
+              />
               <button 
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"

@@ -7,5 +7,8 @@
     },
     "buttons": {
       "submitButton": "Editar usuario"
+    },
+    "placeholders": {
+      "password": "Dejar en blanco si no se quiere editar la contraseña"
     }
   }
