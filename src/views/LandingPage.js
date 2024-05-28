@@ -1,4 +1,5 @@
 import React from "react";
+import { useAuth } from '../context/AuthContext'
 
 import PageTitle from "../components/PageTitle";
 import { FeaturesData, TechData, MoreInformation } from "../utils/landingPageData";
@@ -20,6 +21,7 @@ export function LandingPage() {
     formState: { errors }
   } = useForm();
 
+  const { user, logout } = useAuth();
   const onSubmit = async (data) => {
     const email = data.email;
     const fullName = data.fullName;
@@ -41,7 +43,12 @@ export function LandingPage() {
             </div>
             <div class="md:block">
               <ul class="flex items-center space-x-8">
-                <li><a href="/login" className="text-white hover:text-blue-200">Iniciar Sesión</a></li>
+                {
+                  user ?
+                  <li><button onClick={logout} className="text-white hover:text-blue-200"> Cerrar Sesión </button></li>
+                  :
+                  <li><a href="/login" className="text-white hover:text-blue-200"> Iniciar Sesión </a></li>
+                }
               </ul>
             </div>
           </div>          
