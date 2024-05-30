@@ -15,15 +15,29 @@ function WellReportList() {
   const [wellReports, setWellReports] = useState([]);
   const [loading, loadingIcon, setLoading] = useLoading();
   const { error, setError } = useError();
-  const { page, size } = usePagination();
+  const { page, size, setPage } = usePagination();
+
+  const handlePagination = async () => {
+    setPage(page + 1);
+    fetchWellReports();
+  }
 
   const fetchWellReports = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const reports = await getWellReports(cookies.token, clientId, code, page, size);
-      console.log(reports.rows)
-      setWellReports(reports.rows);
+      const reports = await getWellReports(cookies.token, clientId, code, 2, size);
+      console.log("LALALALALALAL", reports.rows)
+      if (wellReports.length > 0) {
+        console.log("vamos a concatenar dos weas")
+        console.log("El page y el size es:", page, size)
+        console.log("wellReports", wellReports)
+        console.log("reports.rows", reports.rows)
+        setWellReports(wellReports.concat(reports.rows));
+      }
+      else {
+        setWellReports(reports.rows);
+      }
     } catch (error) {
       console.log('Error fetching well reports', error);
       setError('Error cargando los reportes del pozo.');
@@ -48,7 +62,7 @@ function WellReportList() {
         ) : (
           <div>
             { wellReports.length > 0 ? (
-            <EnhancedTable rows={wellReports} columns={headCells} wellCode={code}/>
+            <EnhancedTable rows={wellReports} columns={headCells} wellCode={code} handlePagination={handlePagination}/>
             ) : (
               <p>No hay reportes disponibles.</p>
             )}

@@ -199,7 +199,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ rows, columns, wellCode }) {
+export default function EnhancedTable({ rows, columns, wellCode, handlePagination }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selectedRows, setSelectedRows] = React.useState([]);
@@ -244,6 +244,10 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    console.log("MUAJAJAJAJ", page);
+    if ((page + 1) * rowsPerPage >= rows.length) {
+      handlePagination();
+    }
   };
 
   const handleChangeRowsPerPage = (event) => {
