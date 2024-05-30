@@ -2,13 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getClientDetailsById } from '../../../services/clientServices';
+import { useAuth } from '../../../context/AuthContext';
 import useLoading from '../../../hooks/useLoading';
 import useError from '../../../hooks/useError';
 import Alerts from '../../../components/Alerts';
 
+
 function ClientDetails() {
   const { id: clientId } = useParams();
   const [user, setUser] = useState(null);
+  const { isAdmin } = useAuth();
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
   const [loading, loadingIcon, setLoading] = useLoading();
@@ -52,7 +55,11 @@ function ClientDetails() {
               <div className='text-lg font-semibold'>Client Email: {user.email}</div>
               <div className='text-lg font-semibold'>Client Created: {user.createdAt}</div>
               <button onClick={() => navigate(`/clients/${clientId}/wells`)} className="p-2 bg-pink-500 text-white rounded-md">Wells</button>
-              <button onClick={handleCreateWell} className="p-2 ml-2 bg-pink-500 text-white rounded-md"> Create Well </button>
+              {
+                isAdmin && (
+                  <button onClick={handleCreateWell} className="p-2 bg-blue-500 text-white rounded-md">Create Well</button>
+                )
+              }
             </>
           ) : (
             <Alerts type="error" message={error} />

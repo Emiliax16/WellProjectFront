@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom"
+import { useAuth } from '../../../context/AuthContext';
 
 
 function WellRow({ well }) {
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
   const handleSeeReportsNavigation = () => {
     navigate(`/clients/${well.clientId}/wells/${well.code}`, { state: { well } });
   }
@@ -23,8 +25,14 @@ function WellRow({ well }) {
         <div className='text-lg'>Well Status: {well.isActived === 'true' ? 'Active' : 'Disabled '}</div>
         <div className='text-lg'>Well Created: {well.createdAt}</div>
         <div className=''>
-          <button onClick={handleEditNavigation} className="p-2 bg-blue-500 text-white rounded-md my-2 mx-2">Edit</button>
-          <button onClick={handleDeleteNavigation} className="p-2 bg-red-500 text-white rounded-md my-2 mx-2">Delete</button>
+          {
+            isAdmin && (
+              <div>
+                <button onClick={handleEditNavigation} className='p-2 bg-blue-500 text-white rounded-md'>Edit</button>
+                <button onClick={handleDeleteNavigation} className='p-2 bg-red-500 text-white rounded-md'>Delete</button>
+              </div>
+            )
+          }
         </div>
         <button onClick={handleSeeReportsNavigation} className='p-2 bg-pink-500 text-white rounded-md'>See Reports</button>
       </div>
