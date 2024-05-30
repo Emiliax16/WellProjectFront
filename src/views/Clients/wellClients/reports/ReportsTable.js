@@ -162,6 +162,7 @@ function EnhancedTableToolbar(props) {
           </IconButton>
         </Tooltip>
         <Tooltip title="Descargar">
+          <span>
           <Button
             variant="contained"
             startIcon={<DownloadIcon />}
@@ -172,6 +173,8 @@ function EnhancedTableToolbar(props) {
           >
             Descargar Reportes
           </Button>
+          </span>
+
         </Tooltip>
       </Box>
       {numSelected > 0 && (
@@ -199,13 +202,13 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ rows, columns, wellCode }) {
+export default function EnhancedTable({ rows, columns, wellCode, count, page, size: rowsPerPage, setPage, setSize: setRowsPerPage }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selectedRows, setSelectedRows] = React.useState([]);
-  const [page, setPage] = React.useState(0);
+  // const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -232,7 +235,7 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
     } else if (selectedIndex === 0) {
       newSelectedRows = newSelectedRows.concat(selectedRows.slice(1));
     } else if (selectedIndex === selectedRows.length - 1) {
-      newSelectedRows = newSelectedRows.concat(selectedRows.slice(0, -1));
+      newSelectedRows = newSelectedRows.concat(selectedRows.slice(0, -1));  
     } else if (selectedIndex > 0) {
       newSelectedRows = newSelectedRows.concat(
         selectedRows.slice(0, selectedIndex),
@@ -248,7 +251,7 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    // setPage(0);
   };
 
   /* TODO: Averiguar cómo implementar dense
@@ -341,7 +344,7 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={count} //aqui dberia eser el count
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -351,3 +354,4 @@ export default function EnhancedTable({ rows, columns, wellCode }) {
     </Box>
   );
 }
+
