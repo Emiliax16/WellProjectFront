@@ -41,27 +41,54 @@ root.render(
 
             {/* Clientes */}
             {/* Crear */}
-            <Route path="/clients/new" element={<NewClient />} />
+            <Route path="/clients/new" element={
+              <PrivateRoute roles={['admin']}>
+                <NewClient />
+              </PrivateRoute>
+            } />
             {/* Ver todos*/}
-            <Route path="/clients" element={<ClientList />} />
+            <Route path="/clients" element={
+              <PrivateRoute roles={['admin']}>
+                <ClientList />
+              </PrivateRoute>
+            } />
             {/* Ver uno*/}
             <Route path="/clients/:id" element={<ClientDetails />} />
             {/* Crear un pozo */}
-            <Route path="/clients/:id/wells/new" element={<CreateWell />} />
+            <Route path="/clients/:id/wells/new" element={
+              <PrivateRoute roles={['admin']}>
+                <CreateWell />
+              </PrivateRoute>
+            } />
             {/* Editar un cliente */}
-            <Route path="/clients/:id/edit" element={<EditClient />} />
+            <Route path="/clients/:id/edit" element={
+              <PrivateRoute roles={['admin']}>
+                <EditClient />
+              </PrivateRoute>            
+            } />
             {/* Eliminar un cliente */}
-            <Route path="/clients/:id/delete" element={<DeleteClient />} />
+            <Route path="/clients/:id/delete" element={
+              <PrivateRoute roles={['admin']}>
+                <DeleteClient />
+              </PrivateRoute>
+            } />
             {/* Ver pozos */}
             <Route path="/clients/:id/wells" element={<ClientWells />} />
             {/* Ver reportes de un pozo */}
             <Route path="/clients/:clientId/wells/:code" element={<WellReportList />} />
             {/* Editar un pozo */}
-            <Route path="/clients/:id/wells/:code/edit" element={<EditWell />} />
+            <Route path="/clients/:id/wells/:code/edit" element={
+              <PrivateRoute roles={['admin']}>
+                <EditWell />
+              </PrivateRoute>
+            } 
+            />
             {/* Eliminar un pozo */}
-            <Route path="/clients/:id/wells/:code/delete" element={<DeleteWell />} />
-            
-
+            <Route path="/clients/:id/wells/:code/delete" element={
+              <PrivateRoute roles={['admin']}>
+                <DeleteWell />
+              </PrivateRoute>
+            } />
             <Route path="/*" element="404 Not Found" />
           </Routes>
         </Router>
