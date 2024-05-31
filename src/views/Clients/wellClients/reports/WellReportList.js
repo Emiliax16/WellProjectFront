@@ -21,15 +21,12 @@ function WellReportList() {
   const fetchWellReports = useCallback(async () => {
     setLoading(true);
     setError(null);
-    console.log('Fetching well reports');
     try {
       if ( wellReports.length > page * size) {
         console.log('Reports already fetched');
         return;
       }
       const reports = await getWellReports(cookies.token, clientId, code, page, size);
-      console.log('Fetching well reports');
-      console.log(reports);
       if (page === 0){
         setWellReports(reports.rows);
       } 

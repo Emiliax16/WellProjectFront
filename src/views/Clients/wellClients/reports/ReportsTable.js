@@ -251,7 +251,6 @@ export default function EnhancedTable({ rows, columns, wellCode, count, page, si
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    // setPage(0);
   };
 
   /* TODO: Averiguar cómo implementar dense
