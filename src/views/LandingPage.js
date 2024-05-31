@@ -12,24 +12,39 @@ import Typography from '@mui/material/Typography';
 import ActionAreaCard from "../components/cards/ActionAreaCard";
 import IconCard from "../components/cards/IconCard";
 import Footer from "../components/Footer";
+import Alerts from '../components/Alerts';
+import useError from '../hooks/useError';
+import useSuccess from '../hooks/useSuccess';
+import useLoading from '../hooks/useLoading';
 import Logo from "../assets/img/img5.webp";
+import { postContactRequest } from '../services/landingPageServices';
 
 export function LandingPage() {
+  const { error, setError } = useError();
+  const { success, setSuccess } = useSuccess();
+  const [loading, loadingIcon, setLoading] = useLoading();
+
   const { 
     register, 
-    handleSubmit, 
+    handleSubmit,
+    reset,
     formState: { errors }
   } = useForm();
 
   const { user, logout } = useAuth();
   const onSubmit = async (data) => {
-    const email = data.email;
-    const fullName = data.fullName;
-    const message = data.message;
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
     try {
-      console.log(email, fullName, message, data)
+      await postContactRequest(data);
+      setSuccess('Mensaje enviado correctamente');
+      reset();
     } catch (error) {
       console.log(error)
+      setError('Error al enviar el mensaje');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,50 +165,61 @@ export function LandingPage() {
             {landingPageText.descriptions.contactUs}
           </PageTitle>
           <form className="mx-auto mt-12 w-6/12 text-white" onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-8">
-              <Input
-                name="Correo Electrónico" 
-                label="email" 
-                placeholder="nombre@gmail.com"
-                register={register}
-                classNameLabel='block text-sm font-medium leading-6 text-white'
-                classNameInput='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm sm:leading-6'
-                validation={{ 
-                  required: {
-                    value: true, 
-                    message: 'Este campo es obligatorio'
-                  }, 
-                  pattern: {
-                    value: /^\S+@\S+\.\S+$/, 
-                    message: 'El correo no es válido'
-                  } 
-                }} 
-                errors={errors}  
-              />
-              <Input 
-                name="Nombre Completo"
-                label="fullName"
-                classNameLabel='block mt-5 text-sm font-medium leading-6 text-white'
-                classNameInput='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm sm:leading-6'
-                placeholder="Juan Pablo Cisternas"
-                register={register}
-                validation={{ required: false }}
-                errors={errors}
-              />
-              <Input
-                name="Mensaje"
-                label="message"
-                placeholder="Escriba tu mensaje aquí"
-                register={register}
-                classNameLabel='block mt-5 text-sm font-medium leading-6 text-white'
-                classNameInput='w-full block border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm'
-                validation={{ required: true }}
-                errors={errors}
-              />
-            </div>
-            <button type="submit" className="w-full bg-white text-black py-2 rounded-md hover:bg-cyan-100 my-4">
-              {landingPageText.buttons.send}
-            </button>
+            {loading ? (
+                <div>{loadingIcon}</div>
+              ) : success ? (
+                <Alerts type='success' message={success} />
+              ) : (
+              <div>
+                {error && <Alerts type='error' message={error} />}
+                <div className="mb-8">
+                  <Input
+                    name="Correo Electrónico" 
+                    label="email" 
+                    placeholder="nombre@gmail.com"
+                    register={register}
+                    classNameLabel='block text-sm font-medium leading-6 text-white'
+                    classNameInput='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm sm:leading-6'
+                    validation={{ 
+                      required: {
+                        value: true, 
+                        message: 'Este campo es obligatorio'
+                      }, 
+                      pattern: {
+                        value: /^\S+@\S+\.\S+$/, 
+                        message: 'El correo no es válido'
+                      } 
+                    }} 
+                    errors={errors}  
+                  />
+                  <Input 
+                    name="Nombre Completo"
+                    label="name"
+                    classNameLabel='block mt-5 text-sm font-medium leading-6 text-white'
+                    classNameInput='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm sm:leading-6'
+                    placeholder="Juan Pablo Cisternas"
+                    register={register}
+                    validation={{ required: true }}
+                    errors={errors}
+                  />
+                  <Input
+                    name="Mensaje"
+                    label="message"
+                    placeholder="Escriba tu mensaje aquí"
+                    register={register}
+                    classNameLabel='block mt-5 text-sm font-medium leading-6 text-white'
+                    classNameInput='w-full block border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-white focus:ring-0 sm:text-sm'
+                    validation={{ required: true }}
+                    errors={errors}
+                  />
+
+                  <button type="submit" className="w-full bg-white text-black py-2 rounded-md hover:bg-cyan-100 my-4">
+                    {landingPageText.buttons.send}
+                  </button>
+                </div>
+              </div>
+              )
+            }
           </form>
         </section>
       </div>

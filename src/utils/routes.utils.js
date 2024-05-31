@@ -16,6 +16,11 @@ const userBack = {
     postUser: process.env.REACT_APP_API_ENDPOINT_POST_USER,
 }
 
+// Contact Landing Page Request
+const contactBack = {
+    postContact: process.env.REACT_APP_API_ENDPOINT_POST_CONTACT,
+}
+
 // Client Request
 const clientBack = {
     getClients: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX, 
@@ -44,4 +49,5 @@ module.exports = {
     userBack,
     baseUrl,
     auth,
+    contactBack,
 }
