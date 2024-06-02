@@ -110,7 +110,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
               <Input 
                 name="Número de Teléfono"
                 label="phoneNumber"
-                placeholder="+56998145715"
+                placeholder="56978872828"
                 defaultValue = {userInfo.phoneNumber}
                 register={register}
                 validation={{ 

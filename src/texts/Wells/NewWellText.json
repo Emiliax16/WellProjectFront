@@ -1,11 +1,11 @@
 {
     "titles": {
-        "principalTitle": "Registro de pozos"
+        "principalTitle": "Registro de derechos de agua"
     },
     "descriptions": {
-        "principalDescription": "Creación de pozos, por defecto vendrá inactivo hasta que comience a recibir reportes."
+        "principalDescription": "Creación de derechos de agua, por defecto vendrá inactivo hasta que comience a recibir reportes."
     },
     "buttons": {
-      "submitButton": "Registrar Pozo"
+      "submitButton": "Registrar Derecho"
     }
   }

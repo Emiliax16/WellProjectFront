@@ -1,0 +1,18 @@
+{
+  "alerts": {
+    "success": "Estado del pozo cambiado correctamente.",
+    "error": "Error al cambiar el estado del pozo."
+  },
+  "attributes": {
+    "code": "Código: ",
+    "name": "Nombre: ",
+    "state": "Estado: ",
+    "location": "Ubicación: "
+  },
+  "buttons": {
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "changeState": "Cambiar Estado",
+    "seeReports": "Ver Reportes"
+  }
+}

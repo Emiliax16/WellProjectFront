@@ -6,6 +6,7 @@ import useError from '../../../hooks/useError';
 import useSuccess from '../../../hooks/useSuccess';
 import Alerts from '../../../components/Alerts';
 import { useState } from 'react';
+import WellRowText from '../../../texts/Wells/WellRowText.json';
 
 
 function WellRow({ well }) {
@@ -34,10 +35,10 @@ function WellRow({ well }) {
     try {
       await activateWell(cookies.token, well.id);
       setActive(!active);
-      setSuccess('Estado del pozo cambiado correctamente.');
+      setSuccess(WellRowText.alerts.success);
     } catch (error) {
       console.log(error);
-      setError('Error al activar/desactivar el pozo.');
+      setError(WellRowText.alerts.error);
     }
   }
 
@@ -46,22 +47,22 @@ function WellRow({ well }) {
       <div key={well.code} className='border-b-2 border-gray-200 p-2 shadow-xl mt-2'>
         {error && <Alerts type='error' message={error} />}
         {success && <Alerts type='success' message={success} />}
-        <div className='text-lg'>Well Code: {well.code}</div>
-        <div className='text-lg'>Well Name: {well.name}</div>
-        <div className='text-lg'>Well Status: {active ? 'Activado' : 'Desactivado'}</div>
-        <div className='text-lg'>Well Created: {well.createdAt}</div>
+        <div className='text-lg'>{WellRowText.attributes.code} {well.code}</div>
+        <div className='text-lg'>{WellRowText.attributes.name} {well.name}</div>
+        <div className='text-lg'>{WellRowText.attributes.state} {active ? 'Activado' : 'Desactivado'}</div>
+        <div className='text-lg'>{WellRowText.attributes.location} {well.location}</div>
         <div className=''>
           {
             isAdmin && (
               <div>
-                <button onClick={handleEditNavigation} className='p-2 bg-blue-500 text-white rounded-md'>Edit</button>
-                <button onClick={handleDeleteNavigation} className='p-2 bg-red-500 text-white rounded-md'>Delete</button>
-                <button onClick={handleActivation} className='p-2 bg-green-500 text-white rounded-md'>{well.isActived === 'true' ? 'Disable' : 'Activate'}</button>
+                <button onClick={handleEditNavigation} className='p-2 bg-blue-500 text-white rounded-md'>{WellRowText.buttons.edit}</button>
+                <button onClick={handleDeleteNavigation} className='p-2 bg-red-500 text-white rounded-md'>{WellRowText.buttons.delete}</button>
+                <button onClick={handleActivation} className='p-2 bg-green-500 text-white rounded-md'>{WellRowText.buttons.changeState}</button>
               </div>
             )
           }
         </div>
-        <button onClick={handleSeeReportsNavigation} className='p-2 bg-pink-500 text-white rounded-md'>See Reports</button>
+        <button onClick={handleSeeReportsNavigation} className='p-2 bg-pink-500 text-white rounded-md'>{WellRowText.buttons.seeReports}</button>
       </div>
     </div>
   )
