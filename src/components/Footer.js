@@ -6,7 +6,7 @@ import Logo from '../assets/img/img5.webp';
 
 const year = new Date().getFullYear();
 
-export function Footer({ title, description, socials, menus, copyright, qrCode, logo }) {
+export function Footer({ title, description, contactEmail, socials, menus, copyright, qrCode, logo }) {
   return (
     <footer className="relative px-4 pt-8 pb-6">
       <div className="container mx-auto">
@@ -17,6 +17,9 @@ export function Footer({ title, description, socials, menus, copyright, qrCode, 
             </Typography>
             <Typography className="font-normal text-blue-gray-500 lg:w-full">
               {description}
+            </Typography>
+            <Typography className="font-normal text-blue-gray-500 lg:w-full">
+              {contactEmail}
             </Typography>
             <div className="mx-auto mt-6 mb-8 flex flex-col md:mb-0 lg:justify-start">
               <div className="mb-4">
@@ -83,6 +86,8 @@ Footer.defaultProps = {
   title: "Promedición Chile",
   description:
     "Monitoreo y precisión en telemetría del agua a la vanguardia tecnológica.",
+  contactEmail:
+    "Correo de contacto: info@promedicion.cl",
   socials: [
     {
       color: "text-gray-800",
