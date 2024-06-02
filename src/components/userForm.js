@@ -1,5 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import Input from './input';
 import Select from './select';
@@ -15,12 +16,19 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm();
 
   const [cookies] = useCookies(['token']);
   const { error, setError } = useError();
   const navigate = useNavigate();
+
+  // Si no funcona defaultValue como es en este caso, es mejor usar setValue
+  useEffect(() => {
+    setValue("roleId", userInfo.roleId);
+    setValue("isActived", userInfo.isActived);
+  }, [setValue, userInfo.roleId, userInfo.isActived]);
 
   const onSubmit = async (data) => {
     if (cookies.token) {
@@ -39,6 +47,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
   };
 
   const texts = userInfo.id === '' ? NewClientText : EditClientText;
+  console.log("userInfo", userInfo, userInfo.roleId)
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -129,8 +138,10 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
               <Select 
                 name="Rol"
                 label="roleId"
+                defaultValue={userInfo.roleId}
                 register={register}
                 options={[
+                  { value: '', label: 'Seleccione un rol' },
                   { value: 1, label: 'Admin' },
                   { value: 2, label: 'Normal' }
                 ]}
