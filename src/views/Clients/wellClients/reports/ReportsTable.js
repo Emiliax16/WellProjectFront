@@ -22,6 +22,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import DownloadIcon from '@mui/icons-material/GetApp';
 import { exportToExcel, exportMultipleToExcel } from '../../../../utils/export.utils';
+import numberFormat from '../../../../utils/numberFormat.utils';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -206,9 +207,7 @@ export default function EnhancedTable({ rows, columns, wellCode, count, page, si
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selectedRows, setSelectedRows] = React.useState([]);
-  // const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
-  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -319,9 +318,13 @@ export default function EnhancedTable({ rows, columns, wellCode, count, page, si
                     </TableCell>
                     {Object.keys(row).map((attribute) => {
                       if (attribute === 'updatedAt' || attribute === 'createdAt') return null;
-                      else return (
+                      let value = row[attribute];
+                      if (attribute === 'caudal' || attribute === 'nivel_freatico') {
+                        value = numberFormat(value);
+                      }
+                      return (
                         <TableCell align="center" key={attribute}>
-                          {row[attribute]}
+                          {value}
                         </TableCell>
                       );
                     })}
@@ -341,7 +344,7 @@ export default function EnhancedTable({ rows, columns, wellCode, count, page, si
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10]}
           component="div"
           count={count} //aqui dberia eser el count
           rowsPerPage={rowsPerPage}
