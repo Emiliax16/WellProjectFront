@@ -7,6 +7,7 @@ import useLoading from '../../../hooks/useLoading';
 import useError from '../../../hooks/useError';
 import Alerts from '../../../components/Alerts';
 import WellRow from './WellRow';
+import WellsText from '../../../texts/WellsText.json';
 
 function ClientWells() {
   const { id: clientId } = useParams();
@@ -23,8 +24,8 @@ function ClientWells() {
       const wells = await getClientWells(cookies.token, clientId, page, size);
       setWells(wells.rows);
     } catch (err) {
-      console.log('Error fetching wells', err);
-      setError('Error cargando los pozos del cliente.');
+      console.log(err);
+      setError(WellsText.data.error);
     } finally {
       setLoading(false);
     }
@@ -36,7 +37,7 @@ function ClientWells() {
 
   return (
     <div>
-      <div className='bg-green-500 text-white p-2'>Client Wells</div>
+      <div className='bg-green-500 text-white p-2'>{WellsText.titles.principalTitle}</div>
       <div className='flex justify-center items-center'>
         {loading ? (
           <div>{loadingIcon}</div>
@@ -50,12 +51,12 @@ function ClientWells() {
                   <WellRow key={well.code} well={well} />
                 ))}
                 <div className='flex justify-around'>
-                  <button onClick={() => setPage(page - 1)} className='p-2 bg-blue-500 text-white rounded-md'>Previous Page</button>
-                  <button onClick={() => setPage(page + 1)} className='p-2 bg-blue-500 text-white rounded-md'>Next Page</button>
+                  <button onClick={() => setPage(page - 1)} className='p-2 bg-blue-500 text-white rounded-md'>{WellsText.buttons.previousPage}</button>
+                  <button onClick={() => setPage(page + 1)} className='p-2 bg-blue-500 text-white rounded-md'>{WellsText.buttons.nextPage}</button>
                 </div>
               </>
             ) : (
-              <p>Cliente no tiene pozos creados.</p>
+              <p>{WellsText.data.noDataFound}</p>
             )}
           </div>
         )}

@@ -1,0 +1,22 @@
+{
+  "titles": {
+    "principalTitle": "Información del cliente"
+  },
+  "alerts": {
+    "error": "Error obteniendo los datos del cliente",
+    "noData": "No hay datos para mostrar del cliente"
+  },
+  "attributes": {
+    "fullName": "Nombre Completo: ",
+    "alias": "Alias: ",
+    "state": "Estado de la cuenta: ",
+    "location": "Ubicación: ",
+    "email": "Correo Electrónico: ",
+    "phone": "Teléfono: ",
+    "personalEmail": "Correo Electrónico Personal: "
+  },
+  "buttons": {
+    "seeWells": "Ver Derechos de agua",
+    "createWells": "Crear nuevo derecho"
+  }
+}

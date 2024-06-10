@@ -1,0 +1,14 @@
+{
+  "titles": {
+    "principalTitle": "Derechos de Aguas registrado para el Cliente"
+  },
+  "data": {
+    "error": "Error al obtener los derechos de aguas registrados para el cliente.",
+    "noDataFound": "No se encontraron derechos de aguas registrados para el cliente."
+  },
+  "buttons": {
+    "previousPage": "Anterior",
+    "nextPage": "Siguiente",
+    "seeReports": "Ver Reportes"
+  }
+}

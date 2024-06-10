@@ -1,11 +1,11 @@
 {
     "titles": {
-        "principalTitle": "Editar pozos"
+        "principalTitle": "Editar Derecho de Agua"
     },
     "descriptions": {
-        "principalDescription": "Edición de pozos, no se puede editar el código si existen reportes asociados al pozo."
+        "principalDescription": "Edición de derechos de agua, no se puede editar el código si existen reportes asociados al derecho."
     },
     "buttons": {
-      "submitButton": "Editar pozo"
+      "submitButton": "Editar Derecho"
     }
   }

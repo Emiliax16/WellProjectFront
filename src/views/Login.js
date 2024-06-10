@@ -4,6 +4,8 @@ import Input from '../components/input';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'
 import { getRedirectionPath } from '../strategies/redirectionStrategy';
+import useError from '../hooks/useError';
+import Alerts from '../components/Alerts';
 
 function Login() {
   const { 
@@ -13,16 +15,21 @@ function Login() {
   } = useForm();
 
   const { login, user, isAdmin } = useAuth()
+  const { error, setError } = useError();
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     const email = data.email;
     const password = data.password;
+    setError(null);
     try {
       await login(email, password)
     } catch (error) {
-      console.log(error)
+      const errorMessage = error.response?.data?.error || error.message;
+      console.log(errorMessage)
+      setError(errorMessage || 'Error al iniciar sesión')
+
     }
   };
 
@@ -44,6 +51,7 @@ function Login() {
                 Bienvenido a Pro-Medición, por favor inicie sesión para continuar.
               </p>
             </div>
+            {error && <Alerts type="error" message={error} /> }
             <div className="mt-5 grid grid-cols-1 gap-y-6">
               <Input
                 name="Correo Electrónico" 
