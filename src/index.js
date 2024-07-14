@@ -15,6 +15,7 @@ import ClientWells from './views/Clients/wellClients/ClientWells';
 import EditWell from './views/Clients/wellClients/EditWell';
 import DeleteWell from './views/Clients/wellClients/DeleteWell';
 import WellReportList from './views/Clients/wellClients/reports/WellReportList';
+import Telemetria from './views/Telemetria';
 import View from './views/View';
 import { StyledEngineProvider } from '@mui/material/styles';
 
@@ -30,6 +31,7 @@ root.render(
         <Router>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/telemetria" element={<Telemetria />} />
             <Route path="/login" element={<Login />} />
             <Route path="/test" element={<Test />} />
             <Route path="/admin" element={

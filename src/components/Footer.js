@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import Typography from '@mui/material/Typography';
 import Icon from "./Icon";
 import instagramQR from '../assets/img/instagramQR.webp';
-import Logo from '../assets/img/img5.webp';
+import Logo from '../assets/img/logo.webp';
 
 const year = new Date().getFullYear();
 

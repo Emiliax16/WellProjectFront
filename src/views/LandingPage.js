@@ -47,7 +47,7 @@ export function LandingPage() {
 
   return (
     <div>
-      <LandingPageNavbar />
+      <LandingPageNavbar from={landingPageText.navbar.principalPage} />
       <div className="flex h-screen content-center items-center justify-center pt-16 pb-32 bg-custom">
         <div className="max-w-8xl container relative mx-auto">
           <div className="flex flex-wrap items-center">
