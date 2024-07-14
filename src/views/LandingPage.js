@@ -60,9 +60,9 @@ export function LandingPage() {
               <ul class="flex items-center space-x-8">
                 {
                   user ?
-                  <li><button onClick={logout} className="text-white hover:text-blue-200"> Cerrar Sesión </button></li>
+                  <li><button onClick={logout} className="text-white hover:text-blue-200"> {landingPageText.navbar.logout} </button></li>
                   :
-                  <li><a href="/login" className="text-white hover:text-blue-200"> Iniciar Sesión </a></li>
+                  <li><a href="/login" className="text-white hover:text-blue-200"> {landingPageText.navbar.login} </a></li>
                 }
               </ul>
             </div>

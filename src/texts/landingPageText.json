@@ -27,5 +27,9 @@
   },
   "buttons": {
     "send": "Enviar mensaje"
+  },
+  "navbar": {
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión"
   }
 }
