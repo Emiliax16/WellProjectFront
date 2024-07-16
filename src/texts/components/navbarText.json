@@ -1,0 +1,14 @@
+{
+    "pages": {
+      "portalAdmin": "Portal Admin",
+      "clients": "Clientes",
+      "portalUser": "Portal Usuario"
+    },
+    "settings": {
+      "logout": "Cerrar Sesión"
+    },
+    "logo": {
+        "title": "PROMEDICIÓN",
+        "defaultName": "Juan"
+    }
+  }

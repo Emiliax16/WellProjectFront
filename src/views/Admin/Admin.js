@@ -9,7 +9,6 @@ function Admin() {
 
   return (
     <div>
-      <div className='bg-indigo-700 text-xl text-center text-slate-200'>This should be protected </div>
       {
         user ? 
           <div className='bg-green-500 text-white p-2'>Welcome {user.name} ({user.roleId === 1 ? 'admin' : 'regular'})</div> : 
