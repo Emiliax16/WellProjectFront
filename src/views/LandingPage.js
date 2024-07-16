@@ -1,6 +1,4 @@
 import React from "react";
-import { useAuth } from '../context/AuthContext'
-
 import PageTitle from "../components/PageTitle";
 import { FeaturesData, TechData, MoreInformation } from "../utils/landingPageData";
 import WhatsAppFab from "../utils/landingPageData/WhatsAppFab";
@@ -10,13 +8,13 @@ import landingPageText from "../texts/landingPageText.json";
 import Input from "../components/input";
 import Typography from '@mui/material/Typography';
 import ActionAreaCard from "../components/cards/ActionAreaCard";
+import LandingPageNavbar from "../components/landingPageNavbar";
 import IconCard from "../components/cards/IconCard";
 import Footer from "../components/Footer";
 import Alerts from '../components/Alerts';
 import useError from '../hooks/useError';
 import useSuccess from '../hooks/useSuccess';
 import useLoading from '../hooks/useLoading';
-import Logo from "../assets/img/img5.webp";
 import { postContactRequest } from '../services/landingPageServices';
 
 export function LandingPage() {
@@ -31,7 +29,6 @@ export function LandingPage() {
     formState: { errors }
   } = useForm();
 
-  const { user, logout } = useAuth();
   const onSubmit = async (data) => {
     setLoading(true);
     setError(null);
@@ -50,25 +47,7 @@ export function LandingPage() {
 
   return (
     <div>
-      <header class="bg-gray-800 sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-3">
-          <div class="flex items-center justify-between">
-            <div class="text-white font-bold text-xl">
-              <img src={Logo} alt="Logo" className="h-10 w-10" />
-            </div>
-            <div class="md:block">
-              <ul class="flex items-center space-x-8">
-                {
-                  user ?
-                  <li><button onClick={logout} className="text-white hover:text-blue-200"> Cerrar Sesión </button></li>
-                  :
-                  <li><a href="/login" className="text-white hover:text-blue-200"> Iniciar Sesión </a></li>
-                }
-              </ul>
-            </div>
-          </div>          
-        </nav>
-      </header>
+      <LandingPageNavbar from={landingPageText.navbar.principalPage} />
       <div className="flex h-screen content-center items-center justify-center pt-16 pb-32 bg-custom">
         <div className="max-w-8xl container relative mx-auto">
           <div className="flex flex-wrap items-center">

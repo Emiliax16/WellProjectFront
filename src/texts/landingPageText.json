@@ -27,5 +27,24 @@
   },
   "buttons": {
     "send": "Enviar mensaje"
+  },
+  "navbar": {
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "principalPage": "Inicio",
+    "secondaryPage": "¿Qué es la Telemetría?"
+  },
+  "telemetria": {
+    "title": 
+      "Sistema de Monitoreo de Aguas",
+    "superficialTitle":
+      "Monitoreo de Aguas Superficiales",
+    "superficialDescription":
+      "Este sistema de monitoreo de aguas superficiales muestra cómo se extrae y mide el flujo de agua de una fuente natural, como un río o lago. Una bomba de agua se encarga de la extracción. Un flujómetro mide el flujo del agua, y un datalogger con antena transmite esta información. Los datos se envían al servidor en la nube de ProMedicion, donde los usuarios pueden acceder y monitorear la información. Además, los datos son enviados al Registro de Datos de la Dirección General de Aguas (DGA).",
+    "deepTitle":
+      "Monitoreo de Pozos Profundos",
+    "deepDescription":
+      "Este sistema de monitoreo de pozos profundos muestra cómo se extrae y mide el agua de un acuífero subterráneo. Una bomba sumergible se encarga de extraer el agua a través de una cañería de descarga. Un flujómetro mide el flujo del agua, y una sonda de nivel mide el nivel del agua en el pozo. Un datalogger con antena transmite esta información. Los datos se envían al servidor en la nube de ProMedicion, donde los usuarios pueden acceder y monitorear la información. Además, los datos son enviados al Registro de Datos de la Dirección General de Aguas (DGA)."
   }
+
 }
