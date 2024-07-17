@@ -23,6 +23,9 @@ import { visuallyHidden } from '@mui/utils';
 import DownloadIcon from '@mui/icons-material/GetApp';
 import { exportToExcel, exportMultipleToExcel } from '../../../../utils/export.utils';
 import numberFormat from '../../../../utils/numberFormat.utils';
+import WellRowText from '../../../../texts/Wells/WellRowText.json';
+import { GrValidate } from "react-icons/gr";
+import { IoIosAlert } from "react-icons/io";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -317,10 +320,25 @@ export default function EnhancedTable({ rows, columns, wellCode, count, page, si
                       />
                     </TableCell>
                     {Object.keys(row).map((attribute) => {
-                      if (attribute === 'updatedAt' || attribute === 'createdAt') return null;
+                      if (attribute === 'updatedAt' || attribute === 'createdAt' || attribute === 'sentDate') return null;
                       let value = row[attribute];
                       if (attribute === 'caudal' || attribute === 'nivel_freatico') {
                         value = numberFormat(value);
+                      }
+                      if (attribute === 'sent') {
+                        value = value ? 
+                          <div className='flex items-center justify-center gap-2 font-medium'>
+                            <GrValidate style={{ color: 'green', fontSize: '1rem' }} />
+                            <span> {WellRowText.status.validated}  </span> 
+                          </div>
+                          : 
+                          <div className='flex items-center justify-center gap-2 '>
+                            <span class="relative flex h-4 w-4 items-center">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-300 opacity-75"></span>
+                              <IoIosAlert style={{ color: 'orange', fontSize: '2rem' }} />
+                            </span>
+                            <span> {WellRowText.status.pending} </span>  
+                          </div>
                       }
                       return (
                         <TableCell align="center" key={attribute}>
