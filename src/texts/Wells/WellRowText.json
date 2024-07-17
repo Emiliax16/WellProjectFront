@@ -14,5 +14,9 @@
     "delete": "Eliminar",
     "changeState": "Cambiar Estado",
     "seeReports": "Ver Reportes"
+  },
+  "status": {
+    "validated": "Validado",
+    "pending": "Pendiente"
   }
 }

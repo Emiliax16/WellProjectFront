@@ -23,6 +23,7 @@ import { visuallyHidden } from '@mui/utils';
 import DownloadIcon from '@mui/icons-material/GetApp';
 import { exportToExcel, exportMultipleToExcel } from '../../../../utils/export.utils';
 import numberFormat from '../../../../utils/numberFormat.utils';
+import WellRowText from '../../../../texts/Wells/WellRowText.json';
 import { GrValidate } from "react-icons/gr";
 import { IoIosAlert } from "react-icons/io";
 
@@ -328,7 +329,7 @@ export default function EnhancedTable({ rows, columns, wellCode, count, page, si
                         value = value ? 
                           <div className='flex items-center justify-center gap-2 font-medium'>
                             <GrValidate style={{ color: 'green', fontSize: '1rem' }} />
-                            <span> Validado </span> 
+                            <span> {WellRowText.status.validated}  </span> 
                           </div>
                           : 
                           <div className='flex items-center justify-center gap-2 '>
@@ -336,7 +337,7 @@ export default function EnhancedTable({ rows, columns, wellCode, count, page, si
                               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-300 opacity-75"></span>
                               <IoIosAlert style={{ color: 'orange', fontSize: '2rem' }} />
                             </span>
-                            <span> Pendiente </span>  
+                            <span> {WellRowText.status.pending} </span>  
                           </div>
                       }
                       return (
