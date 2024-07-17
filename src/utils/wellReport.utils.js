@@ -41,4 +41,10 @@ export const headCells = [
       disablePadding: false,
       label: 'Nivel freático (m)',
     },
+    {
+      id: 'sent',
+      numeric: 'false',
+      disablePadding: false,
+      label: 'Estado de envío',
+    }
   ];
