@@ -1,6 +1,6 @@
 // Base url
 const urlTypes = {
-    productionUrl: `https://jpoezi.me/`,
+    productionUrl: `https://promedicionbackend.com/`,
     developmentUrl: `${process.env.REACT_APP_API_PROTOCOL}://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}/`,
 }
 
