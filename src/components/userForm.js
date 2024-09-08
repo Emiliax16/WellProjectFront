@@ -1,10 +1,11 @@
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import Input from './input';
 import Select from './select';
 import { postNewClient } from '../services/clientServices';
+import { getAllUsersRoles } from '../services/userServices';
 import { useNavigate } from 'react-router-dom';
 import { clientFront } from  '../utils/routes.utils';
 import Alerts from './Alerts';
@@ -12,7 +13,7 @@ import useError from '../hooks/useError';
 import NewClientText from '../texts/Clients/oneClients/NewClientText.json'
 import EditClientText from '../texts/Clients/oneClients/EditClientText.json'
 
-function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phoneNumber: '', isActived: true, roleId: 2, email: '', personalEmail: '' }} ) {
+function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phoneNumber: '', isActived: true, roleId: 2, roleType: 'normal', email: '', personalEmail: '' }} ) {
   const {
     register,
     handleSubmit,
@@ -24,11 +25,30 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
   const { error, setError } = useError();
   const navigate = useNavigate();
 
-  // Si no funcona defaultValue como es en este caso, es mejor usar setValue
+  const [roles, setRoles] = useState([]);
+
+  // Obtener roles desde el backend
   useEffect(() => {
-    setValue("roleId", userInfo.roleId);
+    const fetchRoles = async () => {
+      try {
+        const rolesData = await getAllUsersRoles(cookies.token);
+        setRoles(rolesData);
+      } catch (error) {
+        console.error('Error fetching roles:', error);
+        setError('No se pudieron cargar los roles.');
+      }
+    };
+
+    fetchRoles();
+  }, [cookies.token, setError]);
+
+  useEffect(() => {
+    const role = roles.find(r => r.type === userInfo.roleType);
+    if (role) {
+      setValue('roleId', role.id);
+    }
     setValue("isActived", userInfo.isActived);
-  }, [setValue, userInfo.roleId, userInfo.isActived]);
+  }, [setValue, userInfo.roleType, userInfo.isActived, roles]);
 
   const onSubmit = async (data) => {
     if (cookies.token) {
@@ -135,15 +155,14 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
                   { value: false, label: 'Inactivo (no podrá ingresar a la aplicación)' }
                 ]}
               />
-              <Select 
+             <Select 
                 name="Rol"
                 label="roleId"
                 defaultValue={userInfo.roleId}
                 register={register}
                 options={[
                   { value: '', label: 'Seleccione un rol' },
-                  { value: 1, label: 'Admin' },
-                  { value: 2, label: 'Normal' }
+                  ...roles.map(role => ({ value: role.id, label: role.type }))
                 ]}
               />
               <Input 

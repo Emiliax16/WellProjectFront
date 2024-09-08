@@ -15,6 +15,7 @@ const auth = {
 const userBack = {
     postUser: process.env.REACT_APP_API_ENDPOINT_POST_USER,
     userRole: process.env.REACT_APP_API_ENDPOINT_GET_USER_ROLE,
+    allUsersRoles: process.env.REACT_APP_API_ENDPOINT_GET_ALL_USERS_ROLES,
 }
 
 // Contact Landing Page Request
