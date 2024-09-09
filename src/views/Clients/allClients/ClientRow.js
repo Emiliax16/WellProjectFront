@@ -5,7 +5,7 @@ function ClientRow({ client }) {
   const { user } = client;
   return (
     <tr>
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm" onClick={() => navigate(`/user/${client.id}`)}>
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         {user.name}
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">

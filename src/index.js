@@ -7,6 +7,7 @@ import Admin from './views/Admin/Admin';
 import Login from './views/Login';
 import NewClient from './views/Clients/oneClient/NewClient';
 import NewCompany from './views/Companies/oneCompany/NewCompany';
+import CompanyList from './views/Companies/allCompanies/CompanyList';
 import ClientList from './views/Clients/allClients/ClientList';
 import ClientDetails from './views/Clients/oneClient/ClientDetails';
 import EditClient from './views/Clients/oneClient/EditClient';
@@ -83,6 +84,12 @@ root.render(
               <Route path="/companies/new" element={
                 <PrivateRoute roles={['admin']}>
                   <NewCompany />
+                </PrivateRoute>
+              } />
+              { /* Ver todos */}
+              <Route path="/companies" element={
+                <PrivateRoute roles={['admin']}>
+                  <CompanyList />
                 </PrivateRoute>
               } />
               {/* Ver pozos */}
