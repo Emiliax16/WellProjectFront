@@ -1,65 +1,64 @@
-import React from 'react'
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useEffect, useState } from 'react';
 import Input from './input';
 import Select from './select';
-import { postNewClient } from '../services/clientServices';
-import { getAllUsersRoles } from '../services/userServices';
-import { useNavigate } from 'react-router-dom';
-import { clientFront } from  '../utils/routes.utils';
-import Alerts from './Alerts';
 import useError from '../hooks/useError';
-import NewClientText from '../texts/Clients/oneClients/NewClientText.json'
-import EditClientText from '../texts/Clients/oneClients/EditClientText.json'
+import Alerts from './Alerts';
+import { postNewCompany } from '../services/companyServices';
+import { getAllUsersRoles } from '../services/userServices';
+import NewCompanyText from '../texts/Companies/oneCompany/NewCompanyText.json'
+import EditCompanyText from '../texts/Companies/oneCompany/EditCompanyText.json'
 
-function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phoneNumber: '', isActived: true, roleId: 2, roleType: 'normal', email: '', personalEmail: '' }} ) {
+function CompanyForm({ companyInfo = { id: '', name: '', email: '', roleType: 'company', isActived: true, companyLogo: '', companyRut: '', phoneNumber: '', recoveryEmail: '', location: '' } }) {
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors }
-  } = useForm();
-
+  } = useForm({
+    defaultValues: companyInfo
+  });
   const [cookies] = useCookies(['token']);
   const { error, setError } = useError();
   const navigate = useNavigate();
 
-  const [roles, setRoles] = useState([]);
+  const [roleCompany, setRoleCompany] = useState([]);
 
-  // Obtener roles desde el backend
+  // Obtener el id del rol de company
   useEffect(() => {
-    const fetchRoles = async () => {
+    const fetchRoleCompany = async () => {
       try {
         const rolesData = await getAllUsersRoles(cookies.token);
-        // excluimos el tipo company porque ese debe llevarse en un formulario propio
-        const filteredRoles = rolesData.filter(role => role.type !== 'company');
-        setRoles(filteredRoles);
+        // mantenemos solo el tipo company porque ese debe llevarse en un formulario propio
+        const filteredRole = rolesData.filter(role => role.type === 'company');
+        setRoleCompany(filteredRole);
       } catch (error) {
         console.error('Error fetching roles:', error);
         setError('No se pudieron cargar los roles.');
       }
     };
 
-    fetchRoles();
+    fetchRoleCompany();
   }, [cookies.token, setError]);
 
   useEffect(() => {
-    const role = roles.find(r => r.type === userInfo.roleType);
+    const role = roleCompany.length > 0 ? roleCompany[0] : null;
     if (role) {
       setValue('roleId', role.id);
     }
-    setValue("isActived", userInfo.isActived);
-  }, [setValue, userInfo.roleType, userInfo.isActived, roles]);
+    setValue("isActived", companyInfo.isActived);
+  }, [setValue, companyInfo.isActived, roleCompany]);
 
   const onSubmit = async (data) => {
     if (cookies.token) {
       try {
         if (!data.encrypted_password) delete data.encrypted_password;
-        await postNewClient(cookies.token, data, userInfo.id);
-        navigate(`/${clientFront.urlClients}`);
+        await postNewCompany(cookies.token, data, companyInfo.id);
+        navigate(`/admin`);
       } catch (error) {
-        console.log(error)
+        console.log(error);
         const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message;
         setError(message);
       }
@@ -68,7 +67,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
     }
   };
 
-  const texts = userInfo.id === '' ? NewClientText : EditClientText;
+  const texts = companyInfo.id === '' ? NewCompanyText : EditCompanyText;
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -90,12 +89,12 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
             </div>
             <div className="mt-5 grid grid-cols-1 gap-y-6">
               <Input 
-                name="Nombre Completo" 
-                label="fullName" 
-                placeholder="Juan Pablo Cisternas"
-                defaultValue = {userInfo.name}
+                name="Nombre Empresa" 
+                label="name" 
+                placeholder="NTH Consultores"
+                defaultValue = {companyInfo.name}
                 register={register} 
-                validation={{ 
+                validation={{
                   required: {
                     value: true, 
                     message: 'Este campo es obligatorio'
@@ -105,10 +104,28 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
                 errors={errors}  
               />
               <Input 
-                name="Alias"
-                label="name"
-                defaultValue = {userInfo.alias}
-                placeholder="Juanpi"
+                name="RUT de la Empresa"
+                label="companyRut"
+                placeholder="12345678-9"
+                defaultValue={companyInfo.companyRut}
+                register={register}
+                validation={{ 
+                  required: {
+                    value: true, 
+                    message: 'Este campo es obligatorio'
+                  },  
+                  pattern: {
+                    value: /^[0-9]{1,2}\.[0-9]{3}\.[0-9]{3}-[0-9kK]{1}$|^[0-9]{7,8}-[0-9kK]{1}$/,
+                    message: 'El RUT no es válido, use el formato 12.345.678-9 o 12345678-9'
+                  } 
+                }}
+                errors={errors}
+              />
+              <Input 
+                name="URL Logo"
+                label="companyLogo"
+                defaultValue = {companyInfo.companyLogo}
+                placeholder="https://www.nthconsultores.cl/logo.png"
                 register={register}
                 validation={{ required: false }}
                 errors={errors}
@@ -117,7 +134,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
                 name="Ubicación (Ciudad, Comuna 1234)"
                 label="location"
                 placeholder="Temuco, Manuel Montt XXXX"
-                defaultValue = {userInfo.location}
+                defaultValue = {companyInfo.location}
                 register={register}
                 validation={{ 
                   required: {
@@ -132,7 +149,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
                 name="Número de Teléfono"
                 label="phoneNumber"
                 placeholder="56978872828"
-                defaultValue = {userInfo.phoneNumber}
+                defaultValue = {companyInfo.phoneNumber}
                 register={register}
                 validation={{ 
                   required: {
@@ -149,7 +166,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
               <Select
                 name="Estado"
                 label="isActived"
-                defaultValue = {userInfo.isActived}
+                defaultValue = {companyInfo.isActived}
                 register={register}
                 options={[
                   { value: true, label: 'Activo' },
@@ -159,17 +176,17 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
              <Select 
                 name="Rol"
                 label="roleId"
-                defaultValue={userInfo.roleId}
+                defaultValue={roleCompany.length > 0 ? roleCompany[0].id : ''}
                 register={register}
                 options={[
-                  { value: '', label: 'Seleccione un rol' },
-                  ...roles.map(role => ({ value: role.id, label: role.type }))
+                  { value: roleCompany.length > 0 ? roleCompany[0].id : '', label: 'company' }
                 ]}
+                disabled={true}
               />
               <Input 
                 name="Correo Corporativo"
                 label="email"
-                defaultValue = {userInfo.email}
+                defaultValue = {companyInfo.email}
                 register={register}
                 validation={{ 
                   required: {
@@ -184,9 +201,9 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
                 errors={errors}
               />
               <Input 
-                name="Correo Personal"
-                defaultValue = {userInfo.personalEmail}
-                label="personalEmail"
+                name="Correo de Recuperación"
+                defaultValue = {companyInfo.recoveryEmail}
+                label="recoveryEmail"
                 register={register}
                 validation={{ 
                   required: {
@@ -203,10 +220,10 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
               <Input
                 name="Contraseña"
                 label="encrypted_password"
-                placeholder={userInfo.name ? texts.placeholders.password : ''}
+                placeholder={companyInfo.name ? texts.placeholders.password : ''}
                 register={register}
                 type="password"
-                validation={userInfo.name ? {
+                validation={companyInfo.name ? {
                   minLength: {
                     value: 8,
                     message: 'La contraseña debe tener al menos 8 caracteres',
@@ -235,7 +252,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default UserForm
+export default CompanyForm;

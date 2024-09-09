@@ -23,6 +23,14 @@ const contactBack = {
     postContact: process.env.REACT_APP_API_ENDPOINT_POST_CONTACT,
 }
 
+// Company Request
+const companyBack = {
+    getCompanies: process.env.REACT_APP_API_ENDPOINT_GET_ALL_COMPANIES,
+    getCompanyDetails: process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO,
+    putCompany: process.env.REACT_APP_API_ENDPOINT_PUT_COMPANY,
+    deleteCompany: process.env.REACT_APP_API_ENDPOINT_DELETE_COMPANY,
+}
+
 // Client Request
 const clientBack = {
     getClients: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX, 
@@ -52,4 +60,5 @@ module.exports = {
     baseUrl,
     auth,
     contactBack,
+    companyBack,
 }

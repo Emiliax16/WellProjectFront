@@ -18,10 +18,13 @@ function Admin() {
       }
 
       <div className='flex justify-start'>
-        <button className='p-2 bg-pink-500 text-white' onClick={()=>{navigate('/clients/new')}}>
+        <button className='p-2 mx-2 bg-orange-500 text-white' onClick={()=>{navigate('/clients/new')}}>
           Crear un cliente
         </button>
-        <button className='p-2 bg-cyan-400 text-white' onClick={()=>{navigate('/clients')}}>
+        <button className='p-2 mx-2 bg-pink-500 text-white' onClick={()=>{navigate('/companies/new')}}>
+          Crear una empresa
+        </button>
+        <button className='p-2 mx-2 bg-cyan-400 text-white' onClick={()=>{navigate('/clients')}}>
           Ver clientes
         </button>
       </div>

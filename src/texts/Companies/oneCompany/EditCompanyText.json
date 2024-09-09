@@ -1,0 +1,14 @@
+{
+    "titles": {
+        "principalTitle": "Edición de empresas"
+    },
+    "descriptions": {
+        "principalDescription": "En esta sección podrás editar los datos de la empresa seleccionada."
+    },
+    "buttons": {
+      "submitButton": "Editar empresa"
+    },
+    "placeholders": {
+      "password": "Dejar en blanco si no se quiere editar la contraseña"
+    }
+  }
