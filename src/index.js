@@ -7,7 +7,9 @@ import Admin from './views/Admin/Admin';
 import Login from './views/Login';
 import NewClient from './views/Clients/oneClient/NewClient';
 import NewCompany from './views/Companies/oneCompany/NewCompany';
+import EditCompany from './views/Companies/oneCompany/EditCompany';
 import CompanyList from './views/Companies/allCompanies/CompanyList';
+import CompanyDetails from './views/Companies/oneCompany/CompanyDetails';
 import ClientList from './views/Clients/allClients/ClientList';
 import ClientDetails from './views/Clients/oneClient/ClientDetails';
 import EditClient from './views/Clients/oneClient/EditClient';
@@ -92,6 +94,15 @@ root.render(
                   <CompanyList />
                 </PrivateRoute>
               } />
+              {/* Ver uno */}
+              <Route path="/companies/:id" element={<CompanyDetails />} />
+              {/* Editar una empresa */}
+              <Route path="/companies/:id/edit" element={
+                <PrivateRoute roles={['admin']}>
+                  <EditCompany />
+                </PrivateRoute>
+              } />
+              {/* Eliminar una empresa */}
               {/* Ver pozos */}
               <Route path="/clients/:id/wells" element={<ClientWells />} />
               {/* Ver reportes de un pozo */}

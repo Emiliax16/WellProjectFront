@@ -26,7 +26,7 @@ const contactBack = {
 // Company Request
 const companyBack = {
     getCompanies: process.env.REACT_APP_API_ENDPOINT_GET_ALL_COMPANIES,
-    getCompanyDetails: process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO,
+    getCompanyDetails: process.env.REACT_APP_API_ENDPOINT_GET_ONE_COMPANY,
     putCompany: process.env.REACT_APP_API_ENDPOINT_PUT_COMPANY,
     deleteCompany: process.env.REACT_APP_API_ENDPOINT_DELETE_COMPANY,
 }
