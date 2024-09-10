@@ -60,7 +60,7 @@ const postNewCompany = async (token, data, companyId) => {
   }
 }
   
-const deleteCompanytById = async (token, companyId) => {
+const deleteCompanyById = async (token, companyId) => {
   try {
     const url = `${deleteCompany}/${companyId}/delete`
     const response = await apiClient.delete(url, {
@@ -79,5 +79,5 @@ export {
   getAllCompanies,
   getCompanyDetailsById,
   postNewCompany,
-  deleteCompanytById
+  deleteCompanyById
 }

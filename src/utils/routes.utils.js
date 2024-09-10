@@ -43,6 +43,10 @@ const clientFront = {
     urlClients: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX,
 }
 
+const companyFront = {
+    urlCompanies: process.env.REACT_APP_API_ENDPOINT_COMPANY_PREFIX,
+}
+
 // Wells request
 const wellBack = {
     getWells: process.env.REACT_APP_API_ENDPOINT_GET_ALL_WELLS,
@@ -61,4 +65,5 @@ module.exports = {
     auth,
     contactBack,
     companyBack,
+    companyFront,
 }

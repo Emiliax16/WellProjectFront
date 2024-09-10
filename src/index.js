@@ -10,6 +10,7 @@ import NewCompany from './views/Companies/oneCompany/NewCompany';
 import EditCompany from './views/Companies/oneCompany/EditCompany';
 import CompanyList from './views/Companies/allCompanies/CompanyList';
 import CompanyDetails from './views/Companies/oneCompany/CompanyDetails';
+import DeleteCompany from './views/Companies/oneCompany/DeleteCompany';
 import ClientList from './views/Clients/allClients/ClientList';
 import ClientDetails from './views/Clients/oneClient/ClientDetails';
 import EditClient from './views/Clients/oneClient/EditClient';
@@ -103,6 +104,11 @@ root.render(
                 </PrivateRoute>
               } />
               {/* Eliminar una empresa */}
+              <Route path="/companies/:id/delete" element={
+                <PrivateRoute roles={['admin']}>
+                  <DeleteCompany />
+                </PrivateRoute>
+              } />
               {/* Ver pozos */}
               <Route path="/clients/:id/wells" element={<ClientWells />} />
               {/* Ver reportes de un pozo */}

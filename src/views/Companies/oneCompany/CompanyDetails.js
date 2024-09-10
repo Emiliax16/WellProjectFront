@@ -12,7 +12,7 @@ import CompanyDetailsText from '../../../texts/Companies/oneCompany/CompanyDetai
 function CompanyDetails() {
   const { id: companyId } = useParams();
   const [company, setCompany] = useState(null);
-  const { isAdmin } = useAuth();
+  const { isAdmin, isCompany } = useAuth();
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
   const [loading, loadingIcon, setLoading] = useLoading();
@@ -54,12 +54,13 @@ function CompanyDetails() {
             <>
               <div className='text-lg font-semibold'>{CompanyDetailsText.attributes.name} {company.user.name}</div>
               <div className='text-lg font-semibold'>{CompanyDetailsText.attributes.rut} {company.companyRut}</div>
+              <div className='text-lg font-semibold'>{CompanyDetailsText.attributes.email} {company.user.email}</div>
               <div className='text-lg font-semibold'>{CompanyDetailsText.attributes.logoUrl} {company.companyLogo}</div>
               <div className='text-lg font-semibold'>{CompanyDetailsText.attributes.location} {company.location}</div>
               <div className='text-lg font-semibold'>{CompanyDetailsText.attributes.phone} {company.phoneNumber}</div>
               <div className='text-lg font-semibold'>{CompanyDetailsText.attributes.recoveryEmail} {company.recoveryEmail}</div>
               {
-                isAdmin && (
+                (isAdmin || isCompany) && (
                   <button onClick={handleSeeClients} className="p-2 bg-blue-500 text-white rounded-md">{CompanyDetailsText.buttons.seeClients}</button>
                 )
               }
