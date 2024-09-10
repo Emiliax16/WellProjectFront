@@ -43,6 +43,7 @@ function EditClient() {
         phoneNumber: client.person.phoneNumber,
         isActived: client.isActived,
         roleId: client.roleId,
+        roleType: client.role,
         email: client.email,
         personalEmail: client.person.personalEmail
       });

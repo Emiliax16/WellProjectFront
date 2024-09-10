@@ -1,0 +1,11 @@
+{
+    "titles": {
+        "principalTitle": "Registro de empresas"
+    },
+    "descriptions": {
+        "principalDescription": "Creación de empresas, estas pueden crear y gestionar sus propios clientes."
+    },
+    "buttons": {
+      "submitButton": "Registrar empresa"
+    }
+  }

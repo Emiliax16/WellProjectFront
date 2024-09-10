@@ -1,11 +1,29 @@
 const redirectionStrategies = {
-    admin: () => '/admin',
-    user: (clientId) => `/clients/${clientId}`,
-  };
+  admin: () => '/admin',
+  user: (clientId) => `/clients/${clientId}`,
+  company: (companyId) => `/companies/${companyId}`,
+};
+
+export const getRedirectionPath = (isAdmin, isCompany, user) => {
+  let role = '';
   
-  export const getRedirectionPath = (isAdmin, user) => {
-    const role = isAdmin ? 'admin' : 'user';
-    const { id: clientId } = isAdmin ? {} : user.client;
-    return redirectionStrategies[role] ? redirectionStrategies[role](clientId) : '/login';
-  };
+  if (isAdmin) {
+    role = 'admin';
+  } else if (isCompany) {
+    role = 'company';
+  } else {
+    role = 'user';
+  }
+
+  const actualUserId = isAdmin
+    ? null
+    : isCompany
+    ? user.company?.id
+    : user.client?.id;
   
+  if (!actualUserId && !isAdmin) {
+    return '/login';
+  }
+
+  return redirectionStrategies[role] ? redirectionStrategies[role](actualUserId) : '/login';
+};

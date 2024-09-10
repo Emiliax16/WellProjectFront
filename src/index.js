@@ -6,6 +6,11 @@ import LandingPage from './views/LandingPage';
 import Admin from './views/Admin/Admin';
 import Login from './views/Login';
 import NewClient from './views/Clients/oneClient/NewClient';
+import NewCompany from './views/Companies/oneCompany/NewCompany';
+import EditCompany from './views/Companies/oneCompany/EditCompany';
+import CompanyList from './views/Companies/allCompanies/CompanyList';
+import CompanyDetails from './views/Companies/oneCompany/CompanyDetails';
+import DeleteCompany from './views/Companies/oneCompany/DeleteCompany';
 import ClientList from './views/Clients/allClients/ClientList';
 import ClientDetails from './views/Clients/oneClient/ClientDetails';
 import EditClient from './views/Clients/oneClient/EditClient';
@@ -75,6 +80,33 @@ root.render(
               <Route path="/clients/:id/delete" element={
                 <PrivateRoute roles={['admin']}>
                   <DeleteClient />
+                </PrivateRoute>
+              } />
+              {/* Empresas */}
+              {/* Crear */}
+              <Route path="/companies/new" element={
+                <PrivateRoute roles={['admin']}>
+                  <NewCompany />
+                </PrivateRoute>
+              } />
+              { /* Ver todos */}
+              <Route path="/companies" element={
+                <PrivateRoute roles={['admin']}>
+                  <CompanyList />
+                </PrivateRoute>
+              } />
+              {/* Ver uno */}
+              <Route path="/companies/:id" element={<CompanyDetails />} />
+              {/* Editar una empresa */}
+              <Route path="/companies/:id/edit" element={
+                <PrivateRoute roles={['admin']}>
+                  <EditCompany />
+                </PrivateRoute>
+              } />
+              {/* Eliminar una empresa */}
+              <Route path="/companies/:id/delete" element={
+                <PrivateRoute roles={['admin']}>
+                  <DeleteCompany />
                 </PrivateRoute>
               } />
               {/* Ver pozos */}

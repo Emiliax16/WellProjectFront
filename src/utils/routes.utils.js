@@ -14,11 +14,21 @@ const auth = {
 // User Request
 const userBack = {
     postUser: process.env.REACT_APP_API_ENDPOINT_POST_USER,
+    userRole: process.env.REACT_APP_API_ENDPOINT_GET_USER_ROLE,
+    allUsersRoles: process.env.REACT_APP_API_ENDPOINT_GET_ALL_USERS_ROLES,
 }
 
 // Contact Landing Page Request
 const contactBack = {
     postContact: process.env.REACT_APP_API_ENDPOINT_POST_CONTACT,
+}
+
+// Company Request
+const companyBack = {
+    getCompanies: process.env.REACT_APP_API_ENDPOINT_GET_ALL_COMPANIES,
+    getCompanyDetails: process.env.REACT_APP_API_ENDPOINT_GET_ONE_COMPANY,
+    putCompany: process.env.REACT_APP_API_ENDPOINT_PUT_COMPANY,
+    deleteCompany: process.env.REACT_APP_API_ENDPOINT_DELETE_COMPANY,
 }
 
 // Client Request
@@ -31,6 +41,10 @@ const clientBack = {
 
 const clientFront = {
     urlClients: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX,
+}
+
+const companyFront = {
+    urlCompanies: process.env.REACT_APP_API_ENDPOINT_COMPANY_PREFIX,
 }
 
 // Wells request
@@ -50,4 +64,6 @@ module.exports = {
     baseUrl,
     auth,
     contactBack,
+    companyBack,
+    companyFront,
 }

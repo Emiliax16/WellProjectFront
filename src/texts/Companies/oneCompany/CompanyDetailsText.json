@@ -1,0 +1,22 @@
+{
+    "titles": {
+      "principalTitle": "Información de la empresa"
+    },
+    "alerts": {
+      "error": "Error obteniendo los datos de la empresa",
+      "noData": "No hay datos para mostrar de la empresa"
+    },
+    "attributes": {
+      "name": "Nombre: ",
+      "rut": "RUT: ",
+      "logoUrl": "Logo de la empresa: ",
+      "state": "Estado de la cuenta: ",
+      "location": "Ubicación: ",
+      "email": "Correo Electrónico: ",
+      "phone": "Teléfono: ",
+      "recoveryEmail": "Correo Electrónico de Recuperación: "
+    },
+    "buttons": {
+      "seeClients": "Ver Clientes de la empresa"
+    }
+  }

@@ -4,25 +4,30 @@ import { FaCat } from "react-icons/fa";
 
 function Admin() {
   const navigate = useNavigate()
-  const { user, logout } = useAuth()
-
+  const { isAdmin, user, logout } = useAuth()
 
   return (
     <div>
       {
-        user ? 
-          <div className='bg-green-500 text-white p-2'>Welcome {user.name} ({user.roleId === 1 ? 'admin' : 'regular'})</div> : 
+        user ?
+          <div className='bg-green-500 text-white p-2'>Bienvenido {user.name} ({isAdmin ? 'ADMIN' : 'REGULAR'})</div> : 
           <div className='flex justify-center items-center'>
             <FaCat className='animate-spin text-orange-300 text-2xl m-2'/>
           </div>
       }
 
       <div className='flex justify-start'>
-        <button className='p-2 bg-pink-500 text-white' onClick={()=>{navigate('/clients/new')}}>
+        <button className='p-2 mx-2 bg-orange-500 text-white' onClick={()=>{navigate('/clients/new')}}>
           Crear un cliente
         </button>
-        <button className='p-2 bg-cyan-400 text-white' onClick={()=>{navigate('/clients')}}>
+        <button className='p-2 mx-2 bg-pink-500 text-white' onClick={()=>{navigate('/companies/new')}}>
+          Crear una empresa
+        </button>
+        <button className='p-2 mx-2 bg-cyan-400 text-white' onClick={()=>{navigate('/clients')}}>
           Ver clientes
+        </button>
+        <button className='p-2 mx-2 bg-blue-400 text-white' onClick={()=>{navigate('/companies')}}>
+          Ver empresas
         </button>
       </div>
 
