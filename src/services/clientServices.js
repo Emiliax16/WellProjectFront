@@ -64,10 +64,27 @@ const getClientWells = async (token, clientId, page, size) => {
   }
 }
 
-//                GET WELL REPORTS
-const getWellReports = async (token, clientId, wellCode, page, size) => {
+//               GET CLIENT WELL
+const getClientWell = async (token, clientId, wellCode) => {
   try {
-    const url = `${urlClients}/${clientId}/${getWells}/${wellCode}/data?page=${page}&size=${size}`
+    const url = `${urlClients}/${clientId}/${getWells}/${wellCode}`
+    const response = await apiClient.get(url,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+    return response.data
+  } catch (error) {
+    console.error('Error fetching client well', error)
+  }
+}
+
+//                GET WELL REPORTS
+const getWellReports = async (token, clientId, wellCode, page, size, selectedMonth, selectedYear) => {
+  try {
+    console.log("SELECTED MONTH Y YEAR", selectedMonth, selectedYear)
+    const url = `${urlClients}/${clientId}/${getWells}/${wellCode}/data?page=${page}&size=${size}&month=${selectedMonth}&year=${selectedYear}`
     const response = await apiClient.get(url,
       {
         headers: {
@@ -176,5 +193,6 @@ export {
   postNewClient,
   postNewWell,
   deleteClientById,
-  deleteWellByCode
+  deleteWellByCode,
+  getClientWell
 }

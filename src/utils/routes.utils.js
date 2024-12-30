@@ -56,6 +56,12 @@ const wellBack = {
     statusWell: process.env.REACT_APP_API_ENDPOINT_PUT_WELL,
 }
 
+// WellData request
+const wellDataBack = {
+    getWellData: process.env.REACT_APP_API_ENDPOINT_WELL_DATA_PREFIX,
+    sendWellData: process.env.REACT_APP_API_ENDPOINT_SEND_DATA,
+}
+
 module.exports = {
     clientFront,
     clientBack,
@@ -66,4 +72,5 @@ module.exports = {
     contactBack,
     companyBack,
     companyFront,
+    wellDataBack,
 }
