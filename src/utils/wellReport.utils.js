@@ -1,11 +1,5 @@
 export const headCells = [
     {
-      id: 'id',
-      numeric: true,
-      disablePadding: true,
-      label: 'id',
-    },
-    {
       id: 'code',
       numeric: false,
       disablePadding: false,
