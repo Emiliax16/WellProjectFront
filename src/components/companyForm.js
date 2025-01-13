@@ -55,6 +55,9 @@ function CompanyForm({ companyInfo = { id: '', name: '', email: '', roleType: 'c
     if (cookies.token) {
       try {
         if (!data.encrypted_password) delete data.encrypted_password;
+        // añadimos el roleType al objeto data
+        const role = roleCompany.length > 0 ? roleCompany[0] : null;
+        data.roleType = role?.type;
         await postNewCompany(cookies.token, data, companyInfo.id);
         navigate(`/admin`);
       } catch (error) {

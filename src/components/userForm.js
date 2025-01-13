@@ -56,6 +56,9 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
     if (cookies.token) {
       try {
         if (!data.encrypted_password) delete data.encrypted_password;
+        // añadimos el roleType al objeto data
+        const role = roles.find(r => r.id === data.roleId);
+        data.roleType = role?.type;
         await postNewClient(cookies.token, data, userInfo.id);
         navigate(`/${clientFront.urlClients}`);
       } catch (error) {
