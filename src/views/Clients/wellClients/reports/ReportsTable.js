@@ -320,7 +320,7 @@ export default function EnhancedTable({ rows, columns, wellCode, count, page, si
                       />
                     </TableCell>
                     {Object.keys(row).map((attribute) => {
-                      if (attribute === 'updatedAt' || attribute === 'createdAt' || attribute === 'sentDate') return null;
+                      if (attribute === 'id' || attribute === 'updatedAt' || attribute === 'createdAt' || attribute === 'sentDate') return null;
                       let value = row[attribute];
                       if (attribute === 'caudal' || attribute === 'nivel_freatico') {
                         value = numberFormat(value);
