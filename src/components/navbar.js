@@ -163,7 +163,7 @@ function Navbar({ children }) {
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
+              <Tooltip title="Opciones">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt={user ? user.name : navbarText.logo.defaultName} src="/static/images/avatar/2.jpg" />
                 </IconButton>
