@@ -52,7 +52,7 @@ root.render(
               {/* Clientes */}
               {/* Crear */}
               <Route path="/clients/new" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <NewClient />
                 </PrivateRoute>
               } />
