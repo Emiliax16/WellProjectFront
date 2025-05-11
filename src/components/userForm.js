@@ -7,7 +7,7 @@ import Select from './select';
 import { postNewClient } from '../services/clientServices';
 import { getAllUsersRoles } from '../services/userServices';
 import { useNavigate } from 'react-router-dom';
-import { clientFront } from  '../utils/routes.utils';
+import { clientFront, companyFront } from  '../utils/routes.utils';
 import Alerts from './Alerts';
 import useError from '../hooks/useError';
 import NewClientText from '../texts/Clients/oneClients/NewClientText.json'
@@ -48,7 +48,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
     };
 
     fetchRoles();
-  }, [cookies.token, setError]);
+  }, [cookies.token, setError, createdFromCompany]);
 
   useEffect(() => {
     const role = roles.find(r => r.type === userInfo.roleType);
@@ -66,9 +66,14 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
         const role = roles.find(r => r.id === data.roleId);
         data.roleType = role?.type;
         data.companyId = companyId;
-        console.log("añadi la data AERS", data)
         await postNewClient(cookies.token, data, userInfo.id);
-        navigate(`/${clientFront.urlClients}`);
+
+        if (createdFromCompany){
+          navigate(`/${companyFront.urlCompanies}/${companyId}/${clientFront.urlClients}`);
+        }
+        else {
+          navigate(`/${clientFront.urlClients}`);
+        }
       } catch (error) {
         console.log(error)
         const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message;
