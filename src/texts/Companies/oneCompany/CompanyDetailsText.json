@@ -17,6 +17,7 @@
       "recoveryEmail": "Correo Electrónico de Recuperación: "
     },
     "buttons": {
-      "seeClients": "Ver Clientes de la empresa"
+      "seeClients": "Ver Clientes de la empresa",
+      "createClient": "Crear cliente"
     }
   }
