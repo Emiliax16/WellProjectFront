@@ -10,6 +10,7 @@ import NewCompany from './views/Companies/oneCompany/NewCompany';
 import EditCompany from './views/Companies/oneCompany/EditCompany';
 import CompanyList from './views/Companies/allCompanies/CompanyList';
 import CompanyDetails from './views/Companies/oneCompany/CompanyDetails';
+import ClientsByCompany from './views/Companies/oneCompany/ClientsByCompany';
 import DeleteCompany from './views/Companies/oneCompany/DeleteCompany';
 import ClientList from './views/Clients/allClients/ClientList';
 import ClientDetails from './views/Clients/oneClient/ClientDetails';
@@ -72,13 +73,13 @@ root.render(
               } />
               {/* Editar un cliente */}
               <Route path="/clients/:id/edit" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin, company']}>
                   <EditClient />
                 </PrivateRoute>            
               } />
               {/* Eliminar un cliente */}
               <Route path="/clients/:id/delete" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin, company']}>
                   <DeleteClient />
                 </PrivateRoute>
               } />
@@ -97,6 +98,8 @@ root.render(
               } />
               {/* Ver uno */}
               <Route path="/companies/:id" element={<CompanyDetails />} />
+              {/* Ver clientes de una empresa */}
+              <Route path="/companies/:id/clients" element={<ClientsByCompany />} />
               {/* Editar una empresa */}
               <Route path="/companies/:id/edit" element={
                 <PrivateRoute roles={['admin']}>
