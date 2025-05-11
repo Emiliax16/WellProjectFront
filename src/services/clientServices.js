@@ -1,8 +1,9 @@
 import apiClient  from './index';
-import { clientBack, clientFront, wellBack, userBack } from '../utils/routes.utils';
+import { clientBack, clientFront, wellBack, userBack, companyBack } from '../utils/routes.utils';
 
 const { getClients, getDetails, putClient, deleteClient } = clientBack;
 const { urlClients } = clientFront;
+const { getCompanies } = companyBack;
 const { getWells, postWell, putWell, deleteWell } = wellBack;
 const { postUser } = userBack;
 
@@ -14,6 +15,20 @@ const getAllClients = async (token) => {
           Authorization: `Bearer ${token}`
         }
       })
+    return response.data
+  } catch (error) {
+    throw error;
+  }
+}
+
+const getClientsByCompany = async (token, companyId) => {
+  try {
+    const response = await apiClient.get(`${getCompanies}/${companyId}/${getClients}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     return response.data
   } catch (error) {
     throw error;
@@ -194,5 +209,6 @@ export {
   postNewWell,
   deleteClientById,
   deleteWellByCode,
-  getClientWell
+  getClientWell,
+  getClientsByCompany
 }
