@@ -13,7 +13,7 @@ import useError from '../hooks/useError';
 import NewClientText from '../texts/Clients/oneClients/NewClientText.json'
 import EditClientText from '../texts/Clients/oneClients/EditClientText.json'
 
-function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phoneNumber: '', isActived: true, roleId: 2, roleType: 'normal', email: '', personalEmail: '' }, createdFromCompany = false, 
+function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phoneNumber: '', isActived: true, roleId: 2, roleType: 'normal', email: '', personalEmail: ''}, createdFromCompany = false, 
   companyId = null } ) {
   const {
     register,
