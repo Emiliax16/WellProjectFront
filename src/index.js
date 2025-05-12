@@ -73,13 +73,13 @@ root.render(
               } />
               {/* Editar un cliente */}
               <Route path="/clients/:id/edit" element={
-                <PrivateRoute roles={['admin, company']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <EditClient />
                 </PrivateRoute>            
               } />
               {/* Eliminar un cliente */}
               <Route path="/clients/:id/delete" element={
-                <PrivateRoute roles={['admin, company']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <DeleteClient />
                 </PrivateRoute>
               } />

@@ -6,7 +6,9 @@ import { useCookies } from 'react-cookie';
 import useError from '../../../hooks/useError';
 import Alerts from '../../../components/Alerts';
 import PasswordDialog from '../../../components/PasswordDialog';
-import { clientFront } from '../../../utils/routes.utils';
+import { useAuth } from '../../../context/AuthContext';
+import { clientFront, companyFront } from '../../../utils/routes.utils';
+import { useLocation } from 'react-router-dom';
 
 function DeleteClient() {
   const { id: clientId } = useParams();
@@ -15,6 +17,9 @@ function DeleteClient() {
   const { error, setError } = useError();
   const [dialogOpen, setDialogOpen] = useState(true);
   const [cookies] = useCookies(['token']);
+  const { isCompany } = useAuth();
+  const location = useLocation();
+  const { companyId } = location.state || {};
 
   const handleDeleteClient = async (password) => {
     const requiredPassword = process.env.REACT_APP_DELETE_PASSWORD;
@@ -22,7 +27,12 @@ function DeleteClient() {
       try {
         setLoading(true);
         await deleteClientById(cookies.token, clientId);
-        navigate(`/${clientFront.urlClients}`);
+        if (isCompany){
+          navigate(`/${companyFront.urlCompanies}/${companyId}/${clientFront.urlClients}`);
+        }
+        else {
+          navigate(`/${clientFront.urlClients}`);
+        }
       } catch (err) {
         setError('No se pudo eliminar al cliente: ' + err.message);
       } finally {

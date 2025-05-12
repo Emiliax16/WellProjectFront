@@ -56,7 +56,7 @@ function ClientsByCompany() {
             </thead>
             <tbody>
             {clients.map((client) => (
-              <ClientRow key={client.id} client={client} />
+              <ClientRow key={client.id} client={client} companyId={companyId} />
             ))}
             </tbody>
           </table>
