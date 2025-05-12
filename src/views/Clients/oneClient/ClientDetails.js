@@ -12,7 +12,7 @@ import ClientDetailsText from '../../../texts/Clients/oneClients/ClientDetailsTe
 function ClientDetails() {
   const { id: clientId } = useParams();
   const [user, setUser] = useState(null);
-  const { isAdmin } = useAuth();
+  const { isAdmin, isCompany } = useAuth();
   const [cookies] = useCookies(['token']);
   const navigate = useNavigate();
   const [loading, loadingIcon, setLoading] = useLoading();
@@ -60,7 +60,7 @@ function ClientDetails() {
               <div className='text-lg font-semibold'>{ClientDetailsText.attributes.phone} {user.person.phoneNumber}</div>
               <button onClick={() => navigate(`/clients/${clientId}/wells`)} className="p-2 bg-pink-500 text-white rounded-md">{ClientDetailsText.buttons.seeWells}</button>
               {
-                isAdmin && (
+                (isAdmin || isCompany) && (
                   <button onClick={handleCreateWell} className="p-2 bg-blue-500 text-white rounded-md">{ClientDetailsText.buttons.createWells}</button>
                 )
               }

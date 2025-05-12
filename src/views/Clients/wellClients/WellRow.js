@@ -11,7 +11,7 @@ import WellRowText from '../../../texts/Wells/WellRowText.json';
 
 function WellRow({ well }) {
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const { isAdmin, isCompany } = useAuth();
   const [cookies] = useCookies(['token']);
   const { error, setError } = useError();
   const { success, setSuccess } = useSuccess();
@@ -53,7 +53,7 @@ function WellRow({ well }) {
         <div className='text-lg'>{WellRowText.attributes.location} {well.location}</div>
         <div className=''>
           {
-            isAdmin && (
+            (isAdmin || isCompany) && (
               <div>
                 <button onClick={handleEditNavigation} className='p-2 bg-blue-500 text-white rounded-md'>{WellRowText.buttons.edit}</button>
                 <button onClick={handleDeleteNavigation} className='p-2 bg-red-500 text-white rounded-md'>{WellRowText.buttons.delete}</button>

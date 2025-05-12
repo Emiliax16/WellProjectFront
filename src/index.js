@@ -67,7 +67,7 @@ root.render(
               <Route path="/clients/:id" element={<ClientDetails />} />
               {/* Crear un pozo */}
               <Route path="/clients/:id/wells/new" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <CreateWell />
                 </PrivateRoute>
               } />
@@ -118,14 +118,14 @@ root.render(
               <Route path="/clients/:clientId/wells/:code" element={<WellReportList />} />
               {/* Editar un pozo */}
               <Route path="/clients/:id/wells/:code/edit" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <EditWell />
                 </PrivateRoute>
               } 
               />
               {/* Eliminar un pozo */}
               <Route path="/clients/:id/wells/:code/delete" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <DeleteWell />
                 </PrivateRoute>
               } />
