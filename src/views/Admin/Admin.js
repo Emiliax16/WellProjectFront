@@ -23,11 +23,17 @@ function Admin() {
         <button className='p-2 mx-2 bg-pink-500 text-white' onClick={()=>{navigate('/companies/new')}}>
           Crear una empresa
         </button>
+        <button className='p-2 mx-2 bg-slate-500 text-white' onClick={()=>{navigate('/distributors/new')}}>
+          Crear una distributor
+        </button>
         <button className='p-2 mx-2 bg-cyan-400 text-white' onClick={()=>{navigate('/clients')}}>
           Ver clientes
         </button>
         <button className='p-2 mx-2 bg-blue-400 text-white' onClick={()=>{navigate('/companies')}}>
           Ver empresas
+        </button>
+        <button className='p-2 mx-2 bg-green-600 text-white' onClick={()=>{navigate('/distributors')}}>
+          Ver distribuidoras
         </button>
       </div>
 

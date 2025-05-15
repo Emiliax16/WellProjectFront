@@ -6,6 +6,14 @@ import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import ChatIcon from '@mui/icons-material/Chat';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import XIcon from '@mui/icons-material/X';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CellWifiIcon from '@mui/icons-material/CellWifi';
+import StraightenIcon from '@mui/icons-material/Straighten';
+import BalanceIcon from '@mui/icons-material/Balance';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 // Para agregar más íconos, se debe importar y agregar al objeto iconMap
 // https://mui.com/components/material-icons/
@@ -16,6 +24,14 @@ const iconMap = {
   Chat: ChatIcon,
   HomeWork: HomeWorkIcon,
   WorkOutline: WorkOutlineIcon,
+  Instagram: InstagramIcon,
+  Facebook: FacebookIcon,
+  X: XIcon,
+  Settings: SettingsIcon,
+  CellWifi: CellWifiIcon,
+  Straighten: StraightenIcon,
+  Balance: BalanceIcon,
+  PhoneAndroid: PhoneAndroidIcon,
 };
 
 const Icon = ({ icon, classNameIcon, classNameDiv, text=""}) => {

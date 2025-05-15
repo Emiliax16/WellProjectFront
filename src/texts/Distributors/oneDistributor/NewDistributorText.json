@@ -1,0 +1,11 @@
+{
+  "titles": {
+    "principalTitle": "Registro de Distribuidoras"
+  },
+  "descriptions": {
+    "principalDescription": "Creación de distribuidoras, estas pueden crear y gestionar sus propias empresas."
+  },
+  "buttons": {
+    "submitButton": "Registrar compañía"
+  }
+}
