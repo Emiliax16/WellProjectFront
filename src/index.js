@@ -30,6 +30,10 @@ import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 
 import Navbar from './components/navbar';
+import DistributorList from './views/Distributors/allDistributors/DistributorList';
+import NewDistributor from './views/Distributors/oneDistributor/NewDistributor';
+import EditDistributor from './views/Distributors/oneDistributor/EditDistributor';
+import DistributorDetails from './views/Distributors/oneDistributor/DistributorDetails';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(  
@@ -127,6 +131,33 @@ root.render(
               <Route path="/clients/:id/wells/:code/delete" element={
                 <PrivateRoute roles={['admin', 'company']}>
                   <DeleteWell />
+                </PrivateRoute>
+              } />
+              {/* Distribuidoras */}
+              {/* Crear */}
+              <Route path="/distributors/new" element={
+                <PrivateRoute roles={['admin']}>
+                  <NewDistributor/>
+                </PrivateRoute>
+              } />
+              {/* Ver todos */}
+              <Route path="/distributors" element={
+                <PrivateRoute roles={['admin']}>
+                  <DistributorList />
+                </PrivateRoute>
+              } />
+              {/* Ver uno */}
+              <Route path="/distributors/:id" element={<DistributorDetails />} />
+              {/* Editar una distribuidora */}
+              <Route path="/distributors/:id/edit" element={
+                <PrivateRoute roles={['admin']}>
+                  <EditDistributor />
+                </PrivateRoute>
+              } />
+              {/* Eliminar una distribuidora */}
+              <Route path="/distributors/:id/delete" element={
+                <PrivateRoute roles={['admin']}>
+                  <DeleteClient />
                 </PrivateRoute>
               } />
               <Route path="/*" element="404 Not Found" />

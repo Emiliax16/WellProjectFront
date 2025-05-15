@@ -31,6 +31,14 @@ const companyBack = {
     deleteCompany: process.env.REACT_APP_API_ENDPOINT_DELETE_COMPANY,
 }
 
+// Distributor request
+const distributorBack = {
+    getDistributors: process.env.REACT_APP_API_ENDPOINT_GET_ALL_DISTRIBUTORS,
+    getDistributorDetails: process.env.REACT_APP_API_ENDPOINT_GET_ONE_DISTRIBUTOR,
+    putDistributor: process.env.REACT_APP_API_ENDPOINT_PUT_DISTRIBUTOR,
+    deleteDistributor: process.env.REACT_APP_API_ENDPOINT_DELETE_DISTRIBUTOR,
+}
+
 // Client Request
 const clientBack = {
     getClients: process.env.REACT_APP_API_ENDPOINT_CLIENT_PREFIX, 
@@ -73,4 +81,5 @@ module.exports = {
     companyBack,
     companyFront,
     wellDataBack,
+    distributorBack,
 }
