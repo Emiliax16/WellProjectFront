@@ -16,7 +16,7 @@ function DistributorForm({
     id: "",
     name: "",
     email: "",
-    roleType: "company",
+    roleType: "distributor",
     isActived: true,
     distributorLogo: "",
     distributorRut: "",
