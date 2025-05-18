@@ -7,6 +7,7 @@ import { baseUrl, auth } from '../utils/routes.utils';
 import useLoading from '../hooks/useLoading';
 import useAdminStatus from '../hooks/useAdminStatus';
 import useCompanyStatus from '../hooks/useCompanyStatus';
+import useDistributorStatus from '../hooks/useDistributorStatus';
 
 const AuthContext = createContext(null);
 
@@ -17,6 +18,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, loadingIcon, setLoading] = useLoading();
     const [isAdmin, setAdminStatus] = useAdminStatus();
     const [isCompany, setCompanyStatus] = useCompanyStatus();
+    const [isDistributor, setDistributorStatus] = useDistributorStatus();
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
     const baseURL = baseUrl;
     
@@ -28,13 +30,14 @@ export const AuthProvider = ({ children }) => {
                 setUser(response);
                 setAdminStatus(response);
                 setCompanyStatus(response);
+                setDistributorStatus(response);
             } catch (error) {
                 console.error('Failed to fetch user details:', error);
             } finally {
                 setLoading(false);
             }
         }
-    }, [cookies.token, setAdminStatus, setCompanyStatus, setLoading]);
+    }, [cookies.token, setAdminStatus, setCompanyStatus, setLoading, setDistributorStatus]);
     
     useEffect(() => {
         fetchUserDetails();
@@ -63,6 +66,7 @@ export const AuthProvider = ({ children }) => {
                 setUser(user);
                 setAdminStatus(user);
                 setCompanyStatus(user);
+                setDistributorStatus(user);
             }
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error);
@@ -77,9 +81,10 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setAdminStatus(null);
         setCompanyStatus(null);
+        setDistributorStatus(null);
     };
 
-    const value = { user, login, logout, loading, loadingIcon, isAdmin, isCompany };
+    const value = { user, login, logout, loading, loadingIcon, isAdmin, isCompany, isDistributor };
 
     return (
         <AuthContext.Provider value={value}>

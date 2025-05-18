@@ -34,6 +34,7 @@ import DistributorList from './views/Distributors/allDistributors/DistributorLis
 import NewDistributor from './views/Distributors/oneDistributor/NewDistributor';
 import EditDistributor from './views/Distributors/oneDistributor/EditDistributor';
 import DistributorDetails from './views/Distributors/oneDistributor/DistributorDetails';
+import DeleteDistributor from './views/Distributors/oneDistributor/DeleteDistributor';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(  
@@ -71,7 +72,7 @@ root.render(
               <Route path="/clients/:id" element={<ClientDetails />} />
               {/* Crear un pozo */}
               <Route path="/clients/:id/wells/new" element={
-                <PrivateRoute roles={['admin', 'company']}>
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
                   <CreateWell />
                 </PrivateRoute>
               } />
@@ -122,14 +123,14 @@ root.render(
               <Route path="/clients/:clientId/wells/:code" element={<WellReportList />} />
               {/* Editar un pozo */}
               <Route path="/clients/:id/wells/:code/edit" element={
-                <PrivateRoute roles={['admin', 'company']}>
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
                   <EditWell />
                 </PrivateRoute>
               } 
               />
               {/* Eliminar un pozo */}
               <Route path="/clients/:id/wells/:code/delete" element={
-                <PrivateRoute roles={['admin', 'company']}>
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
                   <DeleteWell />
                 </PrivateRoute>
               } />
@@ -157,7 +158,7 @@ root.render(
               {/* Eliminar una distribuidora */}
               <Route path="/distributors/:id/delete" element={
                 <PrivateRoute roles={['admin']}>
-                  <DeleteClient />
+                  <DeleteDistributor />
                 </PrivateRoute>
               } />
               <Route path="/*" element="404 Not Found" />
