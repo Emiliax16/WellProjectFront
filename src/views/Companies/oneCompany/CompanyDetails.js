@@ -21,6 +21,10 @@ function CompanyDetails() {
   const handleSeeClients = () => {
     navigate(`/companies/${companyId}/clients`);
   }
+
+  const handleCreateClients = () => {
+    navigate('/clients/new', { state: { createdFromCompany: true, companyId: companyId } });
+  }
   
   const fetchCompanyDetails = useCallback(async () => {
     setLoading(true);
@@ -61,7 +65,11 @@ function CompanyDetails() {
               <div className='text-lg font-semibold'>{CompanyDetailsText.attributes.recoveryEmail} {company.recoveryEmail}</div>
               {
                 (isAdmin || isCompany) && (
-                  <button onClick={handleSeeClients} className="p-2 bg-blue-500 text-white rounded-md">{CompanyDetailsText.buttons.seeClients}</button>
+                  <>
+                    <button onClick={handleCreateClients} className='p-2 my-5 bg-blue-500 text-white rounded-md'>{CompanyDetailsText.buttons.createClient}</button>
+                    <br></br>
+                    <button onClick={handleSeeClients} className="p-2 bg-blue-500 text-white rounded-md">{CompanyDetailsText.buttons.seeClients}</button>
+                  </>
                 )
               }
             </>

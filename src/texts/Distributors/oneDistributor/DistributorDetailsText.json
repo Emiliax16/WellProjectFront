@@ -1,0 +1,23 @@
+{
+  "titles": {
+    "principalTitle": "Información de la distribuidora"
+  },
+  "alerts": {
+    "error": "Error obteniendo los datos de la distribuidora",
+    "noData": "No hay datos para mostrar de la distribuidora"
+  },
+  "attributes": {
+    "name": "Nombre: ",
+    "rut": "RUT: ",
+    "logoUrl": "Logo de la distribuidora: ",
+    "state": "Estado de la cuenta: ",
+    "location": "Ubicación: ",
+    "email": "Correo Electrónico: ",
+    "phone": "Teléfono: ",
+    "recoveryEmail": "Correo Electrónico de Recuperación: "
+  },
+  "buttons": {
+    "seeCompanies": "Ver compañías de la distribuidora",
+    "createCompany": "Crear compañía"
+  }
+}

@@ -2,6 +2,7 @@ const redirectionStrategies = {
   admin: () => '/admin',
   user: (clientId) => `/clients/${clientId}`,
   company: (companyId) => `/companies/${companyId}`,
+  distributor: (distributorId) => `/distributors/${distributorId}`,
 };
 
 export const getRedirectionPath = (isAdmin, isCompany, user) => {

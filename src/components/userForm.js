@@ -7,13 +7,14 @@ import Select from './select';
 import { postNewClient } from '../services/clientServices';
 import { getAllUsersRoles } from '../services/userServices';
 import { useNavigate } from 'react-router-dom';
-import { clientFront } from  '../utils/routes.utils';
+import { clientFront, companyFront } from  '../utils/routes.utils';
 import Alerts from './Alerts';
 import useError from '../hooks/useError';
 import NewClientText from '../texts/Clients/oneClients/NewClientText.json'
 import EditClientText from '../texts/Clients/oneClients/EditClientText.json'
 
-function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phoneNumber: '', isActived: true, roleId: 2, roleType: 'normal', email: '', personalEmail: '' }} ) {
+function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phoneNumber: '', isActived: true, roleId: 2, roleType: 'normal', email: '', personalEmail: ''}, createdFromCompany = false, 
+  companyId = null } ) {
   const {
     register,
     handleSubmit,
@@ -33,7 +34,12 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
       try {
         const rolesData = await getAllUsersRoles(cookies.token);
         // excluimos el tipo company porque ese debe llevarse en un formulario propio
-        const filteredRoles = rolesData.filter(role => role.type !== 'company');
+        let filteredRoles = rolesData.filter(role => role.type !== 'company');
+
+        // si se está creando desde una empresa, limitar a tipo "normal"
+        if (createdFromCompany) {
+          filteredRoles = filteredRoles.filter(role => role.type === 'normal');
+        }
         setRoles(filteredRoles);
       } catch (error) {
         console.error('Error fetching roles:', error);
@@ -42,7 +48,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
     };
 
     fetchRoles();
-  }, [cookies.token, setError]);
+  }, [cookies.token, setError, createdFromCompany]);
 
   useEffect(() => {
     const role = roles.find(r => r.type === userInfo.roleType);
@@ -59,8 +65,15 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
         // añadimos el roleType al objeto data
         const role = roles.find(r => r.id === data.roleId);
         data.roleType = role?.type;
+        data.companyId = companyId;
         await postNewClient(cookies.token, data, userInfo.id);
-        navigate(`/${clientFront.urlClients}`);
+
+        if (createdFromCompany){
+          navigate(`/${companyFront.urlCompanies}/${companyId}/${clientFront.urlClients}`);
+        }
+        else {
+          navigate(`/${clientFront.urlClients}`);
+        }
       } catch (error) {
         console.log(error)
         const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message;

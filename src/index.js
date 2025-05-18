@@ -10,6 +10,7 @@ import NewCompany from './views/Companies/oneCompany/NewCompany';
 import EditCompany from './views/Companies/oneCompany/EditCompany';
 import CompanyList from './views/Companies/allCompanies/CompanyList';
 import CompanyDetails from './views/Companies/oneCompany/CompanyDetails';
+import ClientsByCompany from './views/Companies/oneCompany/ClientsByCompany';
 import DeleteCompany from './views/Companies/oneCompany/DeleteCompany';
 import ClientList from './views/Clients/allClients/ClientList';
 import ClientDetails from './views/Clients/oneClient/ClientDetails';
@@ -29,6 +30,11 @@ import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 
 import Navbar from './components/navbar';
+import DistributorList from './views/Distributors/allDistributors/DistributorList';
+import NewDistributor from './views/Distributors/oneDistributor/NewDistributor';
+import EditDistributor from './views/Distributors/oneDistributor/EditDistributor';
+import DistributorDetails from './views/Distributors/oneDistributor/DistributorDetails';
+import DeleteDistributor from './views/Distributors/oneDistributor/DeleteDistributor';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(  
@@ -52,7 +58,7 @@ root.render(
               {/* Clientes */}
               {/* Crear */}
               <Route path="/clients/new" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <NewClient />
                 </PrivateRoute>
               } />
@@ -66,19 +72,19 @@ root.render(
               <Route path="/clients/:id" element={<ClientDetails />} />
               {/* Crear un pozo */}
               <Route path="/clients/:id/wells/new" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
                   <CreateWell />
                 </PrivateRoute>
               } />
               {/* Editar un cliente */}
               <Route path="/clients/:id/edit" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <EditClient />
                 </PrivateRoute>            
               } />
               {/* Eliminar un cliente */}
               <Route path="/clients/:id/delete" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company']}>
                   <DeleteClient />
                 </PrivateRoute>
               } />
@@ -97,6 +103,8 @@ root.render(
               } />
               {/* Ver uno */}
               <Route path="/companies/:id" element={<CompanyDetails />} />
+              {/* Ver clientes de una empresa */}
+              <Route path="/companies/:id/clients" element={<ClientsByCompany />} />
               {/* Editar una empresa */}
               <Route path="/companies/:id/edit" element={
                 <PrivateRoute roles={['admin']}>
@@ -115,15 +123,42 @@ root.render(
               <Route path="/clients/:clientId/wells/:code" element={<WellReportList />} />
               {/* Editar un pozo */}
               <Route path="/clients/:id/wells/:code/edit" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
                   <EditWell />
                 </PrivateRoute>
               } 
               />
               {/* Eliminar un pozo */}
               <Route path="/clients/:id/wells/:code/delete" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
                   <DeleteWell />
+                </PrivateRoute>
+              } />
+              {/* Distribuidoras */}
+              {/* Crear */}
+              <Route path="/distributors/new" element={
+                <PrivateRoute roles={['admin']}>
+                  <NewDistributor/>
+                </PrivateRoute>
+              } />
+              {/* Ver todos */}
+              <Route path="/distributors" element={
+                <PrivateRoute roles={['admin']}>
+                  <DistributorList />
+                </PrivateRoute>
+              } />
+              {/* Ver uno */}
+              <Route path="/distributors/:id" element={<DistributorDetails />} />
+              {/* Editar una distribuidora */}
+              <Route path="/distributors/:id/edit" element={
+                <PrivateRoute roles={['admin']}>
+                  <EditDistributor />
+                </PrivateRoute>
+              } />
+              {/* Eliminar una distribuidora */}
+              <Route path="/distributors/:id/delete" element={
+                <PrivateRoute roles={['admin']}>
+                  <DeleteDistributor />
                 </PrivateRoute>
               } />
               <Route path="/*" element="404 Not Found" />
