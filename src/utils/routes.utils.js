@@ -55,6 +55,10 @@ const companyFront = {
     urlCompanies: process.env.REACT_APP_API_ENDPOINT_COMPANY_PREFIX,
 }
 
+const distributorFront = {
+    urlDistributor: process.env.REACT_APP_API_ENDPOINT_GET_ALL_DISTRIBUTORS
+}
+
 // Wells request
 const wellBack = {
     getWells: process.env.REACT_APP_API_ENDPOINT_GET_ALL_WELLS,
@@ -82,4 +86,5 @@ module.exports = {
     companyFront,
     wellDataBack,
     distributorBack,
+    distributorFront,
 }

@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 function WellRow({ well }) {
   const navigate = useNavigate();
-  const { isAdmin, isCompany } = useAuth();
+  const { isDistributor } = useAuth();
   const [cookies] = useCookies(['token']);
   const { error, setError } = useError();
   const { success, setSuccess } = useSuccess();
@@ -64,7 +64,7 @@ function WellRow({ well }) {
         { well.rutInformante ? <div className='text-lg'>{WellRowText.attributes.rutInformante} {well.rutInformante}</div> : null }
         <div className=''>
           {
-            (isAdmin || isCompany) && (
+            (!isDistributor) && (
               <div>
                 <button onClick={handleEditNavigation} className='p-2 bg-blue-500 text-white rounded-md'>{WellRowText.buttons.edit}</button>
                 <button onClick={handleDeleteNavigation} className='p-2 bg-red-500 text-white rounded-md'>{WellRowText.buttons.delete}</button>
