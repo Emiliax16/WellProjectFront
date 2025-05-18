@@ -17,7 +17,7 @@
     "recoveryEmail": "Correo Electrónico de Recuperación: "
   },
   "buttons": {
-    "seeCompanies": "Ver compañías de la distribuidora",
-    "createCompany": "Crear compañía"
+    "seeCompanies": "Ver empresas de la distribuidora",
+    "createCompany": "Crear empresa"
   }
 }
