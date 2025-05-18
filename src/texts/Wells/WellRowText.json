@@ -7,12 +7,16 @@
     "code": "Código: ",
     "name": "Nombre: ",
     "state": "Estado: ",
-    "location": "Ubicación: "
+    "location": "Ubicación: ",
+    "rutEmpresa": "RUT Empresa: ",
+    "rutInformante": "RUT Informante: "
   },
   "buttons": {
     "edit": "Editar",
     "delete": "Eliminar",
     "changeState": "Cambiar Estado",
+    "deactivate": "Desactivar Pozo",
+    "activate": "Activar Pozo",
     "seeReports": "Ver Reportes"
   },
   "status": {
