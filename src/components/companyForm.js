@@ -10,8 +10,10 @@ import { postNewCompany } from '../services/companyServices';
 import { getAllUsersRoles } from '../services/userServices';
 import NewCompanyText from '../texts/Companies/oneCompany/NewCompanyText.json'
 import EditCompanyText from '../texts/Companies/oneCompany/EditCompanyText.json'
+import { distributorFront, companyFront } from  '../utils/routes.utils';
 
-function CompanyForm({ companyInfo = { id: '', name: '', email: '', roleType: 'company', isActived: true, companyLogo: '', companyRut: '', phoneNumber: '', recoveryEmail: '', location: '' } }) {
+function CompanyForm({ companyInfo = { id: '', name: '', email: '', roleType: 'company', isActived: true, companyLogo: '', companyRut: '', phoneNumber: '', recoveryEmail: '', location: '' }, createdFromDistributor = false, 
+  distributorId = null }) {
   const {
     register,
     handleSubmit,
@@ -58,8 +60,17 @@ function CompanyForm({ companyInfo = { id: '', name: '', email: '', roleType: 'c
         // añadimos el roleType al objeto data
         const role = roleCompany.length > 0 ? roleCompany[0] : null;
         data.roleType = role?.type;
+        data.distributorId = distributorId;
+
         await postNewCompany(cookies.token, data, companyInfo.id);
-        navigate(`/admin`);
+
+        if (createdFromDistributor){
+          navigate(`/${distributorFront.urlDistributors}/${distributorId}/${companyFront.urlCompanies}`);
+        }
+        else {
+          navigate(`/${companyFront.urlCompanies}`);
+        }
+
       } catch (error) {
         console.log(error);
         const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message;

@@ -22,7 +22,7 @@ function DeleteDistributor() {
       try {
         setLoading(true);
         await deleteDistributorById(cookies.token, distributorId);
-        navigate(`/${distributorFront.urlDistributor}`);
+        navigate(`/${distributorFront.urlDistributors}`);
       } catch (err) {
         setError('No se pudo eliminar la distribuidora: ' + err.message);
       } finally {

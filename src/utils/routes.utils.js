@@ -56,7 +56,7 @@ const companyFront = {
 }
 
 const distributorFront = {
-    urlDistributor: process.env.REACT_APP_API_ENDPOINT_GET_ALL_DISTRIBUTORS
+    urlDistributors: process.env.REACT_APP_API_ENDPOINT_GET_ALL_DISTRIBUTORS
 }
 
 // Wells request

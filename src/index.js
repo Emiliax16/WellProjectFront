@@ -35,6 +35,7 @@ import NewDistributor from './views/Distributors/oneDistributor/NewDistributor';
 import EditDistributor from './views/Distributors/oneDistributor/EditDistributor';
 import DistributorDetails from './views/Distributors/oneDistributor/DistributorDetails';
 import DeleteDistributor from './views/Distributors/oneDistributor/DeleteDistributor';
+import CompaniesByDistributor from './views/Distributors/oneDistributor/CompaniesByDistributor';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(  
@@ -91,13 +92,13 @@ root.render(
               {/* Empresas */}
               {/* Crear */}
               <Route path="/companies/new" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'distributor']}>
                   <NewCompany />
                 </PrivateRoute>
               } />
               { /* Ver todos */}
               <Route path="/companies" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'distributor']}>
                   <CompanyList />
                 </PrivateRoute>
               } />
@@ -161,6 +162,8 @@ root.render(
                   <DeleteDistributor />
                 </PrivateRoute>
               } />
+              {/* Ver empresas de la distribuidora */}
+              <Route path="/distributors/:id/companies" element={<CompaniesByDistributor />} />
               <Route path="/*" element="404 Not Found" />
             </Routes>
           </Navbar>

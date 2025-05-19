@@ -1,7 +1,8 @@
 import apiClient  from './index';
-import { companyBack, userBack } from '../utils/routes.utils';
+import { companyBack, userBack, distributorBack } from '../utils/routes.utils';
 
 const { getCompanies, getCompanyDetails, putCompany, deleteCompany } = companyBack;
+const { getDistributors } = distributorBack;
 const { postUser } = userBack;
 
 const getAllCompanies = async (token) => {
@@ -75,9 +76,24 @@ const deleteCompanyById = async (token, companyId) => {
   }
 }
 
+const getCompaniesByDistributor = async (token, distributorId) => {
+  try {
+    const response = await apiClient.get(`${getDistributors}/${distributorId}/${getCompanies}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return response.data
+  } catch (error) {
+    throw error;
+  }
+}
+
 export {
   getAllCompanies,
   getCompanyDetailsById,
   postNewCompany,
-  deleteCompanyById
+  deleteCompanyById,
+  getCompaniesByDistributor
 }
