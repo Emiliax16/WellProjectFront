@@ -5,22 +5,27 @@ const redirectionStrategies = {
   distributor: (distributorId) => `/distributors/${distributorId}`,
 };
 
-export const getRedirectionPath = (isAdmin, isCompany, user) => {
+export const getRedirectionPath = (isAdmin, isCompany, isDistributor, user) => {
   let role = '';
   
   if (isAdmin) {
     role = 'admin';
   } else if (isCompany) {
     role = 'company';
+  } else if (isDistributor) {
+    role = 'distributor';
   } else {
     role = 'user';
   }
 
+  console.log("OJO AL USER", user)
   const actualUserId = isAdmin
     ? null
     : isCompany
     ? user.company?.id
-    : user.client?.id;
+    : isDistributor
+    ? user.distributor?.id
+    : user.client?.id    
   
   if (!actualUserId && !isAdmin) {
     return '/login';

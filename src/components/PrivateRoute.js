@@ -11,7 +11,8 @@ function PrivateRoute({ children, roles }) {
   const roleCheck = user && (
     (roles.includes('admin') && isAdmin) ||
     (roles.includes('company') && isCompany) ||
-    (roles.includes('normal') && !isAdmin && !isCompany && !isDistributor)
+    (roles.includes('normal') && !isAdmin && !isCompany && !isDistributor) ||
+    (roles.includes('distributor') && isDistributor)
   );  
 
   return roleCheck ? children : <Navigate to="/" replace />;
