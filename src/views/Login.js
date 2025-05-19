@@ -14,7 +14,7 @@ function Login() {
     formState: { errors }
   } = useForm();
 
-  const { login, user, isAdmin, isCompany } = useAuth()
+  const { login, user, isAdmin, isCompany, isDistributor } = useAuth()
   const { error, setError } = useError();
 
   const navigate = useNavigate();
@@ -34,11 +34,11 @@ function Login() {
   };
 
   useEffect(() => {
-    if ((user && user.client) || isAdmin || isCompany) {
-      const redirectionPath = getRedirectionPath(isAdmin, isCompany, user);
+    if ((user && user.client) || isAdmin || isCompany || isDistributor) {
+      const redirectionPath = getRedirectionPath(isAdmin, isCompany, isDistributor, user);
       navigate(redirectionPath);
     }
-  }, [user, navigate, isAdmin, isCompany]);
+  }, [user, navigate, isAdmin, isCompany, isDistributor]);
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

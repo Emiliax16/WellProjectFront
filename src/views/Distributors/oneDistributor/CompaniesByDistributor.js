@@ -1,42 +1,42 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { getClientsByCompany } from '../../../services/clientServices';
+import { getCompaniesByDistributor } from '../../../services/companyServices';
 import { useCookies } from 'react-cookie';
 import useLoading from '../../../hooks/useLoading';
 import useError from '../../../hooks/useError';
 import Alerts from '../../../components/Alerts';
-import ClientRow from '../../Clients/allClients/ClientRow';
+import CompanyRow from '../../Companies/allCompanies/CompanyRow';
 
-function ClientsByCompany() {
-  const { id: companyId } = useParams();
-  const [clients, setClients] = useState([]);
+function CompaniesByDistributor() {
+  const { id: distributorId } = useParams();
+  const [companies, setCompanies] = useState([]);
   const [loading, loadingIcon, setLoading] = useLoading();
   const { error, setError } = useError();
   const [cookies] = useCookies(['token']);
 
-  const getClients = useCallback(async () => {
+  const getCompanies = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const clients = await getClientsByCompany(cookies.token, companyId);
-      setClients(clients);
+      const companies = await getCompaniesByDistributor(cookies.token, distributorId);
+      setCompanies(companies);
     } catch (error) {
-      console.log('Error fetching clients', error);
-      setError('Error al cargar los clientes por empresa')
+      console.log('Error fetching companies', error);
+      setError('Error al cargar los empresas por distribuidora')
     } finally {
       setLoading(false);
     }
-  }, [cookies.token, setLoading, setError, companyId]);
+  }, [cookies.token, setLoading, setError, distributorId]);
     
   const thStyle = 'px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider';
   
   useEffect(() => {
-    getClients();
-  }, [getClients])
+    getCompanies();
+  }, [getCompanies])
 
   return (
     <div>
-      <div className='bg-green-500 text-white p-2'>Clientes de la empresa ID {companyId} </div>
+      <div className='bg-green-500 text-white p-2'>Empresas de la distribuidora ID {distributorId} </div>
       <div className='flex justify-center items-center'>
       { 
         loading ? (
@@ -49,14 +49,14 @@ function ClientsByCompany() {
           <table className='min-w-full'>
             <thead>
             <tr>
-              <th className={thStyle}>Client Name</th>
-              <th className={thStyle}>Client Status</th>
+              <th className={thStyle}>Empresa Name</th>
+              <th className={thStyle}>Empresa Status</th>
               <th className={thStyle}>Actions</th>
             </tr>
             </thead>
             <tbody>
-            {clients.map((client) => (
-              <ClientRow key={client.id} client={client} companyId={companyId} />
+            {companies.map((company) => (
+              <CompanyRow key={company.id} company={company} />
             ))}
             </tbody>
           </table>
@@ -69,4 +69,4 @@ function ClientsByCompany() {
   );
 }
 
-export default ClientsByCompany
+export default CompaniesByDistributor

@@ -7,22 +7,25 @@ import useLoading from "../../../hooks/useLoading";
 import useError from "../../../hooks/useError";
 import Alerts from "../../../components/Alerts";
 import DistributorDetailsText from "../../../texts/Distributors/oneDistributor/DistributorDetailsText.json";
+import { distributorFront, companyFront } from  '../../../utils/routes.utils';
+import CompaniesByDistributor from "./CompaniesByDistributor";
 
 function DistributorDetails() {
   const { id: distributorId } = useParams();
   const [distributor, setDistributor] = useState(null);
-  const { isAdmin, isCompany } = useAuth();
+  const { isAdmin, isDistributor } = useAuth();
   const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
   const [loading, loadingIcon, setLoading] = useLoading();
   const { error, setError } = useError();
 
   const handleSeeCompanies = () => {
-    navigate(`/distributors/${distributorId}/companies`);
+    navigate(`/${distributorFront.urlDistributors}/${distributorId}/${companyFront.urlCompanies}`);
   };
 
   const handleCreateCompanies = () => {
-    navigate("/companies/new", {
+    console.log("LLEGO AQUI")
+    navigate(`/${companyFront.urlCompanies}/new`, {
       state: { createdFromDistributor: true, distributorId: distributorId },
     });
   };
@@ -90,7 +93,7 @@ function DistributorDetails() {
                   {DistributorDetailsText.attributes.recoveryEmail}{" "}
                   {distributor.recoveryEmail}
                 </div>
-                {(isAdmin || isCompany) && (
+                {(isAdmin || isDistributor) && (
                   <>
                     <button
                       onClick={handleCreateCompanies}
