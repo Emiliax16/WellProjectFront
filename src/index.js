@@ -34,6 +34,10 @@ import DistributorList from './views/Distributors/allDistributors/DistributorLis
 import NewDistributor from './views/Distributors/oneDistributor/NewDistributor';
 import EditDistributor from './views/Distributors/oneDistributor/EditDistributor';
 import DistributorDetails from './views/Distributors/oneDistributor/DistributorDetails';
+<<<<<<< HEAD
+=======
+import DeleteDistributor from './views/Distributors/oneDistributor/DeleteDistributor';
+>>>>>>> 75af84f2f32aa9596caf510a245708e3b5f14d56
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(  
@@ -71,7 +75,11 @@ root.render(
               <Route path="/clients/:id" element={<ClientDetails />} />
               {/* Crear un pozo */}
               <Route path="/clients/:id/wells/new" element={
+<<<<<<< HEAD
                 <PrivateRoute roles={['admin', 'company']}>
+=======
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
+>>>>>>> 75af84f2f32aa9596caf510a245708e3b5f14d56
                   <CreateWell />
                 </PrivateRoute>
               } />
@@ -122,14 +130,22 @@ root.render(
               <Route path="/clients/:clientId/wells/:code" element={<WellReportList />} />
               {/* Editar un pozo */}
               <Route path="/clients/:id/wells/:code/edit" element={
+<<<<<<< HEAD
                 <PrivateRoute roles={['admin', 'company']}>
+=======
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
+>>>>>>> 75af84f2f32aa9596caf510a245708e3b5f14d56
                   <EditWell />
                 </PrivateRoute>
               } 
               />
               {/* Eliminar un pozo */}
               <Route path="/clients/:id/wells/:code/delete" element={
+<<<<<<< HEAD
                 <PrivateRoute roles={['admin', 'company']}>
+=======
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
+>>>>>>> 75af84f2f32aa9596caf510a245708e3b5f14d56
                   <DeleteWell />
                 </PrivateRoute>
               } />
@@ -157,7 +173,11 @@ root.render(
               {/* Eliminar una distribuidora */}
               <Route path="/distributors/:id/delete" element={
                 <PrivateRoute roles={['admin']}>
+<<<<<<< HEAD
                   <DeleteClient />
+=======
+                  <DeleteDistributor />
+>>>>>>> 75af84f2f32aa9596caf510a245708e3b5f14d56
                 </PrivateRoute>
               } />
               <Route path="/*" element="404 Not Found" />
