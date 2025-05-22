@@ -120,7 +120,7 @@ function WellForm({ well }) {
                 register={register}
                 validation={{
                   pattern: {
-                    value: /^[1-9]\d*\-(\d|k|K)$/,
+                    value: /^[1-9]\d*-(\d|k|K)$/,
                     message: "El RUT debe ir en el formato 12345678-9",
                   },
                 }}
@@ -134,7 +134,7 @@ function WellForm({ well }) {
                 register={register}
                 validation={{
                   pattern: {
-                    value: /^[1-9]\d*\-(\d|k|K)$/,
+                    value: /^[1-9]\d*-(\d|k|K)$/,
                     message: "El RUT debe ir en el formato 12345678-9",
                   },
                 }}
