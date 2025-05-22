@@ -76,7 +76,7 @@ function UserForm( {userInfo = { id: '', name: '', alias: '', location: '', phon
         }
       } catch (error) {
         console.log(error)
-        const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message;
+        const message = error.response.data.error ? error.response.data.error : error.response.data.errors ? error.response.data.errors.join(', ') : error.message;
         setError(message);
       }
     } else {
