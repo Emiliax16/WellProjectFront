@@ -114,7 +114,7 @@ function WellForm({ well }) {
               />
               <Input
                 name="Rut de la empresa (Ej: 12345678-9)"
-                label="rut"
+                label="rutEmpresa"
                 placeholder="12345678-9"
                 defaultValue={well ? well.rutEmpresa : ""}
                 register={register}
@@ -128,9 +128,9 @@ function WellForm({ well }) {
               />
               <Input
                 name="Rut del usuario informate (Ej: 12345678-9)"
-                label="informateRut"
+                label="rutUsuario"
                 placeholder="12345678-9"
-                defaultValue={well ? well.rutInformate : ""}
+                defaultValue={well ? well.rutUsuario : ""}
                 register={register}
                 validation={{
                   pattern: {
