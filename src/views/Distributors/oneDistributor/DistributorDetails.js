@@ -8,7 +8,6 @@ import useError from "../../../hooks/useError";
 import Alerts from "../../../components/Alerts";
 import DistributorDetailsText from "../../../texts/Distributors/oneDistributor/DistributorDetailsText.json";
 import { distributorFront, companyFront } from  '../../../utils/routes.utils';
-import CompaniesByDistributor from "./CompaniesByDistributor";
 
 function DistributorDetails() {
   const { id: distributorId } = useParams();
