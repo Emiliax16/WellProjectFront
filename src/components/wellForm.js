@@ -35,6 +35,10 @@ function WellForm({ well }) {
     setError(null);
     if (cookies.token) {
       try {
+        // Si rutEmpresa está vacío o es undefined, usar el RUT_BASE del .env
+        if (!data.rutEmpresa || data.rutEmpresa.trim() === "") {
+          data.rutEmpresa = process.env.REACT_APP_RUT_BASE;
+        }
         const code = well ? well.code : null;
         await postNewWell(cookies.token, data, clientId, code);
         const url = `/${urlClients}/${clientId}/${getWells}`;
@@ -113,9 +117,9 @@ function WellForm({ well }) {
                 errors={errors}
               />
               <Input
-                name="Rut de la empresa (Ej: 12345678-9)"
+                name="Rut de centro de control (Ej: 12345678-9)"
                 label="rutEmpresa"
-                placeholder="12345678-9"
+                placeholder={process.env.REACT_APP_RUT_BASE}
                 defaultValue={well ? well.rutEmpresa : ""}
                 register={register}
                 validation={{
