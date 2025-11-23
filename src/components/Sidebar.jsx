@@ -114,9 +114,9 @@ export function Sidebar({ children }) {
         "flex items-center gap-3 px-4 py-6 border-b",
         collapsed && "justify-center px-2"
       )}>
-        <img src={Logo} alt="Logo" className="w-8 h-8 flex-shrink-0" />
+        <img src={Logo} alt="Logo" className="w-8 h-8 rounded-full flex-shrink-0" />
         {!collapsed && (
-          <span className="font-semibold text-lg tracking-tight">WellProject</span>
+          <span className="font-semibold text-lg tracking-tight">Promedición SpA</span>
         )}
       </div>
 
@@ -257,7 +257,7 @@ export function Sidebar({ children }) {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <img src={Logo} alt="Logo" className="w-8 h-8" />
+          <img src={Logo} alt="Logo" className="w-8 h-8 rounded-full" />
           <div className="w-10" /> {/* Spacer for centering */}
         </div>
 
