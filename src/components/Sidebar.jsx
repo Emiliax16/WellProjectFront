@@ -7,6 +7,7 @@ import {
   Users,
   Building2,
   Truck,
+  Activity,
   ChevronLeft,
   ChevronRight,
   Moon,
@@ -53,6 +54,7 @@ export function Sidebar({ children }) {
       { icon: Users, label: 'Clientes', path: '/clients' },
       { icon: Building2, label: 'Empresas', path: '/companies' },
       { icon: Truck, label: 'Distribuidoras', path: '/distributors' },
+      { icon: Activity, label: 'Actividad', path: '/activity' },
     )
   }
 
