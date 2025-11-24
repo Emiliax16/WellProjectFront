@@ -6,7 +6,41 @@ import Logo from '../assets/img/logo.webp';
 
 const year = new Date().getFullYear();
 
-export function Footer({ title, description, contactEmail, socials, menus, copyright, qrCode, logo }) {
+export function Footer({
+  title = "Promedición Chile",
+  description = "Monitoreo y precisión en telemetría del agua a la vanguardia tecnológica.",
+  contactEmail = "Correo de contacto: info@promedicion.cl",
+  socials = [
+    {
+      color: "text-gray-800",
+      name: "Instagram",
+      path: "https://www.instagram.com/promedicion/",
+    },
+  ],
+  menus = [
+    {
+      name: "Fundadores",
+      items: [
+        {
+          name: "Alejandro Gómez",
+        },
+        {
+          name: "Aike Parvex",
+        },
+        {
+          name: "Sebastián Torres",
+        },
+      ],
+    },
+  ],
+  qrCode = instagramQR,
+  logo = Logo,
+  copyright = (
+    <>
+      Copyright © {year} Todos los derechos reservados.
+    </>
+  ),
+}) {
   return (
     <footer className="relative px-4 pt-8 pb-6">
       <div className="container mx-auto">
@@ -82,47 +116,10 @@ export function Footer({ title, description, contactEmail, socials, menus, copyr
   );
 }
 
-Footer.defaultProps = {
-  title: "Promedición Chile",
-  description:
-    "Monitoreo y precisión en telemetría del agua a la vanguardia tecnológica.",
-  contactEmail:
-    "Correo de contacto: info@promedicion.cl",
-  socials: [
-    {
-      color: "text-gray-800",
-      name: "Instagram",
-      path: "https://www.instagram.com/promedicion/",
-    },
-  ],
-  menus: [
-    {
-      name: "Fundadores",
-      items: [
-        {
-          name: "Alejandro Gómez",
-        },
-        {
-          name: "Aike Parvex",
-        },
-        {
-          name: "Sebastián Torres",
-        },
-      ],
-    },
-  ],
-  qrCode: instagramQR,
-  logo: Logo,
-  copyright: (
-    <>
-      Copyright © {year} Todos los derechos reservados.
-    </>
-  ),
-};
-
 Footer.propTypes = {
   title: PropTypes.string,
   description: PropTypes.string,
+  contactEmail: PropTypes.string,
   socials: PropTypes.arrayOf(PropTypes.object),
   menus: PropTypes.arrayOf(PropTypes.object),
   qrCode: PropTypes.string,

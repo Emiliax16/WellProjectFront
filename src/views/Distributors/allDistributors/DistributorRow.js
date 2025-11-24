@@ -27,7 +27,7 @@ function DistributorRow({ distributor }) {
             Edit
           </button>
           <button
-            onClick={() => navigate(`/distributors/${distributor.id}/delete`)}
+            onClick={() => navigate(`/distributors/${distributor.id}/delete`, {state: {distributor}})}
             className="p-2 bg-red-500 text-white rounded-md"
           >
             Delete
