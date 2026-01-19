@@ -1,16 +1,20 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCompaniesByDistributor } from '../../../services/companyServices';
 import { useCookies } from 'react-cookie';
-import useLoading from '../../../hooks/useLoading';
 import useError from '../../../hooks/useError';
+import { DataTable } from '../../../components/DataTable';
+import { Badge } from '../../../components/ui/badge';
+import { Button } from '../../../components/ui/button';
+import { Building2, Plus, ChevronLeft } from 'lucide-react';
 import Alerts from '../../../components/Alerts';
-import CompanyRow from '../../Companies/allCompanies/CompanyRow';
+import { useNavigate } from 'react-router-dom';
 
 function CompaniesByDistributor() {
   const { id: distributorId } = useParams();
+  const navigate = useNavigate();
   const [companies, setCompanies] = useState([]);
-  const [loading, loadingIcon, setLoading] = useLoading();
+  const [loading, setLoading] = useState(true);
   const { error, setError } = useError();
   const [cookies] = useCookies(['token']);
 
@@ -22,51 +26,119 @@ function CompaniesByDistributor() {
       setCompanies(companies);
     } catch (error) {
       console.log('Error fetching companies', error);
-      setError('Error al cargar los empresas por distribuidora')
+      setError('Error al cargar las empresas de la distribuidora');
     } finally {
       setLoading(false);
     }
-  }, [cookies.token, setLoading, setError, distributorId]);
-    
-  const thStyle = 'px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider';
-  
+  }, [cookies.token, setError, distributorId]);
+
   useEffect(() => {
     getCompanies();
-  }, [getCompanies])
+  }, [getCompanies]);
+
+  // Definir columnas para la tabla
+  const columns = [
+    {
+      accessorKey: 'user.name',
+      header: 'Nombre de Empresa',
+      accessorFn: (row) => row.user?.name || 'Sin nombre',
+      cell: (row) => (
+        <div className="flex items-center gap-2">
+          <Building2 className="w-4 h-4 text-muted-foreground" />
+          <span className="font-medium">{row.user?.name || 'Sin nombre'}</span>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'user.email',
+      header: 'Email',
+      accessorFn: (row) => row.user?.email || '-',
+      cell: (row) => (
+        <div className="text-muted-foreground">{row.user?.email || '-'}</div>
+      ),
+    },
+    {
+      accessorKey: 'companyRut',
+      header: 'RUT',
+      accessorFn: (row) => row.companyRut || '-',
+      cell: (row) => (
+        <div className="font-mono text-sm">{row.companyRut || '-'}</div>
+      ),
+    },
+    {
+      accessorKey: 'user.isActived',
+      header: 'Estado',
+      accessorFn: (row) => (row.user?.isActived ? 'Activo' : 'Inactivo'),
+      cell: (row) => (
+        <Badge variant={row.user?.isActived ? 'success' : 'secondary'}>
+          {row.user?.isActived ? 'Activo' : 'Inactivo'}
+        </Badge>
+      ),
+      sortable: true,
+    },
+  ];
+
+  // Definir acciones para cada fila
+  const getRowActions = (company) => ({
+    view: () => navigate(`/companies/${company.id}`),
+    edit: () => navigate(`/companies/${company.id}/edit`, { state: { company, editedFromDistributor: true, distributorId } }),
+    delete: () => navigate(`/companies/${company.id}/delete`, { state: { company } }),
+  });
+
+  if (error) {
+    return (
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Empresas de la Distribuidora</h1>
+            <p className="text-muted-foreground">
+              Gestiona las empresas asociadas a esta distribuidora
+            </p>
+          </div>
+        </div>
+        <Alerts type="error" message={error} />
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <div className='bg-green-500 text-white p-2'>Empresas de la distribuidora ID {distributorId} </div>
-      <div className='flex justify-center items-center'>
-      { 
-        loading ? (
-        <div>{loadingIcon}</div>
-        ) : (
-        error ? (
-          <Alerts type='error' message={error} />
-        ) : (
-          <div className='bg-white p-2 m-2 min-w-full'>
-          <table className='min-w-full'>
-            <thead>
-            <tr>
-              <th className={thStyle}>Empresa Name</th>
-              <th className={thStyle}>Empresa Status</th>
-              <th className={thStyle}>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {companies.map((company) => (
-              <CompanyRow key={company.id} company={company} />
-            ))}
-            </tbody>
-          </table>
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate(`/distributors/${distributorId}`)}
+            className="h-8 w-8"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Empresas de la Distribuidora</h1>
+            <p className="text-muted-foreground">
+              Gestiona las empresas asociadas a esta distribuidora
+            </p>
           </div>
-        )
-        )
-      }
+        </div>
+        <Button onClick={() => navigate('/companies/new', { state: { createdFromDistributor: true, distributorId } })}>
+          <Plus className="mr-2 h-4 w-4" />
+          Nueva Empresa
+        </Button>
       </div>
+
+      {/* Tabla de empresas */}
+      <DataTable
+        columns={columns}
+        data={companies}
+        searchKey="user.name"
+        searchPlaceholder="Buscar empresa..."
+        loading={loading}
+        getRowActions={getRowActions}
+        emptyMessage="No hay empresas asociadas a esta distribuidora"
+      />
     </div>
   );
 }
 
-export default CompaniesByDistributor
+export default CompaniesByDistributor;

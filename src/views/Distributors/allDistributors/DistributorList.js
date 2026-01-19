@@ -1,72 +1,127 @@
-import { useState, useEffect, useCallback } from "react";
-import { useCookies } from "react-cookie";
-import useLoading from "../../../hooks/useLoading";
-import useError from "../../../hooks/useError";
-import Alerts from "../../../components/Alerts";
-import { getAllDistributors } from "../../../services/distributorService";
-import DistributorRow from "./DistributorRow";
+import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+import useError from '../../../hooks/useError'
+import { getAllDistributors } from '../../../services/distributorService'
+import { DataTable } from '../../../components/DataTable'
+import { Badge } from '../../../components/ui/badge'
+import { Button } from '../../../components/ui/button'
+import { Truck } from 'lucide-react'
+import Alerts from '../../../components/Alerts'
 
 function DistributorList() {
-  const [distributors, setDistributors] = useState([]);
-  const [loading, loadingIcon, setLoading] = useLoading();
-  const { error, setError } = useError();
-  const [cookies] = useCookies(["token"]);
+  const navigate = useNavigate()
+  const [distributors, setDistributors] = useState([])
+  const [loading, setLoading] = useState(true)
+  const { error, setError } = useError()
+  const [cookies] = useCookies(['token'])
 
   const getDistributors = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
     try {
-      const distributors = await getAllDistributors(cookies.token);
-      setDistributors(distributors);
+      const distributors = await getAllDistributors(cookies.token)
+      setDistributors(distributors)
     } catch (error) {
-      console.log("Error fetching companies", error);
-      setError("Error al cargar las empresas");
+      console.log('Error fetching distributors', error)
+      setError('Error al cargar las distribuidoras')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [cookies.token, setLoading, setError]);
-
-  const thStyle =
-    "px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider";
+  }, [cookies.token, setError])
 
   useEffect(() => {
-    getDistributors();
-  }, [getDistributors]);
+    getDistributors()
+  }, [getDistributors])
+
+  // Definir columnas para la tabla
+  const columns = [
+    {
+      accessorKey: 'user.name',
+      header: 'Nombre',
+      accessorFn: (row) => row.user?.name || 'Sin nombre',
+      cell: (row) => (
+        <div className="font-medium">{row.user?.name || 'Sin nombre'}</div>
+      ),
+    },
+    {
+      accessorKey: 'user.email',
+      header: 'Email',
+      accessorFn: (row) => row.user?.email || '-',
+      cell: (row) => (
+        <div className="text-muted-foreground">{row.user?.email || '-'}</div>
+      ),
+    },
+    {
+      accessorKey: 'user.isActived',
+      header: 'Estado',
+      accessorFn: (row) => (row.user?.isActived ? 'Activo' : 'Inactivo'),
+      cell: (row) => (
+        <Badge variant={row.user?.isActived ? 'success' : 'secondary'}>
+          {row.user?.isActived ? 'Activo' : 'Inactivo'}
+        </Badge>
+      ),
+      sortable: true,
+    },
+  ]
+
+  // Definir acciones para cada fila
+  const getRowActions = (distributor) => ({
+    view: () => navigate(`/distributors/${distributor.id}`),
+    edit: () => navigate(`/distributors/${distributor.id}/edit`, { state: { distributor } }),
+    delete: () => navigate(`/distributors/${distributor.id}/delete`, { state: { distributor } }),
+  })
+
+  if (error) {
+    return (
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Distribuidoras</h1>
+            <p className="text-muted-foreground">
+              Gestiona todas las distribuidoras del sistema
+            </p>
+          </div>
+        </div>
+        <Alerts type="error" message={error} />
+      </div>
+    )
+  }
 
   return (
-    <div>
-      <div className="bg-green-500 text-white p-2">
-        Welcome to the distributors view
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Distribuidoras</h1>
+          <p className="text-muted-foreground">
+            Gestiona todas las distribuidoras del sistema
+          </p>
+        </div>
+        <Button onClick={() => navigate('/distributors/new')} className="gap-2">
+          <Truck className="h-4 w-4" />
+          Nueva Distribuidora
+        </Button>
       </div>
-      <div className="flex justify-center items-center">
-        {loading ? (
-          <div>{loadingIcon}</div>
-        ) : error ? (
-          <Alerts type="error" message={error} />
-        ) : (
-          <div className="bg-white p-2 m-2 min-w-full">
-            <table className="min-w-full">
-              <thead>
-                <tr>
-                  <th className={thStyle}>Distributor Name</th>
-                  <th className={thStyle}>Distributor Status</th>
-                  <th className={thStyle}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {distributors.map((distributor) => (
-                  <DistributorRow
-                    key={distributor.id}
-                    distributor={distributor}
-                  />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+
+      {/* DataTable */}
+      <DataTable
+        data={distributors}
+        columns={columns}
+        loading={loading}
+        searchPlaceholder="Buscar distribuidoras por nombre, email..."
+        getRowActions={getRowActions}
+        emptyState={{
+          title: 'No hay distribuidoras',
+          description: 'Comienza creando tu primera distribuidora para gestionar empresas y clientes',
+          action: {
+            label: 'Crear Distribuidora',
+            onClick: () => navigate('/distributors/new'),
+          },
+        }}
+      />
     </div>
-  );
+  )
 }
 
-export default DistributorList;
+export default DistributorList

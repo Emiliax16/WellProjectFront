@@ -18,4 +18,17 @@ const sendReports = async (reports) => {
   }
 };
 
-export { sendReports }
+const bulkDeleteReports = async (reportIds) => {
+  try {
+    const url = '/wellData/bulk';
+    const response = await apiClient.delete(url, {
+      data: { reportIds }
+    });
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { sendReports, bulkDeleteReports }

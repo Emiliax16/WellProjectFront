@@ -69,8 +69,9 @@ export function LandingPage() {
       <section className="bg-white px-4 pb-20 pt-4">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-3 md:grid-cols-2 justify-items-center grid-cols-1 gap-12 z-40 -mt-24">
-            {FeaturesData.map(({ color, title, icon, description }) => (
+            {FeaturesData.map(({ color, title, icon, description }, index) => (
               <IconCard
+                key={`feature-${index}-${title}`}
                 color={color}
                 title={title}
                 icon={icon}
@@ -111,8 +112,9 @@ export function LandingPage() {
               {landingPageText.descriptions.ourTechnologies}
             </PageTitle>
             <div className="mt-24 grid grid-cols-1 gap-12 gap-x-24 md:grid-cols-2 xl:grid-cols-4 justify-items-center">
-              {TechData.map(({ img, name, description }) => (
+              {TechData.map(({ img, name, description }, index) => (
                 <ActionAreaCard
+                  key={`tech-${index}-${name}`}
                   title={name}
                   description={description}
                   path={img} />
@@ -127,8 +129,9 @@ export function LandingPage() {
             {landingPageText.descriptions.ourBenefits}
           </PageTitle>
           <div className="mx-auto mt-20 mb-24 flex flex-wrap justify-center gap-16">
-            {MoreInformation.map(({ title, icon, description }) => (
-              <IconCard 
+            {MoreInformation.map(({ title, icon, description }, index) => (
+              <IconCard
+                key={`info-${index}-${title}`}
                 title={title}
                 icon={icon}
                 description={description}

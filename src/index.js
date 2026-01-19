@@ -4,6 +4,7 @@ import './index.css';
 import Test from './Test';
 import LandingPage from './views/LandingPage';
 import Admin from './views/Admin/Admin';
+import AdminNew from './views/Admin/AdminNew';
 import Login from './views/Login';
 import NewClient from './views/Clients/oneClient/NewClient';
 import NewCompany from './views/Companies/oneCompany/NewCompany';
@@ -27,31 +28,44 @@ import { StyledEngineProvider } from '@mui/material/styles';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './components/ThemeProvider';
 import PrivateRoute from './components/PrivateRoute';
 
-import Navbar from './components/navbar';
+import { Sidebar } from './components/Sidebar';
 import DistributorList from './views/Distributors/allDistributors/DistributorList';
 import NewDistributor from './views/Distributors/oneDistributor/NewDistributor';
 import EditDistributor from './views/Distributors/oneDistributor/EditDistributor';
 import DistributorDetails from './views/Distributors/oneDistributor/DistributorDetails';
 import DeleteDistributor from './views/Distributors/oneDistributor/DeleteDistributor';
 import CompaniesByDistributor from './views/Distributors/oneDistributor/CompaniesByDistributor';
+import ActivityLog from './views/Activity/ActivityLog';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(  
+root.render(
   <React.StrictMode>
-    <StyledEngineProvider injectFirst>
-      <AuthProvider>
-        <Router>
-          <Navbar>
-            <Routes>
+    <ThemeProvider defaultTheme="light" storageKey="wellproject-theme">
+      <StyledEngineProvider injectFirst>
+        <AuthProvider>
+          <Router>
+            <Sidebar>
+              <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/telemetria" element={<Telemetria />} />
               <Route path="/login" element={<Login />} />
               <Route path="/test" element={<Test />} />
               <Route path="/admin" element={
                 <PrivateRoute roles={['admin']}>
+                  <AdminNew />
+                </PrivateRoute>
+              } />
+              <Route path="/admin/old" element={
+                <PrivateRoute roles={['admin']}>
                   <Admin />
+                </PrivateRoute>
+              } />
+              <Route path="/activity" element={
+                <PrivateRoute roles={['admin']}>
+                  <ActivityLog />
                 </PrivateRoute>
               } />
               <Route path="/view" element={<View />} />
@@ -108,13 +122,13 @@ root.render(
               <Route path="/companies/:id/clients" element={<ClientsByCompany />} />
               {/* Editar una empresa */}
               <Route path="/companies/:id/edit" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'distributor']}>
                   <EditCompany />
                 </PrivateRoute>
               } />
               {/* Eliminar una empresa */}
               <Route path="/companies/:id/delete" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'distributor']}>
                   <DeleteCompany />
                 </PrivateRoute>
               } />
@@ -165,11 +179,12 @@ root.render(
               {/* Ver empresas de la distribuidora */}
               <Route path="/distributors/:id/companies" element={<CompaniesByDistributor />} />
               <Route path="/*" element="404 Not Found" />
-            </Routes>
-          </Navbar>
-        </Router>
-      </AuthProvider>
-    </StyledEngineProvider>
+              </Routes>
+            </Sidebar>
+          </Router>
+        </AuthProvider>
+      </StyledEngineProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

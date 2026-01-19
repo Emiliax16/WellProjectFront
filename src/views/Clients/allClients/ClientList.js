@@ -1,71 +1,127 @@
-import { useState, useEffect, useCallback} from 'react';
-import { getAllClients } from '../../../services/clientServices';
-import { useCookies } from 'react-cookie';
-import useLoading from '../../../hooks/useLoading';
-import useError from '../../../hooks/useError';
-import Alerts from '../../../components/Alerts';
-import ClientRow from './ClientRow';
+import { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getAllClients } from '../../../services/clientServices'
+import { useCookies } from 'react-cookie'
+import useError from '../../../hooks/useError'
+import { DataTable } from '../../../components/DataTable'
+import { Badge } from '../../../components/ui/badge'
+import { Button } from '../../../components/ui/button'
+import { UserPlus } from 'lucide-react'
+import Alerts from '../../../components/Alerts'
 
 function ClientList() {
+  const navigate = useNavigate()
   const [clients, setClients] = useState([])
-  const [loading, loadingIcon, setLoading] = useLoading();
-  const { error, setError } = useError();
-  const [cookies] = useCookies(['token']);
+  const [loading, setLoading] = useState(true)
+  const { error, setError } = useError()
+  const [cookies] = useCookies(['token'])
 
   const getClients = useCallback(async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const clients = await getAllClients(cookies.token);
-        setClients(clients);
-      } catch (error) {
-        console.log('Error fetching clients', error);
-        setError('Error al cargar los clientes')
-      } finally {
-        setLoading(false);
-      }
+    setLoading(true)
+    setError(null)
+    try {
+      const clients = await getAllClients(cookies.token)
+      setClients(clients)
+    } catch (error) {
+      console.log('Error fetching clients', error)
+      setError('Error al cargar los clientes')
+    } finally {
+      setLoading(false)
     }
-  , [cookies.token, setLoading, setError]);
-  
-  const thStyle = 'px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider';
+  }, [cookies.token, setError])
 
   useEffect(() => {
-    getClients();
+    getClients()
   }, [getClients])
 
-  return (
-    <div>
-      <div className='bg-green-500 text-white p-2'>Welcome to the clients view</div>
-      <div className='flex justify-center items-center'>
-        { 
-          loading ? (
-            <div>{loadingIcon}</div>
-          ) : (
-            error ? (
-              <Alerts type='error' message={error} />
-            ) : (
-              <div className='bg-white p-2 m-2 min-w-full'>
-                <table className='min-w-full'>
-                  <thead>
-                    <tr>
-                      <th className={thStyle}>Client Name</th>
-                      <th className={thStyle}>Client Status</th>
-                      <th className={thStyle}>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {clients.map((client) => (
-                      <ClientRow key={client.id} client={client} />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )
-          )
-        }
+  // Definir columnas para la tabla
+  const columns = [
+    {
+      accessorKey: 'user.name',
+      header: 'Nombre',
+      accessorFn: (row) => row.user?.name || 'Sin nombre',
+      cell: (row) => (
+        <div className="font-medium">{row.user?.name || 'Sin nombre'}</div>
+      ),
+    },
+    {
+      accessorKey: 'user.email',
+      header: 'Email',
+      accessorFn: (row) => row.user?.email || '-',
+      cell: (row) => (
+        <div className="text-muted-foreground">{row.user?.email || '-'}</div>
+      ),
+    },
+    {
+      accessorKey: 'user.isActived',
+      header: 'Estado',
+      accessorFn: (row) => (row.user?.isActived ? 'Activo' : 'Inactivo'),
+      cell: (row) => (
+        <Badge variant={row.user?.isActived ? 'success' : 'secondary'}>
+          {row.user?.isActived ? 'Activo' : 'Inactivo'}
+        </Badge>
+      ),
+      sortable: true,
+    },
+  ]
+
+  // Definir acciones para cada fila
+  const getRowActions = (client) => ({
+    view: () => navigate(`/clients/${client.id}`),
+    edit: () => navigate(`/clients/${client.id}/edit`, { state: { client } }),
+    delete: () => navigate(`/clients/${client.id}/delete`, { state: { client } }),
+  })
+
+  if (error) {
+    return (
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Clientes</h1>
+            <p className="text-muted-foreground">
+              Gestiona todos los clientes del sistema
+            </p>
+          </div>
+        </div>
+        <Alerts type="error" message={error} />
       </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Clientes</h1>
+          <p className="text-muted-foreground">
+            Gestiona todos los clientes del sistema
+          </p>
+        </div>
+        <Button onClick={() => navigate('/clients/new')} className="gap-2">
+          <UserPlus className="h-4 w-4" />
+          Nuevo Cliente
+        </Button>
+      </div>
+
+      {/* DataTable */}
+      <DataTable
+        data={clients}
+        columns={columns}
+        loading={loading}
+        searchPlaceholder="Buscar clientes por nombre, email..."
+        getRowActions={getRowActions}
+        emptyState={{
+          title: 'No hay clientes',
+          description: 'Comienza creando tu primer cliente para gestionar pozos y reportes',
+          action: {
+            label: 'Crear Cliente',
+            onClick: () => navigate('/clients/new'),
+          },
+        }}
+      />
     </div>
-  );
+  )
 }
 
-export default ClientList;
+export default ClientList
