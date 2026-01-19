@@ -1,7 +1,7 @@
 import CompanyForm from '../../../components/companyForm';
 import { useState, useEffect, useCallback } from 'react';
 import { useCookies } from 'react-cookie';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { getCompanyDetailsById } from '../../../services/companyServices';
 import useLoading from '../../../hooks/useLoading';
 import useError from '../../../hooks/useError';
@@ -9,12 +9,16 @@ import Alerts from '../../../components/Alerts';
 
 function EditCompany() {
   const { id: companyId } = useParams();
+  const location = useLocation();
   const [cookies] = useCookies(['token']);
   const [company, setCompany] = useState(null);
   const [loading, loadingIcon, setLoading] = useLoading();
   const { error, setError } = useError();
   const [ companyInfo, setCompanyInfo ] = useState(null);
   
+  const editedFromDistributor = location.state?.editedFromDistributor || false;
+  const distributorId = location.state?.distributorId || null;
+
   const fetchCompany = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -57,7 +61,11 @@ function EditCompany() {
       { loading ? (
           <div>{loadingIcon}</div>
         ) : companyInfo ? (
-          <CompanyForm companyInfo = { companyInfo } />
+          <CompanyForm 
+            companyInfo={companyInfo} 
+            createdFromDistributor={editedFromDistributor}
+            distributorId={distributorId}
+          />
         ) : error ? (
           <Alerts type="error" message={error} />
         ) : (

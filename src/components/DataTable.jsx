@@ -226,7 +226,13 @@ export function DataTable({
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => navigate(rowActions.view)}
+                                onClick={() => {
+                                  if (typeof rowActions.view === 'function') {
+                                    rowActions.view()
+                                  } else {
+                                    navigate(rowActions.view)
+                                  }
+                                }}
                                 className="h-8 w-8 text-muted-foreground hover:text-foreground"
                               >
                                 <Eye className="h-4 w-4" />
@@ -236,7 +242,13 @@ export function DataTable({
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => navigate(rowActions.edit)}
+                                onClick={() => {
+                                  if (typeof rowActions.edit === 'function') {
+                                    rowActions.edit()
+                                  } else {
+                                    navigate(rowActions.edit)
+                                  }
+                                }}
                                 className="h-8 w-8 text-muted-foreground hover:text-foreground"
                               >
                                 <Pencil className="h-4 w-4" />
@@ -246,7 +258,13 @@ export function DataTable({
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                onClick={() => navigate(rowActions.delete)}
+                                onClick={() => {
+                                  if (typeof rowActions.delete === 'function') {
+                                    rowActions.delete()
+                                  } else {
+                                    navigate(rowActions.delete)
+                                  }
+                                }}
                                 className="h-8 w-8 text-muted-foreground hover:text-destructive"
                               >
                                 <Trash2 className="h-4 w-4" />

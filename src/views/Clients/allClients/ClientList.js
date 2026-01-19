@@ -67,9 +67,9 @@ function ClientList() {
 
   // Definir acciones para cada fila
   const getRowActions = (client) => ({
-    view: `/clients/${client.id}`,
-    edit: `/clients/${client.id}/edit`,
-    delete: `/clients/${client.id}/delete`,
+    view: () => navigate(`/clients/${client.id}`),
+    edit: () => navigate(`/clients/${client.id}/edit`, { state: { client } }),
+    delete: () => navigate(`/clients/${client.id}/delete`, { state: { client } }),
   })
 
   if (error) {

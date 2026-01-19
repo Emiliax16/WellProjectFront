@@ -122,13 +122,13 @@ root.render(
               <Route path="/companies/:id/clients" element={<ClientsByCompany />} />
               {/* Editar una empresa */}
               <Route path="/companies/:id/edit" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'distributor']}>
                   <EditCompany />
                 </PrivateRoute>
               } />
               {/* Eliminar una empresa */}
               <Route path="/companies/:id/delete" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'distributor']}>
                   <DeleteCompany />
                 </PrivateRoute>
               } />

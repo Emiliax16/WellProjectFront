@@ -12,7 +12,6 @@ import EditClientText from '../texts/Clients/oneClients/EditClientText.json'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
-import { Separator } from './ui/separator'
 import {
   User,
   Mail,
@@ -60,7 +59,7 @@ function UserForm({
     const fetchRoles = async () => {
       try {
         const rolesData = await getAllUsersRoles(cookies.token)
-        let filteredRoles = rolesData.filter((role) => role.type !== 'company')
+        let filteredRoles = rolesData.filter((role) => role.type !== 'company' && role.type !== 'distributor')
 
         if (createdFromCompany) {
           filteredRoles = filteredRoles.filter((role) => role.type === 'normal')

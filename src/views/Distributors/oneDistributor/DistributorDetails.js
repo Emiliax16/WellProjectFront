@@ -20,8 +20,7 @@ import {
   Eye,
   FileText,
   Image as ImageIcon,
-  Activity,
-  Building2
+  Activity
 } from 'lucide-react'
 
 function DistributorDetails() {
@@ -256,29 +255,31 @@ function DistributorDetails() {
         </Card>
       </div>
 
-      {/* Additional Info Card */}
-      <Card className="card-premium border-0 hover:shadow-premium-lg transition-all">
-        <CardHeader>
-          <CardTitle>Estadísticas de la Distribuidora</CardTitle>
-          <CardDescription>Resumen de actividad y métricas</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
-              <div className="text-3xl font-bold text-primary mb-1">-</div>
-              <p className="text-sm text-muted-foreground">Empresas Activas</p>
+      {/* Additional Info Card - Solo visible para Admin */}
+      {isAdmin && (
+        <Card className="card-premium border-0 hover:shadow-premium-lg transition-all">
+          <CardHeader>
+            <CardTitle>Estadísticas de la Distribuidora</CardTitle>
+            <CardDescription>Resumen de actividad y métricas</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
+                <div className="text-3xl font-bold text-primary mb-1">-</div>
+                <p className="text-sm text-muted-foreground">Empresas Activas</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
+                <div className="text-3xl font-bold text-primary mb-1">-</div>
+                <p className="text-sm text-muted-foreground">Clientes Totales</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
+                <div className="text-3xl font-bold text-primary mb-1">-</div>
+                <p className="text-sm text-muted-foreground">Pozos Totales</p>
+              </div>
             </div>
-            <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
-              <div className="text-3xl font-bold text-primary mb-1">-</div>
-              <p className="text-sm text-muted-foreground">Clientes Totales</p>
-            </div>
-            <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
-              <div className="text-3xl font-bold text-primary mb-1">-</div>
-              <p className="text-sm text-muted-foreground">Pozos Totales</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

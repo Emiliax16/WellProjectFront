@@ -6,7 +6,7 @@ import useError from '../../../hooks/useError';
 import { DataTable } from '../../../components/DataTable';
 import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
-import { Building2, Plus } from 'lucide-react';
+import { Building2, Plus, ChevronLeft } from 'lucide-react';
 import Alerts from '../../../components/Alerts';
 import { useNavigate } from 'react-router-dom';
 
@@ -80,9 +80,9 @@ function CompaniesByDistributor() {
 
   // Definir acciones para cada fila
   const getRowActions = (company) => ({
-    view: `/companies/${company.id}`,
-    edit: `/companies/${company.id}/edit`,
-    delete: `/companies/${company.id}/delete`,
+    view: () => navigate(`/companies/${company.id}`),
+    edit: () => navigate(`/companies/${company.id}/edit`, { state: { company, editedFromDistributor: true, distributorId } }),
+    delete: () => navigate(`/companies/${company.id}/delete`, { state: { company } }),
   });
 
   if (error) {
@@ -105,13 +105,23 @@ function CompaniesByDistributor() {
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Empresas de la Distribuidora</h1>
-          <p className="text-muted-foreground">
-            Gestiona las empresas asociadas a esta distribuidora
-          </p>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate(`/distributors/${distributorId}`)}
+            className="h-8 w-8"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Empresas de la Distribuidora</h1>
+            <p className="text-muted-foreground">
+              Gestiona las empresas asociadas a esta distribuidora
+            </p>
+          </div>
         </div>
-        <Button onClick={() => navigate(`/distributors/${distributorId}/companies/new`)}>
+        <Button onClick={() => navigate('/companies/new', { state: { createdFromDistributor: true, distributorId } })}>
           <Plus className="mr-2 h-4 w-4" />
           Nueva Empresa
         </Button>

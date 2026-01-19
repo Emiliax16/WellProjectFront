@@ -14,7 +14,6 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import { Button } from '../../components/ui/button'
 import { StatCard } from '../../components/StatCard'
-import { QuickActionCard } from '../../components/QuickActionCard'
 import { Separator } from '../../components/ui/separator'
 import { Badge } from '../../components/ui/badge'
 import { Skeleton } from '../../components/ui/skeleton'
@@ -151,8 +150,8 @@ function AdminNew() {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-5xl font-extrabold tracking-tight">
-              <span className="premium-water-title relative inline-block">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">
+              <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-slate-100 dark:to-slate-300 bg-clip-text text-transparent">
                 Administración de tus Derechos del Agua
               </span>
             </h1>

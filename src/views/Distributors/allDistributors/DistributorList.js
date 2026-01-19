@@ -67,9 +67,9 @@ function DistributorList() {
 
   // Definir acciones para cada fila
   const getRowActions = (distributor) => ({
-    view: `/distributors/${distributor.id}`,
-    edit: `/distributors/${distributor.id}/edit`,
-    delete: `/distributors/${distributor.id}/delete`,
+    view: () => navigate(`/distributors/${distributor.id}`),
+    edit: () => navigate(`/distributors/${distributor.id}/edit`, { state: { distributor } }),
+    delete: () => navigate(`/distributors/${distributor.id}/delete`, { state: { distributor } }),
   })
 
   if (error) {
