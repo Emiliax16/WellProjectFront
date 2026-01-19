@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { deleteCompanyById } from '../../../services/companyServices'
 import { useCookies } from 'react-cookie'
 import useError from '../../../hooks/useError'
@@ -11,7 +11,6 @@ import { AlertTriangle, Lock, Trash2, X, AlertCircle, Building2 } from 'lucide-r
 function DeleteCompany() {
   const { id: companyId } = useParams()
   const navigate = useNavigate()
-  const location = useLocation()
   const [loading, setLoading] = useState(false)
   const { error, setError } = useError()
   const [password, setPassword] = useState('')

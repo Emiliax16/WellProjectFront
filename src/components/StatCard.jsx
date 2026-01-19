@@ -13,13 +13,6 @@ export function StatCard({
   variant = "default",
   className
 }) {
-  const variantStyles = {
-    default: "border-l-primary",
-    success: "border-l-green-500",
-    warning: "border-l-yellow-500",
-    danger: "border-l-red-500",
-  }
-
   const getTrendIcon = () => {
     if (!trend) return null
     if (trend > 0) return <TrendingUp className="h-3.5 w-3.5" />

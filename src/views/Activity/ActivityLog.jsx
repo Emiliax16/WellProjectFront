@@ -54,6 +54,7 @@ function ActivityLog() {
     if (cookies.token) {
       fetchLogs(0)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cookies.token])
 
   // Entity configuration for activity logs
