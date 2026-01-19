@@ -18,6 +18,7 @@ import {
   AlertCircle,
   CheckCircle2,
   XCircle,
+  ChevronLeft,
 } from 'lucide-react'
 import WellsText from '../../../texts/WellsText.json'
 
@@ -162,15 +163,15 @@ function ClientWells() {
   const getRowActions = (well) => {
     if (isDistributor) {
       return {
-        view: `/clients/${well.clientId}/wells/${well.code}`,
+        view: () => navigate(`/clients/${well.clientId}/wells/${well.code}`, { state: { well } }),
         edit: null,
         delete: null,
       }
     }
     return {
-      view: `/clients/${well.clientId}/wells/${well.code}`,
-      edit: `/clients/${well.clientId}/wells/${well.code}/edit`,
-      delete: `/clients/${well.clientId}/wells/${well.code}/delete`,
+      view: () => navigate(`/clients/${well.clientId}/wells/${well.code}`, { state: { well } }),
+      edit: () => navigate(`/clients/${well.clientId}/wells/${well.code}/edit`, { state: { well } }),
+      delete: () => navigate(`/clients/${well.clientId}/wells/${well.code}/delete`, { state: { well } }),
     }
   }
 
@@ -203,9 +204,19 @@ function ClientWells() {
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header with Create Button */}
       <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight">{WellsText.titles.principalTitle}</h1>
-          <p className="text-muted-foreground">Gestiona los pozos y sus reportes</p>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate(`/clients/${clientId}`)}
+            className="h-8 w-8"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold tracking-tight">{WellsText.titles.principalTitle}</h1>
+            <p className="text-muted-foreground">Gestiona los pozos y sus reportes</p>
+          </div>
         </div>
         {!isDistributor && (
           <Button onClick={() => navigate(`/clients/${clientId}/wells/new`)} size="lg" className="gap-2">

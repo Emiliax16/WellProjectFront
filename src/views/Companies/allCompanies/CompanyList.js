@@ -67,9 +67,9 @@ function CompanyList() {
 
   // Definir acciones para cada fila
   const getRowActions = (company) => ({
-    view: `/companies/${company.id}`,
-    edit: `/companies/${company.id}/edit`,
-    delete: `/companies/${company.id}/delete`,
+    view: () => navigate(`/companies/${company.id}`),
+    edit: () => navigate(`/companies/${company.id}/edit`, { state: { company } }),
+    delete: () => navigate(`/companies/${company.id}/delete`, { state: { company } }),
   })
 
   if (error) {

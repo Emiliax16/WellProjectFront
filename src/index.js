@@ -38,6 +38,7 @@ import EditDistributor from './views/Distributors/oneDistributor/EditDistributor
 import DistributorDetails from './views/Distributors/oneDistributor/DistributorDetails';
 import DeleteDistributor from './views/Distributors/oneDistributor/DeleteDistributor';
 import CompaniesByDistributor from './views/Distributors/oneDistributor/CompaniesByDistributor';
+import ActivityLog from './views/Activity/ActivityLog';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -60,6 +61,11 @@ root.render(
               <Route path="/admin/old" element={
                 <PrivateRoute roles={['admin']}>
                   <Admin />
+                </PrivateRoute>
+              } />
+              <Route path="/activity" element={
+                <PrivateRoute roles={['admin']}>
+                  <ActivityLog />
                 </PrivateRoute>
               } />
               <Route path="/view" element={<View />} />
@@ -116,13 +122,13 @@ root.render(
               <Route path="/companies/:id/clients" element={<ClientsByCompany />} />
               {/* Editar una empresa */}
               <Route path="/companies/:id/edit" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'distributor']}>
                   <EditCompany />
                 </PrivateRoute>
               } />
               {/* Eliminar una empresa */}
               <Route path="/companies/:id/delete" element={
-                <PrivateRoute roles={['admin']}>
+                <PrivateRoute roles={['admin', 'distributor']}>
                   <DeleteCompany />
                 </PrivateRoute>
               } />

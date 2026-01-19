@@ -20,14 +20,15 @@ import {
   Eye,
   FileText,
   Image as ImageIcon,
-  Activity
+  Activity,
+  ChevronLeft
 } from 'lucide-react'
 
 function CompanyDetails() {
   const { id: companyId } = useParams()
   const [company, setCompany] = useState(null)
   const [loading, setLoading] = useState(true)
-  const { isAdmin, isCompany } = useAuth()
+  const { isAdmin, isCompany, isDistributor } = useAuth()
   const [cookies] = useCookies(['token'])
   const navigate = useNavigate()
   const { error, setError } = useError()
@@ -115,12 +116,36 @@ function CompanyDetails() {
     },
   ]
 
+  // Determinar si debe mostrar el botón de volver atrás
+  // Solo mostrar para admin o distribuidora
+  const shouldShowBackButton = isAdmin || isDistributor
+
+  const handleGoBack = () => {
+    if (isDistributor && company?.distributorId) {
+      // Si es distribuidora, volver a la lista de empresas de la distribuidora
+      navigate(`/distributors/${company.distributorId}/companies`)
+    } else {
+      // Si es admin, volver a la lista general de empresas
+      navigate('/companies')
+    }
+  }
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
+            {shouldShowBackButton && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleGoBack}
+                className="h-8 w-8 mt-2"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+            )}
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
               <Building2 className="h-6 w-6 text-primary" />
             </div>
@@ -255,29 +280,31 @@ function CompanyDetails() {
         </Card>
       </div>
 
-      {/* Additional Info Card */}
-      <Card className="card-premium border-0 hover:shadow-premium-lg transition-all">
-        <CardHeader>
-          <CardTitle>Estadísticas de la Empresa</CardTitle>
-          <CardDescription>Resumen de actividad y métricas</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
-              <div className="text-3xl font-bold text-primary mb-1">-</div>
-              <p className="text-sm text-muted-foreground">Clientes Activos</p>
+      {/* Additional Info Card - Solo visible para Admin */}
+      {isAdmin && (
+        <Card className="card-premium border-0 hover:shadow-premium-lg transition-all">
+          <CardHeader>
+            <CardTitle>Estadísticas de la Empresa</CardTitle>
+            <CardDescription>Resumen de actividad y métricas</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
+                <div className="text-3xl font-bold text-primary mb-1">-</div>
+                <p className="text-sm text-muted-foreground">Clientes Activos</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
+                <div className="text-3xl font-bold text-primary mb-1">-</div>
+                <p className="text-sm text-muted-foreground">Pozos Totales</p>
+              </div>
+              <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
+                <div className="text-3xl font-bold text-primary mb-1">-</div>
+                <p className="text-sm text-muted-foreground">Reportes del Mes</p>
+              </div>
             </div>
-            <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
-              <div className="text-3xl font-bold text-primary mb-1">-</div>
-              <p className="text-sm text-muted-foreground">Pozos Totales</p>
-            </div>
-            <div className="flex flex-col items-center justify-center p-6 rounded-lg bg-muted/50">
-              <div className="text-3xl font-bold text-primary mb-1">-</div>
-              <p className="text-sm text-muted-foreground">Reportes del Mes</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

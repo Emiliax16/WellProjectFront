@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../../context/AuthContext'
 import { getWellReports, getClientWell } from '../../../../services/clientServices'
-import { sendReports } from '../../../../services/wellDataServices'
+import { sendReports, bulkDeleteReports } from '../../../../services/wellDataServices'
 import { useCookies } from 'react-cookie'
 import useError from '../../../../hooks/useError'
 import { DataTable } from '../../../../components/DataTable'
@@ -22,7 +22,10 @@ import {
   ChevronLeft,
   Activity,
   XCircle,
+  Download,
+  Trash2,
 } from 'lucide-react'
+import * as XLSX from 'xlsx'
 
 function WellReportList() {
   const { clientId, code } = useParams()
@@ -39,6 +42,8 @@ function WellReportList() {
 
   const [well, setWell] = useState(location.state?.well || null)
   const [sendingReports, setSendingReports] = useState(false)
+  const [selectedReports, setSelectedReports] = useState([])
+  const [deletingReports, setDeletingReports] = useState(false)
 
   const fetchWell = useCallback(async () => {
     if (!well) {
@@ -97,16 +102,26 @@ function WellReportList() {
         throw new Error('El pozo está desactivado.')
       }
 
-      if (wellReports && wellReports.length !== 0) {
-        const pendingReports = wellReports.filter((report) => !report.sent)
-        if (pendingReports.length === 0) {
+      // Si hay reportes seleccionados, enviar solo esos
+      // Si no hay selección, enviar todos los pendientes
+      let reportsToSend = []
+      if (selectedReports.length > 0) {
+        reportsToSend = wellReports.filter((report) => 
+          selectedReports.includes(report.id) && !report.sent
+        )
+        if (reportsToSend.length === 0) {
+          throw new Error('Los reportes seleccionados ya fueron enviados.')
+        }
+      } else {
+        reportsToSend = wellReports.filter((report) => !report.sent)
+        if (reportsToSend.length === 0) {
           throw new Error('No hay reportes pendientes.')
-        } else {
-          await sendReports(pendingReports)
-          // Refresh reports after sending
-          fetchWellReports()
         }
       }
+
+      await sendReports(reportsToSend)
+      setSelectedReports([])
+      fetchWellReports()
     } catch (error) {
       console.error('Error enviando reportes:', error)
       setError(error.message || 'Error enviando los reportes.')
@@ -115,7 +130,106 @@ function WellReportList() {
     }
   }
 
+  const handleSelectReport = (reportId) => {
+    setSelectedReports((prev) => {
+      if (prev.includes(reportId)) {
+        return prev.filter((id) => id !== reportId)
+      } else {
+        return [...prev, reportId]
+      }
+    })
+  }
+
+  const handleSelectAll = () => {
+    if (selectedReports.length === wellReports.length) {
+      setSelectedReports([])
+    } else {
+      setSelectedReports(wellReports.map((report) => report.id))
+    }
+  }
+
+  const handleDownloadExcel = () => {
+    const reportsToDownload = selectedReports.length > 0
+      ? wellReports.filter((report) => selectedReports.includes(report.id))
+      : wellReports
+
+    if (reportsToDownload.length === 0) {
+      setError('No hay reportes para descargar')
+      return
+    }
+
+    // Preparar datos para Excel
+    const excelData = reportsToDownload.map((report) => ({
+      'Código': report.code,
+      'Fecha': report.date,
+      'Hora': report.hour,
+      'Totalizador (m³)': report.totalizador,
+      'Caudal (L/s)': report.caudal,
+      'Nivel Freático (m)': report.nivel_freatico,
+      'Estado': report.sent ? 'Enviado' : 'Pendiente',
+    }))
+
+    // Crear libro de Excel
+    const worksheet = XLSX.utils.json_to_sheet(excelData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Reportes')
+
+    // Descargar archivo
+    const fileName = `reportes_${code}_${selectedMonth}_${selectedYear}.xlsx`
+    XLSX.writeFile(workbook, fileName)
+
+    setSelectedReports([])
+  }
+
+  const handleDeleteReports = async () => {
+    if (selectedReports.length === 0) {
+      setError('Debe seleccionar al menos un reporte para eliminar')
+      return
+    }
+
+    const confirmDelete = window.confirm(
+      `¿Está seguro de que desea eliminar ${selectedReports.length} reporte(s)? Esta acción no se puede deshacer.`
+    )
+
+    if (!confirmDelete) return
+
+    try {
+      setDeletingReports(true)
+      setError(null)
+
+      await bulkDeleteReports(selectedReports)
+      
+      setSelectedReports([])
+      fetchWellReports()
+    } catch (error) {
+      console.error('Error eliminando reportes:', error)
+      setError(error.response?.data?.message || 'Error eliminando los reportes.')
+    } finally {
+      setDeletingReports(false)
+    }
+  }
+
   const columns = [
+    {
+      accessorKey: 'select',
+      header: () => (
+        <input
+          type="checkbox"
+          checked={selectedReports.length === wellReports.length && wellReports.length > 0}
+          onChange={handleSelectAll}
+          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+        />
+      ),
+      cell: (row) => (
+        <input
+          type="checkbox"
+          checked={selectedReports.includes(row.id)}
+          onChange={() => handleSelectReport(row.id)}
+          className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+        />
+      ),
+      sortable: false,
+    },
     {
       accessorKey: 'code',
       header: 'Código',
@@ -223,7 +337,7 @@ function WellReportList() {
             <div>
               <h1 className="text-3xl font-bold tracking-tight">Reportes del Pozo</h1>
               <p className="text-muted-foreground">
-                {well?.name || code} - {well?.location || 'Ubicación no especificada'}
+                {well?.name || 'Sin nombre'} con código {code} - {well?.location || 'Ubicación no especificada'}
               </p>
             </div>
           </div>
@@ -289,40 +403,99 @@ function WellReportList() {
             </div>
           </div>
 
-          {/* Send Reports Button */}
-          {wellReports.length > 0 && pendingReportsCount > 0 && (isAdmin || isCompany) && (
-            <div className="mt-6 pt-6 border-t">
-              <div className="flex items-center justify-between">
+          {/* Action Buttons */}
+          {wellReports.length > 0 && (
+            <div className="mt-6 pt-6 border-t space-y-4">
+              {/* Selection and Download Controls */}
+              <div className="flex items-center justify-between flex-wrap gap-3">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium">Enviar reportes pendientes a la DGA</p>
+                  <p className="text-sm font-medium">Acciones con reportes</p>
                   <p className="text-xs text-muted-foreground">
-                    {pendingReportsCount} reporte{pendingReportsCount !== 1 ? 's' : ''} pendiente
-                    {pendingReportsCount !== 1 ? 's' : ''} de envío
+                    {selectedReports.length > 0 
+                      ? `${selectedReports.length} reporte${selectedReports.length !== 1 ? 's' : ''} seleccionado${selectedReports.length !== 1 ? 's' : ''}`
+                      : 'Ningún reporte seleccionado'}
                   </p>
                 </div>
-                <Button
-                  onClick={handleSendReports}
-                  disabled={!isWellActive || sendingReports}
-                  className="gap-2"
-                  title={
-                    !isWellActive
-                      ? 'El pozo debe estar activado para enviar reportes'
-                      : 'Enviar todos los reportes pendientes a la DGA'
-                  }
-                >
-                  {sendingReports ? (
-                    <>
-                      <div className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                      Enviando...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4" />
-                      Enviar a DGA
-                    </>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleSelectAll}
+                    className="gap-2"
+                  >
+                    {selectedReports.length === wellReports.length ? 'Deseleccionar Todos' : 'Seleccionar Todos'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDownloadExcel}
+                    className="gap-2"
+                    disabled={wellReports.length === 0}
+                  >
+                    <Download className="h-4 w-4" />
+                    Descargar Excel
+                  </Button>
+                  {(isAdmin || isCompany) && (
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={handleDeleteReports}
+                      className="gap-2"
+                      disabled={selectedReports.length === 0 || deletingReports}
+                    >
+                      {deletingReports ? (
+                        <>
+                          <div className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                          Eliminando...
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 className="h-4 w-4" />
+                          Eliminar
+                        </>
+                      )}
+                    </Button>
                   )}
-                </Button>
+                </div>
               </div>
+
+              {/* Send to DGA Button */}
+              {pendingReportsCount > 0 && (isAdmin || isCompany) && (
+                <div className="flex items-center justify-between pt-4 border-t">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Enviar reportes a la DGA</p>
+                    <p className="text-xs text-muted-foreground">
+                      {selectedReports.length > 0
+                        ? `Se enviarán ${wellReports.filter(r => selectedReports.includes(r.id) && !r.sent).length} reporte(s) seleccionado(s)`
+                        : `${pendingReportsCount} reporte${pendingReportsCount !== 1 ? 's' : ''} pendiente${pendingReportsCount !== 1 ? 's' : ''} de envío`}
+                    </p>
+                  </div>
+                  <Button
+                    onClick={handleSendReports}
+                    disabled={!isWellActive || sendingReports}
+                    className="gap-2"
+                    title={
+                      !isWellActive
+                        ? 'El pozo debe estar activado para enviar reportes'
+                        : selectedReports.length > 0
+                        ? 'Enviar reportes seleccionados a la DGA'
+                        : 'Enviar todos los reportes pendientes a la DGA'
+                    }
+                  >
+                    {sendingReports ? (
+                      <>
+                        <div className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        Enviando...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" />
+                        {selectedReports.length > 0 ? 'Enviar Seleccionados' : 'Enviar Todos'}
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </CardContent>
