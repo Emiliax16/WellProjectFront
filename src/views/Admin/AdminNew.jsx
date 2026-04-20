@@ -20,6 +20,8 @@ import { Skeleton } from '../../components/ui/skeleton'
 import { Avatar, AvatarFallback } from '../../components/ui/avatar'
 import { getGlobalStats } from '../../services/statsServices'
 import { getActivityLogs } from '../../services/activityLogServices'
+import { getWellsStatus } from '../../services/monitoringServices'
+import { WellsStatusPanel } from '../../components/WellsStatusPanel'
 import { cn } from '../../lib/utils'
 
 function AdminNew() {
@@ -28,20 +30,23 @@ function AdminNew() {
   const [cookies] = useCookies(['token'])
   const [stats, setStats] = useState(null)
   const [activityLogs, setActivityLogs] = useState([])
+  const [wellsStatus, setWellsStatus] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // Fetch global stats and activity logs on component mount
+  // Fetch global stats, activity logs y estado de pozos
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true)
-        const [statsData, logsResponse] = await Promise.all([
+        const [statsData, logsResponse, wellsStatusData] = await Promise.all([
           getGlobalStats(cookies.token),
-          getActivityLogs(cookies.token, 0, 10)
+          getActivityLogs(cookies.token, 0, 10),
+          getWellsStatus(cookies.token)
         ])
         setStats(statsData)
         setActivityLogs(logsResponse.data)
+        setWellsStatus(wellsStatusData)
       } catch (err) {
         console.error('Error loading data:', err)
         setError('Error al cargar los datos')
@@ -203,6 +208,9 @@ function AdminNew() {
           className="card-premium"
         />
       </div>
+
+      {/* Monitoreo de comunicación de pozos */}
+      <WellsStatusPanel data={wellsStatus} loading={loading} />
 
       {/* Quick Actions - Compacto y Minimalista */}
       <Card className="card-premium border-0 hover:shadow-premium-lg transition-all">
