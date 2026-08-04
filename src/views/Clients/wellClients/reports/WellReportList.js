@@ -119,7 +119,7 @@ function WellReportList() {
         }
       }
 
-      await sendReports(reportsToSend)
+      await sendReports(cookies.token, reportsToSend)
       setSelectedReports([])
       fetchWellReports()
     } catch (error) {
@@ -197,7 +197,7 @@ function WellReportList() {
       setDeletingReports(true)
       setError(null)
 
-      await bulkDeleteReports(selectedReports)
+      await bulkDeleteReports(cookies.token, selectedReports)
       
       setSelectedReports([])
       fetchWellReports()
