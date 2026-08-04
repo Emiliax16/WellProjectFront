@@ -37,17 +37,15 @@ const postNewCompany = async (token, data, companyId) => {
   try {
     let response = null;
     if (companyId === '') {
-      response = await apiClient.post(`${postUser}` , {
-        ...data,
+      response = await apiClient.post(`${postUser}`, data, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-    } 
+    }
     else {
       const url = `${putCompany}/${companyId}/edit`
-      response = await apiClient.put(url , {
-        ...data,
+      response = await apiClient.put(url, data, {
         headers: {
           Authorization: `Bearer ${token}`
         }

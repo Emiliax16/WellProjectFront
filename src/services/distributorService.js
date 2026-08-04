@@ -42,16 +42,14 @@ const postNewDistributor = async (token, data, distributorId) => {
   try {
     let response = null;
     if (distributorId === "") {
-      response = await apiClient.post(`${postUser}`, {
-        ...data,
+      response = await apiClient.post(`${postUser}`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
     } else {
       const url = `${putDistributor}/${distributorId}/edit`;
-      response = await apiClient.put(url, {
-        ...data,
+      response = await apiClient.put(url, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
