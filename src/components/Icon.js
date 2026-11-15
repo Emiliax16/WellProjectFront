@@ -1,4 +1,4 @@
-// Input.js
+// Icon.js
 import React from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ConstructionIcon from '@mui/icons-material/Construction';
