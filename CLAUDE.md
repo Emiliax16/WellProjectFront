@@ -449,7 +449,7 @@ npm run eject
 4. Admin/Company puede seleccionar reportes
 5. Botón "Enviar a DGA" ejecuta `sendReports()`
 6. Backend procesa y envía a DGA chilena
-7. Servicio SENDER (Rails cron job) reenvía los pendientes una vez al día, siempre que su cron esté activo (ver la documentación de operación en `WellProject`)
+7. Servicio SENDER (Rails cron job) reenvía una vez al día hasta 100 pendientes, siempre que su cron esté activo (ver la documentación de operación en `WellProject`)
 8. Estado de reporte actualizado a `sent: true`
 
 ### Flujo de Creación de Pozo
