@@ -371,9 +371,11 @@ NODE_ENV=development
 
 **Variables especiales**:
 ```bash
-REACT_APP_DELETE_PASSWORD=    # Contraseña para operaciones críticas
+REACT_APP_DELETE_PASSWORD=    # Confirmación visual al borrar; el backend no la valida
 REACT_APP_RUT_BASE=           # RUT por defecto para pozos
 ```
+
+Toda variable `REACT_APP_*` queda dentro del bundle y es legible desde el navegador, así que ninguna debe contener un secreto. En el build de producción, CRA fija `NODE_ENV=production` y la URL de la API es la fija de `src/utils/routes.utils.js`; las variables de host, puerto y protocolo solo aplican en desarrollo.
 
 ### Tailwind CSS
 
@@ -433,21 +435,9 @@ npm run eject
 
 **Plataforma**: AWS S3 + CloudFront
 
-**Proceso**:
-```bash
-# 1. Build de producción
-npm run build
+**Proceso**: manual y sin pasar por GitHub. Se construye desde un clon limpio de `master`, se sube el build con `aws s3 sync` y se invalida CloudFront. El procedimiento completo, con la verificación de la versión publicada y cómo volver atrás, está en `documentations/deployment.md`.
 
-# 2. Sincronizar con S3
-aws s3 sync build/ s3://YOUR-BUCKET --delete
-
-# 3. Invalidar caché de CloudFront
-aws cloudfront create-invalidation \
-  --distribution-id YOUR_CLOUDFRONT_ID \
-  --paths "/*"
-```
-
-**URL de Producción**: https://promedicionbackend.com/
+**URL de Producción**: https://promedicion.cl/ (consume la API en `https://promedicionbackend.com/`)
 
 ## Flujos Principales
 
@@ -459,7 +449,7 @@ aws cloudfront create-invalidation \
 4. Admin/Company puede seleccionar reportes
 5. Botón "Enviar a DGA" ejecuta `sendReports()`
 6. Backend procesa y envía a DGA chilena
-7. Servicio SENDER (Rails cron job) maneja envíos automáticos
+7. Servicio SENDER (Rails cron job) reenvía los pendientes una vez al día, siempre que su cron esté activo (ver la documentación de operación en `WellProject`)
 8. Estado de reporte actualizado a `sent: true`
 
 ### Flujo de Creación de Pozo
