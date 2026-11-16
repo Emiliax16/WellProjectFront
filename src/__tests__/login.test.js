@@ -137,7 +137,7 @@ describe('formulario de login (#41)', () => {
     expect(getClientDetails).not.toHaveBeenCalledWith('token-de-otra-persona');
   });
 
-  it('muestra un error si la cuenta no tiene perfil, en vez de quedarse quieto', async () => {
+  it('muestra un error si la cuenta no tiene perfil y no guarda la sesión', async () => {
     getClientDetails.mockResolvedValue({ id: 7 });
     getUserRole.mockResolvedValue({ type: 'normal' });
     montar(<Login />);
@@ -146,6 +146,22 @@ describe('formulario de login (#41)', () => {
 
     expect(await screen.findByText('Tu cuenta no tiene un perfil asociado. Contacta al administrador.')).toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalled();
+    expect(document.cookie).not.toContain(TOKEN_NUEVO);
+  });
+
+  it('no vuelve a cargar el perfil cuando se guarda la cookie del login', async () => {
+    // Esa recarga desmontaba y volvía a montar la página de destino, y si
+    // fallaba cerraba la sesión recién abierta.
+    getClientDetails.mockResolvedValue({ id: 7, client: { id: 3 } });
+    getUserRole.mockResolvedValue({ type: 'normal' });
+    montar(<Login />);
+
+    await enviarFormulario();
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/clients/3', { replace: true }));
+    await act(async () => { await new Promise((r) => setTimeout(r, 50)); });
+
+    expect(getClientDetails).toHaveBeenCalledTimes(1);
+    expect(getUserRole).toHaveBeenCalledTimes(1);
   });
 
   it('muestra el mensaje de la API si las credenciales son incorrectas', async () => {

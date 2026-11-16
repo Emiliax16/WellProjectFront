@@ -1,9 +1,10 @@
 
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {getClientDetails} from '../services/clientServices';
 import { getUserRole } from '../services/userServices';
+import { getRedirectionPath } from '../strategies/redirectionStrategy';
 import { baseUrl, auth } from '../utils/routes.utils';
 import useLoading from '../hooks/useLoading';
 import useAdminStatus from '../hooks/useAdminStatus';
@@ -22,9 +23,14 @@ export const AuthProvider = ({ children }) => {
     const [isDistributor, setDistributorStatus] = useDistributorStatus();
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
     const baseURL = baseUrl;
+    // Token que `login()` ya dejó resuelto (perfil y rol). Cuando su cookie se
+    // guarda, el efecto de abajo no lo vuelve a cargar: esa recarga desmontaba
+    // y volvía a montar la página de destino y, si fallaba, cerraba la sesión
+    // recién abierta.
+    const tokenResuelto = useRef(null);
     
     const fetchUserDetails = useCallback(async () => {
-        if (cookies.token) {
+        if (cookies.token && cookies.token !== tokenResuelto.current) {
             try {
                 setLoading(true);
                 const response = await getClientDetails(cookies.token);
@@ -73,7 +79,13 @@ export const AuthProvider = ({ children }) => {
                 setCompanyStatus(detalles, token, rol),
                 setDistributorStatus(detalles, token, rol),
             ]);
+            // Una cuenta sin perfil no tiene adónde ir: se rechaza antes de
+            // guardar la cookie, para no dejar una sesión a medias.
+            if (getRedirectionPath(isAdminNuevo, isCompanyNuevo, isDistributorNuevo, detalles) === '/login') {
+                throw new Error('Tu cuenta no tiene un perfil asociado. Contacta al administrador.');
+            }
             setUser(detalles);
+            tokenResuelto.current = token;
             setCookie('token', token, {
                 path: '/',
                 expires: new Date(Date.now() + 3600000),
