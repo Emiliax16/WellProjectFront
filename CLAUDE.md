@@ -11,7 +11,7 @@ Esta documentación proporciona una guía completa para trabajar con el frontend
 ### Core
 - **React** 18.2.0 - Biblioteca UI
 - **React Router** v6.23.0 - Enrutamiento SPA
-- **Axios** 1.6.8 - Cliente HTTP para API
+- **Axios** 1.21 - Cliente HTTP para API
 
 ### UI & Styling
 - **Material-UI** (@mui/material) 5.15.16 - Componentes base
@@ -32,7 +32,7 @@ Esta documentación proporciona una guía completa para trabajar con el frontend
 ### Utilidades
 - **file-saver** 2.0.5 - Descargas de archivos
 - **jszip** 3.10.1 - Compresión ZIP
-- **xlsx** 0.18.5 - Exportación/importación Excel
+- **xlsx** 0.20.3 - Exportación a Excel. Se instala desde el CDN oficial de SheetJS, que dejó de publicar en npm
 
 ## 🎨 Epic de Rediseño Frontend - IMPORTANTE
 
@@ -415,8 +415,8 @@ module.exports = {
 ## Comandos de Desarrollo
 
 ```bash
-# Instalar dependencias
-npm install
+# Instalar dependencias (exactas, desde package-lock.json)
+npm ci
 
 # Desarrollo (http://localhost:3000)
 npm start
