@@ -23,27 +23,49 @@ export const AuthProvider = ({ children }) => {
     const [isCompany, setCompanyStatus] = useCompanyStatus();
     const [isDistributor, setDistributorStatus] = useDistributorStatus();
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
+    // Si al cargar la página hay una cookie, la sesión se está restaurando.
+    // Mientras tanto `PrivateRoute` debe esperar: antes evaluaba con el usuario
+    // todavía en null y mandaba al inicio a quien recargaba una página protegida.
+    const [restaurandoSesion, setRestaurandoSesion] = useState(() => Boolean(cookies.token));
     const baseURL = baseUrl;
     // Token que `login()` ya dejó resuelto (perfil y rol). Cuando su cookie se
     // guarda, el efecto de abajo no lo vuelve a cargar: esa recarga desmontaba
     // y volvía a montar la página de destino y, si fallaba, cerraba la sesión
     // recién abierta.
     const tokenResuelto = useRef(null);
+    // Token de la restauración en curso; se limpia al cerrar sesión o al iniciar
+    // una nueva, para descartar resultados de una carga anterior.
+    const cargaVigente = useRef(null);
     
     const fetchUserDetails = useCallback(async () => {
-        if (cookies.token && cookies.token !== tokenResuelto.current) {
-            try {
-                setLoading(true);
-                const response = await getClientDetails(cookies.token);
-                setUser(response);
-                setAdminStatus(response);
-                setCompanyStatus(response);
-                setDistributorStatus(response);
-            } catch (error) {
-                console.error('Failed to fetch user details:', error);
-            } finally {
-                setLoading(false);
-            }
+        if (!cookies.token || cookies.token === tokenResuelto.current) {
+            setRestaurandoSesion(false);
+            return;
+        }
+        // Si mientras carga se cierra la sesión o se abre otra, este resultado
+        // ya no corresponde y no debe repoblar el usuario ni los roles.
+        const tokenDeEstaCarga = cookies.token;
+        cargaVigente.current = tokenDeEstaCarga;
+        const sigueVigente = () => cargaVigente.current === tokenDeEstaCarga;
+        try {
+            setLoading(true);
+            const response = await getClientDetails(tokenDeEstaCarga);
+            if (!sigueVigente()) return;
+            // Los roles se esperan antes de terminar la carga: si no, por un
+            // instante el usuario quedaba sin rol y `PrivateRoute` lo sacaba.
+            const rol = response ? await getUserRole(response.id, tokenDeEstaCarga) : null;
+            if (!sigueVigente()) return;
+            await Promise.all([
+                setAdminStatus(response, tokenDeEstaCarga, rol),
+                setCompanyStatus(response, tokenDeEstaCarga, rol),
+                setDistributorStatus(response, tokenDeEstaCarga, rol),
+            ]);
+            setUser(response);
+        } catch (error) {
+            console.error('Failed to fetch user details:', error);
+        } finally {
+            setLoading(false);
+            setRestaurandoSesion(false);
         }
     }, [cookies.token, setAdminStatus, setCompanyStatus, setLoading, setDistributorStatus]);
     
@@ -73,6 +95,7 @@ export const AuthProvider = ({ children }) => {
                 password
             });
             const { token } = response.data;
+            cargaVigente.current = null;
             if (!token) {
                 throw new Error('El servidor no entregó una sesión.');
             }
@@ -124,6 +147,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
+        cargaVigente.current = null;
         removeCookie('token', { path: '/' });
         setUser(null);
         setAdminStatus(null);
@@ -131,7 +155,7 @@ export const AuthProvider = ({ children }) => {
         setDistributorStatus(null);
     };
 
-    const value = { user, login, logout, loading, loadingIcon, isAdmin, isCompany, isDistributor };
+    const value = { user, login, logout, loading: loading || restaurandoSesion, loadingIcon, isAdmin, isCompany, isDistributor };
 
     return (
         <AuthContext.Provider value={value}>
