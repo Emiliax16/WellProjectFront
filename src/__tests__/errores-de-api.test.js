@@ -73,7 +73,10 @@ describe('interceptor de 401', () => {
     llamadas = [];
     respuestas = {};
     apiClient.defaults.adapter = async (config) => {
-      llamadas.push(config.url);
+      llamadas.push({ url: config.url, autorizacion: config.headers?.Authorization });
+      if (respuestas[config.url] === 'red') {
+        throw Object.assign(new Error('Network Error'), { isAxiosError: true, config });
+      }
       const status = respuestas[config.url] ?? 200;
       const respuesta = { status, data: status === 200 ? { ok: true } : { error: 'Recurso no autorizado.' }, headers: {}, config };
       if (status >= 400) {
@@ -95,10 +98,14 @@ describe('interceptor de 401', () => {
   const pedir = (url) => apiClient.get(url, { headers: { Authorization: 'Bearer token' } }).catch((e) => e);
 
   it('cierra la sesión si la verificación también responde 401', async () => {
-    respuestas = { companies: 401, [process.env.REACT_APP_API_ENDPOINT_GET_USER_INFO]: 401 };
+    respuestas = { companies: 401, 'users/data': 401 };
 
     const error = await pedir('companies');
 
+    expect(llamadas).toEqual([
+      { url: 'companies', autorizacion: 'Bearer token' },
+      { url: 'users/data', autorizacion: 'Bearer token' },
+    ]);
     expect(alVencer).toHaveBeenCalledTimes(1);
     expect(error.sesionVencida).toBe(true);
     expect(mensajeDeError(error)).toBe(MENSAJE_SESION_VENCIDA);
@@ -120,7 +127,7 @@ describe('interceptor de 401', () => {
 
     await pedir('wells');
 
-    expect(llamadas).toEqual(['wells']);
+    expect(llamadas.map((l) => l.url)).toEqual(['wells']);
     expect(alVencer).not.toHaveBeenCalled();
   });
 
@@ -129,6 +136,23 @@ describe('interceptor de 401', () => {
 
     await apiClient.get('publica').catch(() => {});
 
-    expect(llamadas).toEqual(['publica']);
+    expect(llamadas.map((l) => l.url)).toEqual(['publica']);
+  });
+
+  it('hace una sola verificación aunque varias peticiones reciban 401 a la vez', async () => {
+    respuestas = { a: 401, b: 401, c: 401, 'users/data': 401 };
+
+    await Promise.all([pedir('a'), pedir('b'), pedir('c')]);
+
+    expect(llamadas.filter((l) => l.url === 'users/data')).toHaveLength(1);
+  });
+
+  it('no cierra la sesión si la verificación falla por red', async () => {
+    respuestas = { companies: 401, 'users/data': 'red' };
+
+    const error = await pedir('companies');
+
+    expect(alVencer).not.toHaveBeenCalled();
+    expect(mensajeDeError(error)).toBe('Recurso no autorizado.');
   });
 });

@@ -102,6 +102,26 @@ describe('login() del contexto (#41)', () => {
   });
 });
 
+describe('aviso de sesión vencida (#44)', () => {
+  it('lo muestra cuando el portal redirigió por sesión vencida', () => {
+    render(
+      <CookiesProvider cookies={new Cookies()}>
+        <MemoryRouter initialEntries={['/login?sesion=vencida']}>
+          <AuthProvider><Login /></AuthProvider>
+        </MemoryRouter>
+      </CookiesProvider>
+    );
+
+    expect(screen.getByText('Tu sesión expiró. Vuelve a iniciar sesión.')).toBeInTheDocument();
+  });
+
+  it('no lo muestra en un ingreso normal', () => {
+    montar(<Login />);
+
+    expect(screen.queryByText('Tu sesión expiró. Vuelve a iniciar sesión.')).not.toBeInTheDocument();
+  });
+});
+
 describe('formulario de login (#41)', () => {
   it.each([
     ['un cliente a su perfil', { id: 7, client: { id: 3 } }, 'normal', '/clients/3'],

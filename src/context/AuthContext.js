@@ -56,10 +56,11 @@ export const AuthProvider = ({ children }) => {
     const cerrarSesionVencida = useRef(null);
     cerrarSesionVencida.current = () => {
         tokenResuelto.current = null;
-        removeCookie('token', { path: '/' });
-        setUser(null);
+        logout();
+        // El aviso viaja en la URL porque la recarga borra el estado de la
+        // vista que recibió el error.
         if (window.location.pathname !== '/login') {
-            window.location.assign('/login');
+            window.location.assign('/login?sesion=vencida');
         }
     };
     useEffect(() => registrarSesionVencida(() => cerrarSesionVencida.current()), []);

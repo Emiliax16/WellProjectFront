@@ -16,6 +16,7 @@ import useError from '../hooks/useError';
 import useSuccess from '../hooks/useSuccess';
 import useLoading from '../hooks/useLoading';
 import { postContactRequest } from '../services/landingPageServices';
+import { mensajeDeError } from '../utils/apiErrors';
 
 export function LandingPage() {
   const { error, setError } = useError();
@@ -39,7 +40,7 @@ export function LandingPage() {
       reset();
     } catch (error) {
       console.log(error)
-      setError('Error al enviar el mensaje');
+      setError(mensajeDeError(error, 'Error al enviar el mensaje'));
     } finally {
       setLoading(false);
     }

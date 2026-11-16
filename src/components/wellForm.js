@@ -54,7 +54,7 @@ function WellForm({ well }) {
         const url = `/${urlClients}/${clientId}/${getWells}`
         navigate(url)
       } catch (error) {
-        const message = mensajeDeError(error)
+        const message = mensajeDeError(error, 'Intenta de nuevo.')
         setError(errorText + message)
       }
     }
