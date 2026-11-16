@@ -12,8 +12,10 @@ jobs:
   test-build-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
           cache: npm
@@ -24,7 +26,7 @@ jobs:
       - run: npm run build
         env:
           CI: true
-      # Solo lo que llega al navegador. Las herramientas de build (react-scripts)
-      # arrastran avisos que no viajan al bundle; ver el issue #42.
+      # Solo dependencias de runtime: react-scripts, Tailwind y las librerías de
+      # test son de desarrollo y arrastran avisos que no viajan al bundle (#42).
       - name: Auditoría de dependencias de runtime
         run: npm audit --omit=dev --audit-level=high

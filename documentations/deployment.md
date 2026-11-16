@@ -8,7 +8,7 @@ Los nombres del bucket y el ID de la distribución de CloudFront no se escriben 
 
 Para desplegar se necesita lo siguiente:
 
-1. Node y npm. `react-scripts` 5 acepta Node 14 o superior; el build se verificó por última vez con Node 26. Conviene anotar la versión usada en cada despliegue, porque `package-lock.json` no está versionado y el resultado depende de las dependencias que resuelva `npm install`.
+1. Node y npm. `react-scripts` 5 acepta Node 14 o superior; el build se verificó por última vez con Node 26. Conviene anotar la versión usada en cada despliegue. Las dependencias quedan fijadas en `package-lock.json`, que está versionado desde el PR #50.
 2. El AWS CLI instalado y configurado con una cuenta que pueda leer y escribir en el bucket y crear invalidaciones en CloudFront.
 3. Acceso de lectura al repositorio.
 
@@ -29,7 +29,7 @@ Create React App también da prioridad a `.env.production.local` y `.env.local` 
    curl -s https://promedicion.cl/asset-manifest.json | grep '"main.js"'
    ```
 
-2. Respaldar el contenido actual del bucket. Es lo que permite volver atrás, porque reconstruir un commit anterior no garantiza obtener el mismo bundle sin un lockfile versionado:
+2. Respaldar el contenido actual del bucket. Es la forma más rápida de volver atrás, sin tener que reconstruir un commit anterior:
 
    ```bash
    aws s3 sync s3://<BUCKET> ~/respaldo-front-$(date +%F)
@@ -42,9 +42,11 @@ Create React App también da prioridad a `.env.production.local` y `.env.local` 
    git clone https://github.com/Emiliax16/WellProjectFront.git "$DEPLOY_DIR" && cd "$DEPLOY_DIR"
    git log -1 --format='%h %s'
    node -v
-   npm install
+   npm ci
    npm run build
    ```
+
+   `npm ci` instala exactamente las versiones de `package-lock.json`; `npm install` puede resolver otras. No hay que instalar con `--omit=dev` ni con `NODE_ENV=production`, porque `react-scripts` y Tailwind son dependencias de desarrollo y sin ellas el build falla.
 
    Hay que revisar que `git log` muestre el commit esperado y que el build termine sin errores. Si el proyecto necesita variables `REACT_APP_*` que no están en `.env.production`, se escriben a mano en un archivo `.env.production.local` dentro del clon antes de construir, y nunca se commitean.
 
@@ -88,4 +90,4 @@ Como el paso 4 no borra archivos, restaurar el respaldo vuelve a dejar el `index
 
 ## Mejoras pendientes
 
-Dos cambios harían este procedimiento más simple y reproducible. El primero es versionar `package-lock.json`, para que dos builds del mismo commit produzcan el mismo resultado. El segundo es configurar los headers de caché que recomienda Create React App: `Cache-Control: max-age=31536000` para `build/static`, cuyos nombres cambian en cada build, y `no-cache` para `index.html` y el resto de los archivos.
+Un cambio haría este procedimiento más simple: configurar los headers de caché que recomienda Create React App: `Cache-Control: max-age=31536000` para `build/static`, cuyos nombres cambian en cada build, y `no-cache` para `index.html` y el resto de los archivos.
