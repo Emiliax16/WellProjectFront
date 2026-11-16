@@ -18,7 +18,6 @@ export const getRedirectionPath = (isAdmin, isCompany, isDistributor, user) => {
     role = 'user';
   }
 
-  console.log("OJO AL USER", user)
   const actualUserId = isAdmin
     ? null
     : isCompany
