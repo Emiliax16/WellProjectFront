@@ -8,7 +8,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
 import Cookies from 'universal-cookie';
@@ -80,7 +80,7 @@ describe('recargar una página protegida', () => {
 });
 
 describe('distribuidora (#43)', () => {
-  it('no puede entrar a las páginas de clientes y pozos', async () => {
+  it('PrivateRoute le cierra una ruta con los roles de clientes y pozos', async () => {
     getClientDetails.mockResolvedValue({ id: 5, distributor: { id: 2 } });
     getUserRole.mockResolvedValue({ type: 'distributor' });
 
@@ -90,16 +90,46 @@ describe('distribuidora (#43)', () => {
     expect(screen.queryByText('PÁGINA PROTEGIDA')).not.toBeInTheDocument();
   });
 
-  it('las rutas de clientes y pozos excluyen a la distribuidora en el router', () => {
+  it('el router da a cada ruta de clientes y pozos exactamente los roles que corresponden', () => {
+    // `index.js` monta la app con createRoot y no se puede importar, así que
+    // se lee como texto. Se exige la lista exacta: así falla tanto si se abre a
+    // la distribuidora como si se le quita el acceso a un rol legítimo.
     const fuente = fs.readFileSync(path.join(__dirname, '..', 'index.js'), 'utf8');
-    const rutas = ['/clients/:id"', '/companies/:id/clients"', '/clients/:id/wells"', '/clients/:clientId/wells/:code"'];
+    const esperado = {
+      '/clients/:id': "['admin', 'company', 'normal']",
+      '/companies/:id/clients': "['admin', 'company']",
+      '/clients/:id/wells': "['admin', 'company', 'normal']",
+      '/clients/:clientId/wells/:code': "['admin', 'company', 'normal']",
+    };
 
-    for (const ruta of rutas) {
-      const desde = fuente.indexOf(`path="${ruta}`);
+    for (const [ruta, roles] of Object.entries(esperado)) {
+      const desde = fuente.indexOf(`path="${ruta}"`);
       expect(desde).toBeGreaterThan(-1);
       const bloque = fuente.slice(desde, fuente.indexOf('} />', desde));
-      expect(bloque).toMatch(/<PrivateRoute roles=\{\[/);
-      expect(bloque).not.toMatch(/'distributor'/);
+      expect(bloque).toContain(`<PrivateRoute roles={${roles}}>`);
     }
+  });
+});
+
+describe('cargas viejas de la sesión', () => {
+  it('no repuebla el usuario si se cerró la sesión mientras cargaba', async () => {
+    const { useAuth } = require('../context/AuthContext');
+    let resolver;
+    getClientDetails.mockReturnValue(new Promise((r) => { resolver = r; }));
+    getUserRole.mockResolvedValue({ type: 'normal' });
+    let auth;
+    const Espia = () => { auth = useAuth(); return <p>{auth.user ? `USUARIO ${auth.user.id}` : 'SIN USUARIO'}</p>; };
+    document.cookie = 'token=token-vigente; path=/';
+    render(
+      <CookiesProvider cookies={new Cookies()}>
+        <MemoryRouter><AuthProvider><Espia /></AuthProvider></MemoryRouter>
+      </CookiesProvider>
+    );
+
+    await waitFor(() => expect(getClientDetails).toHaveBeenCalled());
+    await act(async () => auth.logout());
+    await act(async () => resolver({ id: 7, client: { id: 3 } }));
+
+    expect(screen.getByText('SIN USUARIO')).toBeInTheDocument();
   });
 });

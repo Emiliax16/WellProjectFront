@@ -33,22 +33,32 @@ export const AuthProvider = ({ children }) => {
     // y volvía a montar la página de destino y, si fallaba, cerraba la sesión
     // recién abierta.
     const tokenResuelto = useRef(null);
+    // Token de la restauración en curso; se limpia al cerrar sesión o al iniciar
+    // una nueva, para descartar resultados de una carga anterior.
+    const cargaVigente = useRef(null);
     
     const fetchUserDetails = useCallback(async () => {
         if (!cookies.token || cookies.token === tokenResuelto.current) {
             setRestaurandoSesion(false);
             return;
         }
+        // Si mientras carga se cierra la sesión o se abre otra, este resultado
+        // ya no corresponde y no debe repoblar el usuario ni los roles.
+        const tokenDeEstaCarga = cookies.token;
+        cargaVigente.current = tokenDeEstaCarga;
+        const sigueVigente = () => cargaVigente.current === tokenDeEstaCarga;
         try {
             setLoading(true);
-            const response = await getClientDetails(cookies.token);
+            const response = await getClientDetails(tokenDeEstaCarga);
+            if (!sigueVigente()) return;
             // Los roles se esperan antes de terminar la carga: si no, por un
             // instante el usuario quedaba sin rol y `PrivateRoute` lo sacaba.
-            const rol = response ? await getUserRole(response.id, cookies.token) : null;
+            const rol = response ? await getUserRole(response.id, tokenDeEstaCarga) : null;
+            if (!sigueVigente()) return;
             await Promise.all([
-                setAdminStatus(response, cookies.token, rol),
-                setCompanyStatus(response, cookies.token, rol),
-                setDistributorStatus(response, cookies.token, rol),
+                setAdminStatus(response, tokenDeEstaCarga, rol),
+                setCompanyStatus(response, tokenDeEstaCarga, rol),
+                setDistributorStatus(response, tokenDeEstaCarga, rol),
             ]);
             setUser(response);
         } catch (error) {
@@ -85,6 +95,7 @@ export const AuthProvider = ({ children }) => {
                 password
             });
             const { token } = response.data;
+            cargaVigente.current = null;
             if (!token) {
                 throw new Error('El servidor no entregó una sesión.');
             }
@@ -136,6 +147,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
+        cargaVigente.current = null;
         removeCookie('token', { path: '/' });
         setUser(null);
         setAdminStatus(null);
