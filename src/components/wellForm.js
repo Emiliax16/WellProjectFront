@@ -21,6 +21,7 @@ import {
   CheckCircle2,
   Info,
 } from 'lucide-react'
+import { mensajeDeError } from '../utils/apiErrors';
 
 const { urlClients } = clientFront
 const { getWells } = wellBack
@@ -53,9 +54,7 @@ function WellForm({ well }) {
         const url = `/${urlClients}/${clientId}/${getWells}`
         navigate(url)
       } catch (error) {
-        const message = error.response.data.errors
-          ? error.response.data.errors.join(', ')
-          : error.message
+        const message = mensajeDeError(error, 'Intenta de nuevo.')
         setError(errorText + message)
       }
     }

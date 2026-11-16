@@ -26,6 +26,7 @@ import { getUserRole } from '../services/userServices';
 const mockNavigate = jest.fn();
 
 jest.mock('axios');
+jest.mock('../services', () => ({ __esModule: true, default: {}, registrarSesionVencida: () => () => {} }));
 jest.mock('../services/clientServices', () => ({ getClientDetails: jest.fn() }));
 jest.mock('../services/userServices', () => ({ getUserRole: jest.fn() }));
 jest.mock('react-router-dom', () => ({
@@ -98,6 +99,26 @@ describe('login() del contexto (#41)', () => {
     expect(getUserRole).toHaveBeenCalledTimes(1);
     expect(getUserRole).toHaveBeenCalledWith(4, TOKEN_NUEVO);
     expect(document.cookie).toContain(`token=${TOKEN_NUEVO}`);
+  });
+});
+
+describe('aviso de sesión vencida (#44)', () => {
+  it('lo muestra cuando el portal redirigió por sesión vencida', () => {
+    render(
+      <CookiesProvider cookies={new Cookies()}>
+        <MemoryRouter initialEntries={['/login?sesion=vencida']}>
+          <AuthProvider><Login /></AuthProvider>
+        </MemoryRouter>
+      </CookiesProvider>
+    );
+
+    expect(screen.getByText('Tu sesión expiró. Vuelve a iniciar sesión.')).toBeInTheDocument();
+  });
+
+  it('no lo muestra en un ingreso normal', () => {
+    montar(<Login />);
+
+    expect(screen.queryByText('Tu sesión expiró. Vuelve a iniciar sesión.')).not.toBeInTheDocument();
   });
 });
 

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import Input from '../components/input';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'
 import { getRedirectionPath } from '../strategies/redirectionStrategy';
 import useError from '../hooks/useError';
 import Alerts from '../components/Alerts';
+import { mensajeDeError, MENSAJE_SESION_VENCIDA } from '../utils/apiErrors';
 
 function Login() {
   const { 
@@ -18,6 +19,8 @@ function Login() {
   const { error, setError } = useError();
 
   const navigate = useNavigate();
+  const [parametros] = useSearchParams();
+  const sesionVencida = parametros.get('sesion') === 'vencida';
 
   const onSubmit = async (data) => {
     const email = data.email;
@@ -34,9 +37,7 @@ function Login() {
       }
       navigate(ruta, { replace: true })
     } catch (error) {
-      const errorMessage = error.response?.data?.error || error.message;
-      console.log(errorMessage)
-      setError(errorMessage || 'Error al iniciar sesión')
+      setError(mensajeDeError(error, 'Error al iniciar sesión'))
 
     }
   };
@@ -59,6 +60,7 @@ function Login() {
                 Bienvenido a Pro-Medición, por favor inicie sesión para continuar.
               </p>
             </div>
+            {!error && sesionVencida && <Alerts type="error" message={MENSAJE_SESION_VENCIDA} /> }
             {error && <Alerts type="error" message={error} /> }
             <div className="mt-5 grid grid-cols-1 gap-y-6">
               <Input
