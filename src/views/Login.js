@@ -11,7 +11,7 @@ function Login() {
   const { 
     register, 
     handleSubmit, 
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm();
 
   const { login, user, isAdmin, isCompany, isDistributor } = useAuth()
@@ -24,7 +24,15 @@ function Login() {
     const password = data.password;
     setError(null);
     try {
-      await login(email, password)
+      const sesion = await login(email, password)
+      const ruta = getRedirectionPath(sesion.isAdmin, sesion.isCompany, sesion.isDistributor, sesion.user)
+      if (ruta === '/login') {
+        // La sesión se abrió, pero la cuenta no tiene un perfil al que llevarla.
+        // Antes el formulario se quedaba quieto, sin ningún aviso.
+        setError('Tu cuenta no tiene un perfil asociado. Contacta al administrador.')
+        return
+      }
+      navigate(ruta, { replace: true })
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.message;
       console.log(errorMessage)
@@ -36,7 +44,7 @@ function Login() {
   useEffect(() => {
     if ((user && user.client) || isAdmin || isCompany || isDistributor) {
       const redirectionPath = getRedirectionPath(isAdmin, isCompany, isDistributor, user);
-      navigate(redirectionPath);
+      navigate(redirectionPath, { replace: true });
     }
   }, [user, navigate, isAdmin, isCompany, isDistributor]);
 
@@ -83,8 +91,8 @@ function Login() {
                 }}
                 errors={errors} 
               />
-              <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
-                Iniciar
+              <button type="submit" disabled={isSubmitting} className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 disabled:opacity-60">
+                {isSubmitting ? 'Ingresando…' : 'Iniciar'}
               </button>
             </div>
           </div>

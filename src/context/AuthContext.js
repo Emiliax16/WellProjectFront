@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import {getClientDetails} from '../services/clientServices';
+import { getUserRole } from '../services/userServices';
 import { baseUrl, auth } from '../utils/routes.utils';
 import useLoading from '../hooks/useLoading';
 import useAdminStatus from '../hooks/useAdminStatus';
@@ -50,24 +51,43 @@ export const AuthProvider = ({ children }) => {
                 email,
                 password
             });
-            const { token, user } = response.data;
-            if (cookies.token) {
-                removeCookie('token', { path: '/' });
+            const { token } = response.data;
+            if (!token) {
+                throw new Error('El servidor no entregó una sesión.');
             }
 
-            if (token) {
-                setCookie('token', token, {
-                    path: '/',
-                    expires: new Date(Date.now() + 3600000), 
-                    secure: true, 
-                    httpOnly: false,  // por ahora false, cuando estemos en https cambiar a true
-                    sameSite: 'Strict'
-                  });
-                setUser(user);
-                setAdminStatus(user);
-                setCompanyStatus(user);
-                setDistributorStatus(user);
+            // La respuesta del login no trae el perfil (`client`, `company`,
+            // `distributor`). Se piden el perfil y el rol con el token nuevo antes
+            // de guardar la cookie: así la redirección no depende de una segunda
+            // carga, no hay una carrera con el efecto que reacciona a la cookie, y
+            // si algo falla no queda una sesión a medias.
+            const detalles = await getClientDetails(token);
+            if (!detalles) {
+                throw new Error('No se pudo cargar tu perfil. Intenta de nuevo.');
             }
+            // Una sola consulta de rol; si falla, el error llega al formulario en
+            // vez de confundirse con "no tiene perfil".
+            const rol = await getUserRole(detalles.id, token);
+            const [isAdminNuevo, isCompanyNuevo, isDistributorNuevo] = await Promise.all([
+                setAdminStatus(detalles, token, rol),
+                setCompanyStatus(detalles, token, rol),
+                setDistributorStatus(detalles, token, rol),
+            ]);
+            setUser(detalles);
+            setCookie('token', token, {
+                path: '/',
+                expires: new Date(Date.now() + 3600000),
+                // `secure` solo bajo HTTPS: en http://localhost, Safari descarta
+                // las cookies seguras y el login nunca se completaba.
+                secure: window.location.protocol === 'https:',
+                sameSite: 'Strict'
+            });
+            return {
+                user: detalles,
+                isAdmin: isAdminNuevo,
+                isCompany: isCompanyNuevo,
+                isDistributor: isDistributorNuevo,
+            };
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error);
             throw error;
