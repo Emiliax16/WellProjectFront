@@ -84,7 +84,12 @@ root.render(
                 </PrivateRoute>
               } />
               {/* Ver uno*/}
-              <Route path="/clients/:id" element={<ClientDetails />} />
+              {/* Clientes y pozos: la distribuidora solo ve sus empresas (issue #43). */}
+              <Route path="/clients/:id" element={
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
+                  <ClientDetails />
+                </PrivateRoute>
+              } />
               {/* Crear un pozo */}
               <Route path="/clients/:id/wells/new" element={
                 <PrivateRoute roles={['admin', 'company', 'normal']}>
@@ -119,7 +124,11 @@ root.render(
               {/* Ver uno */}
               <Route path="/companies/:id" element={<CompanyDetails />} />
               {/* Ver clientes de una empresa */}
-              <Route path="/companies/:id/clients" element={<ClientsByCompany />} />
+              <Route path="/companies/:id/clients" element={
+                <PrivateRoute roles={['admin', 'company']}>
+                  <ClientsByCompany />
+                </PrivateRoute>
+              } />
               {/* Editar una empresa */}
               <Route path="/companies/:id/edit" element={
                 <PrivateRoute roles={['admin', 'distributor']}>
@@ -133,9 +142,17 @@ root.render(
                 </PrivateRoute>
               } />
               {/* Ver pozos */}
-              <Route path="/clients/:id/wells" element={<ClientWells />} />
+              <Route path="/clients/:id/wells" element={
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
+                  <ClientWells />
+                </PrivateRoute>
+              } />
               {/* Ver reportes de un pozo */}
-              <Route path="/clients/:clientId/wells/:code" element={<WellReportList />} />
+              <Route path="/clients/:clientId/wells/:code" element={
+                <PrivateRoute roles={['admin', 'company', 'normal']}>
+                  <WellReportList />
+                </PrivateRoute>
+              } />
               {/* Editar un pozo */}
               <Route path="/clients/:id/wells/:code/edit" element={
                 <PrivateRoute roles={['admin', 'company', 'normal']}>
