@@ -26,6 +26,7 @@ import { getUserRole } from '../services/userServices';
 const mockNavigate = jest.fn();
 
 jest.mock('axios');
+jest.mock('../services', () => ({ __esModule: true, default: {}, registrarSesionVencida: () => () => {} }));
 jest.mock('../services/clientServices', () => ({ getClientDetails: jest.fn() }));
 jest.mock('../services/userServices', () => ({ getUserRole: jest.fn() }));
 jest.mock('react-router-dom', () => ({

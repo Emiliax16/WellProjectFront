@@ -22,6 +22,7 @@ import {
   Inbox,
   AlertCircle,
 } from 'lucide-react'
+import { mensajeDeError } from '../utils/apiErrors';
 
 function DistributorForm({
   distributorInfo = {
@@ -87,7 +88,7 @@ function DistributorForm({
         navigate(`/admin`)
       } catch (error) {
         console.log(error)
-        const message = error.response.data.errors ? error.response.data.errors.join(', ') : error.message
+        const message = mensajeDeError(error)
         setError(message)
       }
     } else {

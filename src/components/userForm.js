@@ -24,6 +24,7 @@ import {
   CheckCircle2,
   AlertCircle,
 } from 'lucide-react'
+import { mensajeDeError } from '../utils/apiErrors';
 
 function UserForm({
   userInfo = {
@@ -99,11 +100,7 @@ function UserForm({
         }
       } catch (error) {
         console.log(error)
-        const message = error.response?.data?.error
-          ? error.response.data.error
-          : error.response?.data?.errors
-          ? error.response.data.errors.join(', ')
-          : error.message
+        const message = mensajeDeError(error)
         setError(message)
       } finally {
         setIsSubmitting(false)

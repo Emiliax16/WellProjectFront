@@ -26,6 +26,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import * as XLSX from 'xlsx'
+import { mensajeDeError } from '../../../../utils/apiErrors';
 
 function WellReportList() {
   const { clientId, code } = useParams()
@@ -124,7 +125,7 @@ function WellReportList() {
       fetchWellReports()
     } catch (error) {
       console.error('Error enviando reportes:', error)
-      setError(error.message || 'Error enviando los reportes.')
+      setError(mensajeDeError(error, 'Error enviando los reportes.'))
     } finally {
       setSendingReports(false)
     }
@@ -203,7 +204,7 @@ function WellReportList() {
       fetchWellReports()
     } catch (error) {
       console.error('Error eliminando reportes:', error)
-      setError(error.response?.data?.message || 'Error eliminando los reportes.')
+      setError(mensajeDeError(error, 'Error eliminando los reportes.'))
     } finally {
       setDeletingReports(false)
     }

@@ -5,6 +5,7 @@ import { createContext, useContext, useState, useEffect, useCallback, useRef } f
 import {getClientDetails} from '../services/clientServices';
 import { getUserRole } from '../services/userServices';
 import { getRedirectionPath } from '../strategies/redirectionStrategy';
+import { registrarSesionVencida } from '../services';
 import { baseUrl, auth } from '../utils/routes.utils';
 import useLoading from '../hooks/useLoading';
 import useAdminStatus from '../hooks/useAdminStatus';
@@ -49,6 +50,19 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         fetchUserDetails();
     }, [fetchUserDetails]);
+
+    // Si una llamada a la API detecta que la sesión venció (por ejemplo, el
+    // usuario fue desactivado), se cierra la sesión y se vuelve al login.
+    const cerrarSesionVencida = useRef(null);
+    cerrarSesionVencida.current = () => {
+        tokenResuelto.current = null;
+        removeCookie('token', { path: '/' });
+        setUser(null);
+        if (window.location.pathname !== '/login') {
+            window.location.assign('/login');
+        }
+    };
+    useEffect(() => registrarSesionVencida(() => cerrarSesionVencida.current()), []);
 
     const login = async (email, password) => {
         try {

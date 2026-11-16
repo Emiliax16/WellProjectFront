@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import { getRedirectionPath } from '../strategies/redirectionStrategy';
 import useError from '../hooks/useError';
 import Alerts from '../components/Alerts';
+import { mensajeDeError } from '../utils/apiErrors';
 
 function Login() {
   const { 
@@ -34,9 +35,7 @@ function Login() {
       }
       navigate(ruta, { replace: true })
     } catch (error) {
-      const errorMessage = error.response?.data?.error || error.message;
-      console.log(errorMessage)
-      setError(errorMessage || 'Error al iniciar sesión')
+      setError(mensajeDeError(error, 'Error al iniciar sesión'))
 
     }
   };
